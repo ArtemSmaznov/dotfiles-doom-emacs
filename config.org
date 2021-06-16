@@ -166,6 +166,16 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 
 #+end_src
 
+* Keys
+** General
+
+#+begin_src emacs-lisp
+
+(map! :leader
+      :desc "Clear search highlights" "SPC" #'evil-ex-nohighlight)
+
+#+end_src
+
 * Additional Notes
 
 Here are some additional functions/macros that could help you configure Doom:
