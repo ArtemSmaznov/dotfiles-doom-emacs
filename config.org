@@ -136,6 +136,7 @@ available. You can either set `doom-theme' or manually load a theme with the
 #+end_src
 
 ** Neotree
+
 Neotree is a file tree viewer. When you open neotree, it jumps to the current file thanks to neo-smart-open. The neo-window-fixed-size setting makes the neotree width be adjustable. Doom Emacs had no keybindings set for neotree. Since Doom Emacs uses ‘SPC t’ for ‘toggle’ keybindings, I used ‘SPC t n’ for toggle-neotree.
 
 #+begin_src emacs-lisp
@@ -171,8 +172,49 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 
 #+begin_src emacs-lisp
 
-(map! :leader
-      :desc "Clear search highlights" "SPC" #'evil-ex-nohighlight)
+
+#+end_src
+
+* Packages
+** Which-key
+
+#+begin_src emacs-lisp
+
+(setq which-key-idle-delay 0.4)
+
+#+end_src
+
+** Modeline
+
+#+begin_src emacs-lisp
+
+;; (after! doom-modeline
+;;   (serq doom-modeline-buffer-modification-icon t))
+
+#+end_src
+
+** Neotree
+
+#+begin_src emacs-lisp
+
+(map! :map neotree-mode-map
+      :n "h" #'+neotree/collapse-or-up
+      :n "l" #'+neotree/expand-or-open
+      :n "s" #'neotree-enter-horizontal-split
+      :n "v" #'neotree-enter-vertical-split
+)
+
+#+end_src
+
+* LSP
+** Vim
+
+Enable syntax highlighting for .vim files
+
+#+begin_src emacs-lisp
+
+(require 'vimrc-mode)
+(add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
 
 #+end_src
 
