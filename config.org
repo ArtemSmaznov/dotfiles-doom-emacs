@@ -1,6 +1,7 @@
 #+TITLE: Artem's Doom Emacs Config
 #+AUTHOR: Artem Smaznov
 #+DESCRIPTION: Artem's personal config for Doom Emacs
+#+STARTUP: overview
 
 * Introduction to the Config
 
@@ -8,40 +9,54 @@ Place your private configuration here! Remember, you do not need to run 'doom
 sync' after modifying this file!
 
 #+begin_src emacs-lisp
-
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
 #+end_src
 
-* Personal Info
+** Personal Info
 
 Some functionality uses this to identify you, e.g. GPG configuration, email
 clients, file templates and snippets.
 
-#+begin_src emacs-lisp
-
-(setq user-full-name "Artem Smaznov")
-
+#+begin_src emacs-lisp(setq user-full-name "Artem Smaznov")
 #+end_src
 
-* Text
+* UI
+** Tools
+
+#+begin_src emacs-lisp
+;; This determines the style of line numbers in effect.
+;; If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type 'relative)
+#+end_src
+
+** Theme
+
+There are two ways to load a theme. Both assume the theme is installed and
+available. You can either set `doom-theme' or manually load a theme with the
+`load-theme' function. This is the default:
+
+#+begin_src emacs-lisp
+(setq doom-theme 'doom-gruvbox)
+#+end_src
+
 ** Fonts
 
 Doom exposes five (optional) variables for controlling fonts in Doom. Here
 are the three important ones:
 
-+ `doom-font'
-+ `doom-variable-pitch-font'
-+ `doom-big-font' -- used for `doom-big-font-mode'; use this for
-  presentations or streaming.
++ 'doom-font' -- standard monospace font that is used for most things in Emacs.
++ 'doom-variable-pitch-font' -- variable font which is useful in some Emacs plugins.
++ 'doom-big-font' -- used in doom-big-font-mode; useful for presentations.
++ 'font-lock-comment-face' -- for comments.
++ 'font-lock-keyword-face' -- for keywords with special significance like 'setq' in elisp.
++ 'global-prettify-symbols-mode' -- change certain keywords to symbols, such as lambda!
 
 They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 font string. You generally only need these two:
 
 #+begin_src emacs-lisp
-
-(setq doom-font (font-spec :family "Hack Nerd Font Mono" :size 14)
-      doom-variable-pitch-font (font-spec :family "Hack Nerd Font Mono" :size 16))
+(setq doom-font (font-spec :family "Hack Nerd Font Mono" :size 16)
+      doom-variable-pitch-font (font-spec :family "Hack Nerd Font Mono" :size 18))
 
 (after! doom-themes
   (setq doom-themes-enable-bold t
@@ -52,24 +67,158 @@ font string. You generally only need these two:
   '(font-lock-keyword-face :slant italic))
 
 (setq global-prettify-symbols-mode t)
-
 #+end_src
 
-** Emojis
+*** Emojis
 
-Emojify is an Emacs extension to display emojis. It can display github style emojis like :smile: or plain ascii ones like :).
+Emojify is an Emacs extension to display emojis. It can display GitHub style emojis like :smile: or plain ASCII ones like :).
 
 #+begin_src emacs-lisp
-
 (use-package emojify
   :hook (after-init . global-emojify-mode))
-
 #+end_src
 
-* ORG Mode
+** Modeline
 
 #+begin_src emacs-lisp
+;; (after! doom-modeline
+;;   (serq doom-modeline-buffer-modification-icon t))
+#+end_src
 
+** Dashboard
+
+Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
+
+*** Configuring the Dashboard
+
+#+begin_src emacs-lisp
+;; (use-package dashboard
+;;   :init      ;; tweak dashboard config before loading it
+;;   (setq dashboard-set-heading-icons t)
+;;   (setq dashboard-set-file-icons t)
+;;   (setq dashboard-banner-logo-title "There is no place like home!")
+;;   (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+;;   ;; (setq dashboard-startup-banner "~/.config/doom/doom-emacs-dash.png")  ;; use custom image as banner
+;;   (setq dashboard-center-content t) ;; set to 't' for centered content
+;;   (setq dashboard-items '((recents . 5)
+;;                           (agenda . 5 )
+;;                           (bookmarks . 5)
+;;                           (projects . 5)
+;;                           (registers . 5)))
+;;   :config
+;;   (dashboard-setup-startup-hook)
+;;   (dashboard-modify-heading-icons '((recents . "file-text")
+;;                                     (bookmarks . "book"))))
+#+end_src
+
+*** Dashboard in Emacsclient
+
+This setting ensures that emacsclient always opens on *dashboard* rather than *scratch*.
+
+#+begin_src emacs-lisp
+(setq doom-fallback-buffer "*dashboard*")
+#+end_src
+
+* Behavior
+** Which-key
+
+#+begin_src emacs-lisp
+(setq which-key-idle-delay 0.4)
+#+end_src
+
+** Password Store
+
+Uses the standard Unix password store "pass".
+
+#+begin_src emacs-lisp
+;; (use-package! password-store)
+#+end_src
+
+** Exit confirmation
+
+#+begin_src emacs-lisp
+(setq confirm-kill-emacs nil)
+#+end_src
+
+* Navigation
+** Neotree
+
+Neotree is a file tree viewer. When you open neotree, it jumps to the current file thanks to neo-smart-open. The neo-window-fixed-size setting makes the neotree width be adjustable. Doom Emacs had no keybindings set for neotree. Since Doom Emacs uses ‘SPC t’ for ‘toggle’ keybindings, I used ‘SPC t n’ for toggle-neotree.
+
+#+begin_src emacs-lisp
+(after! neotree
+  (setq neo-smart-open t
+        neo-window-fixed-size nil))
+(after! doom-themes
+  (setq doom-neotree-enable-variable-pitch t))
+
+(map! :leader
+      :desc "Neotree" "t n" #'neotree-toggle
+      :desc "Open directory in neotree" "d n" #'neotree-dir)
+
+(map! :map neotree-mode-map
+      :n "h" #'+neotree/collapse-or-up
+      :n "l" #'+neotree/expand-or-open
+      :n "s" #'neotree-enter-horizontal-split
+      :n "v" #'neotree-enter-vertical-split
+      )
+#+end_src
+
+** Evil Mode
+
+#+begin_src emacs-lisp
+#+end_src
+
+** Splits
+
+I set splits to default to opening on the right using ‘prefer-horizontal-split’. I set a keybinding for ‘clone-indirect-buffer-other-window’ for when I want to have the same document in two splits. The text of the indirect buffer is always identical to the text of its base buffer; changes made by editing either one are visible immediately in the other. But in all other respects, the indirect buffer and its base buffer are completely separate. For example, I can fold one split but other will be unfolded.
+
+#+begin_src emacs-lisp
+(defun prefer-horizontal-split ()
+  (set-variable 'split-height-threshold nil t)
+  (set-variable 'split-width-threshold 40 t)) ; make this as low as needed
+(add-hook 'markdown-mode-hook 'prefer-horizontal-split)
+(map! :leader
+      :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
+#+end_src
+
+** Mouse Support
+
+#+begin_src emacs-lisp
+(xterm-mouse-mode 1)
+#+end_src
+
+* LSP
+** ORG Mode
+*** Pretty Symbols
+
+#+begin_src emacs-lisp
+(defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
+  (interactive)
+  (setq prettify-symbols-alist
+    (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+          '(("#+begin_src" . ?)
+            ("#+end_src" . ?)
+            ("#+begin_example" . ?)
+            ("#+end_example" . ?)
+            ("#+DATE:" . ?⏱)
+            ("#+AUTHOR:" . ?✏)
+            ("[ ]" .  ?☐)
+            ("[X]" . ?☑ )
+            ("[-]" . ?❍ )
+            ("lambda" . ?λ)
+            ("#+header:" . ?)
+            ("#+name:" . ?﮸)
+            ("#+results:" . ?)
+            ("#+call:" . ?)
+            (":properties:" . ?)
+            (":logbook:" . ?))))
+  (prettify-symbols-mode 1))
+#+end_src
+
+*** Setup
+
+#+begin_src emacs-lisp
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Documents/Org/")
@@ -77,7 +226,7 @@ Emojify is an Emacs extension to display emojis. It can display github style emo
 (map! :leader
       :desc "Org babel tangle" "m B" #'org-babel-tangle)
 
-  ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 (after! org
   (setq org-agenda-files '("~/Documents/Org/agenda.org")
         org-default-notes-file (expand-file-name "notes.org" org-directory)
@@ -94,128 +243,54 @@ Emojify is an Emacs extension to display emojis. It can display github style emo
           ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
           ("ddg" . "https://duckduckgo.com/?q=")
           ("wiki" . "https://en.wikipedia.org/wiki/"))))
-
 #+end_src
 
-* UI
-** Interface
+*** Headings
+
+Setting the font sizes for each header level in Org mode.
 
 #+begin_src emacs-lisp
-
-;; This determines the style of line numbers in effect.
-;; If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type 'relative)
-
+;; (custom-set-faces
+;;   '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
+;;   '(org-level-2 ((t (:inherit outline-2 :height 1.0))))
+;;   '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
+;;   '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
+;;   '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
+;; )
 #+end_src
 
-** Theme
+*** Manpage
 
-There are two ways to load a theme. Both assume the theme is installed and
-available. You can either set `doom-theme' or manually load a theme with the
-`load-theme' function. This is the default:
+We need ox-man for "Org eXporting" to manpage format.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
+(use-package ox-man)
+(use-package ox-gemini)
+#+END_SRC
 
-(setq doom-theme 'doom-gruvbox)
-
-#+end_src
-
-** Mouse Support
-
-#+begin_src emacs-lisp
-
-(xterm-mouse-mode 1)
-
-#+end_src
-
-* Navigation
-** Evil Mode
-
-#+begin_src emacs-lisp
-
-#+end_src
-
-** Neotree
-
-Neotree is a file tree viewer. When you open neotree, it jumps to the current file thanks to neo-smart-open. The neo-window-fixed-size setting makes the neotree width be adjustable. Doom Emacs had no keybindings set for neotree. Since Doom Emacs uses ‘SPC t’ for ‘toggle’ keybindings, I used ‘SPC t n’ for toggle-neotree.
-
-#+begin_src emacs-lisp
-
-(after! neotree
-  (setq neo-smart-open t
-        neo-window-fixed-size nil))
-(after! doom-themes
-  (setq doom-neotree-enable-variable-pitch t))
-
-(map! :leader
-      :desc "Neotree" "t n" #'neotree-toggle
-      :desc "Open directory in neotree" "d n" #'neotree-dir)
-
-#+end_src
-
-** Splits
-I set splits to default to opening on the right using ‘prefer-horizontal-split’. I set a keybinding for ‘clone-indirect-buffer-other-window’ for when I want to have the same document in two splits. The text of the indirect buffer is always identical to the text of its base buffer; changes made by editing either one are visible immediately in the other. But in all other respects, the indirect buffer and its base buffer are completely separate. For example, I can fold one split but other will be unfolded.
-
-#+begin_src emacs-lisp
-
-(defun prefer-horizontal-split ()
-  (set-variable 'split-height-threshold nil t)
-  (set-variable 'split-width-threshold 40 t)) ; make this as low as needed
-(add-hook 'markdown-mode-hook 'prefer-horizontal-split)
-(map! :leader
-      :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
-
-#+end_src
-
-* Keys
-** General
-
-#+begin_src emacs-lisp
-
-
-#+end_src
-
-* Packages
-** Which-key
-
-#+begin_src emacs-lisp
-
-(setq which-key-idle-delay 0.4)
-
-#+end_src
-
-** Modeline
-
-#+begin_src emacs-lisp
-
-;; (after! doom-modeline
-;;   (serq doom-modeline-buffer-modification-icon t))
-
-#+end_src
-
-** Neotree
-
-#+begin_src emacs-lisp
-
-(map! :map neotree-mode-map
-      :n "h" #'+neotree/collapse-or-up
-      :n "l" #'+neotree/expand-or-open
-      :n "s" #'neotree-enter-horizontal-split
-      :n "v" #'neotree-enter-vertical-split
-)
-
-#+end_src
-
-* LSP
 ** Vim
 
 Enable syntax highlighting for .vim files
 
 #+begin_src emacs-lisp
-
 (require 'vimrc-mode)
 (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+#+end_src
 
+* Keybindings
+** General
+
+#+begin_src emacs-lisp
+
+#+end_src
+
+** Buffers and Bookmarks
+
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("b". "buffer")
+       :desc "List bookmarks" "L" #'list-bookmarks
+       :desc "Save current bookmarks to bookmark file" "w" #'bookmark-save))
 #+end_src
 
 * Additional Notes
@@ -223,7 +298,6 @@ Enable syntax highlighting for .vim files
 Here are some additional functions/macros that could help you configure Doom:
 
 #+BEGIN_SRC emacs-lisp
-
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package!' for configuring packages
 ;; - `after!' for running code after a package has loaded
@@ -231,7 +305,6 @@ Here are some additional functions/macros that could help you configure Doom:
 ;;   this file. Emacs searches the `load-path' when you load packages with
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
-
 #+END_SRC
 
 To get information about any of these functions/macros, move the cursor over
