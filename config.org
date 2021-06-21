@@ -44,7 +44,8 @@ sync' after modifying this file!
 Some functionality uses this to identify you, e.g. GPG configuration, email
 clients, file templates and snippets.
 
-#+begin_src emacs-lisp(setq user-full-name "Artem Smaznov")
+#+begin_src emacs-lisp
+(setq user-full-name "Artem Smaznov")
 #+end_src
 
 * UI
@@ -309,6 +310,7 @@ Enable syntax highlighting for .vim files
 #+begin_src emacs-lisp
 (require 'vimrc-mode)
 (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+(add-hook 'vimrc-mode-hook #'lsp)
 #+end_src
 
 * Keybindings
