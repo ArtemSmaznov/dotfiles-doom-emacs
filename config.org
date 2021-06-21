@@ -1,7 +1,34 @@
-#+TITLE: Artem's Doom Emacs Config
+#+TITLE: Doom Emacs
 #+AUTHOR: Artem Smaznov
 #+DESCRIPTION: Artem's personal config for Doom Emacs
 #+STARTUP: overview
+
+* Table of Contents :toc:
+- [[#introduction-to-the-config][Introduction to the Config]]
+  - [[#personal-info][Personal Info]]
+- [[#ui][UI]]
+  - [[#tools][Tools]]
+  - [[#theme][Theme]]
+  - [[#fonts][Fonts]]
+  - [[#modeline][Modeline]]
+  - [[#dashboard][Dashboard]]
+- [[#behavior][Behavior]]
+  - [[#which-key][Which-key]]
+  - [[#password-store][Password Store]]
+  - [[#exit-confirmation][Exit confirmation]]
+- [[#navigation][Navigation]]
+  - [[#neotree][Neotree]]
+  - [[#dired][Dired]]
+  - [[#evil-mode][Evil Mode]]
+  - [[#splits][Splits]]
+  - [[#mouse-support][Mouse Support]]
+- [[#lsp][LSP]]
+  - [[#org-mode][ORG Mode]]
+  - [[#vim][Vim]]
+- [[#keybindings][Keybindings]]
+  - [[#general][General]]
+  - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
+- [[#additional-notes][Additional Notes]]
 
 * Introduction to the Config
 
@@ -164,6 +191,13 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
       )
 #+end_src
 
+** Dired
+
+#+begin_src emacs-lisp
+(setq )
+
+#+end_src
+
 ** Evil Mode
 
 #+begin_src emacs-lisp
@@ -226,8 +260,8 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 (map! :leader
       :desc "Org babel tangle" "m B" #'org-babel-tangle)
 
-;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 (after! org
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
   (setq org-agenda-files '("~/Documents/Org/agenda.org")
         org-default-notes-file (expand-file-name "notes.org" org-directory)
         org-ellipsis " ▼ "
@@ -243,7 +277,7 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
           ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
           ("ddg" . "https://duckduckgo.com/?q=")
           ("wiki" . "https://en.wikipedia.org/wiki/"))))
-#+end_src
+      #+end_src
 
 *** Headings
 
