@@ -128,7 +128,7 @@ Emacs Dashboard is an extensible startup screen showing you recent files, bookma
 ;;   (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
 ;;   ;; (setq dashboard-startup-banner "~/.config/doom/doom-emacs-dash.png")  ;; use custom image as banner
 ;;   (setq dashboard-center-content t) ;; set to 't' for centered content
-;;   (setq dashboard-items '((recents . 5)
+;;   (setq dashboard-items '((recents . 10)
 ;;                           (agenda . 5 )
 ;;                           (bookmarks . 5)
 ;;                           (projects . 5)
@@ -195,8 +195,10 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
 ** Dired
 
 #+begin_src emacs-lisp
-(setq )
-
+(map! :map dired-mode-map
+           :n "<backspace>" 'dired-up-directory
+           :n "h" 'dired-up-directory
+           :n "l"  'dired-open-file)
 #+end_src
 
 ** Evil Mode
