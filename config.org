@@ -204,6 +204,9 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
 ** Evil Mode
 
 #+begin_src emacs-lisp
+(use-package! evil
+  :config
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join))
 #+end_src
 
 ** Splits
