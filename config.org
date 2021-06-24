@@ -16,6 +16,7 @@
   - [[#which-key][Which-key]]
   - [[#password-store][Password Store]]
   - [[#exit-confirmation][Exit confirmation]]
+  - [[#projectile][Projectile]]
 - [[#navigation][Navigation]]
   - [[#neotree][Neotree]]
   - [[#dired][Dired]]
@@ -166,6 +167,16 @@ Uses the standard Unix password store "pass".
 
 #+begin_src emacs-lisp
 (setq confirm-kill-emacs nil)
+#+end_src
+
+** Projectile
+
+#+begin_src emacs-lisp
+(use-package! projectile
+  :init
+  (when (file-directory-p "~/projects")
+    (setq projectile-project-search-path '("~/projects")))
+  (setq projectile-switch-project-action #'projectile-dired))
 #+end_src
 
 * Navigation
