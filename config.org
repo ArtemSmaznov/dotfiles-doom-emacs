@@ -17,6 +17,7 @@
   - [[#password-store][Password Store]]
   - [[#exit-confirmation][Exit confirmation]]
   - [[#projectile][Projectile]]
+  - [[#windows][Windows]]
 - [[#navigation][Navigation]]
   - [[#neotree][Neotree]]
   - [[#dired][Dired]]
@@ -27,7 +28,7 @@
   - [[#org-mode][ORG Mode]]
   - [[#vim][Vim]]
 - [[#keybindings][Keybindings]]
-  - [[#general][General]]
+  - [[#org-mode-1][Org Mode]]
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
 - [[#additional-notes][Additional Notes]]
 
@@ -178,6 +179,12 @@ Uses the standard Unix password store "pass".
     (setq projectile-project-search-path '("~/projects")))
   (setq projectile-switch-project-action #'projectile-dired))
 #+end_src
+** Windows
+
+#+begin_src emacs-lisp
+(setq split-width-threshold 0
+      split-height-threshold nil)
+#+end_src
 
 * Navigation
 ** Neotree
@@ -207,9 +214,9 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
 
 #+begin_src emacs-lisp
 (map! :map dired-mode-map
-           :n "<backspace>" 'dired-up-directory
-           :n "h" 'dired-up-directory
-           :n "l"  'dired-open-file)
+      :n "<backspace>" 'dired-up-directory
+      :n "h" 'dired-up-directory
+      :n "l"  'dired-open-file)
 #+end_src
 
 ** Evil Mode
@@ -241,51 +248,31 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 
 * LSP
 ** ORG Mode
-*** Pretty Symbols
+*** Paths
 
 #+begin_src emacs-lisp
-(defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
-  (interactive)
-  (setq prettify-symbols-alist
-    (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-          '(("#+begin_src" . ?)
-            ("#+end_src" . ?)
-            ("#+begin_example" . ?)
-            ("#+end_example" . ?)
-            ("#+DATE:" . ?⏱)
-            ("#+AUTHOR:" . ?✏)
-            ("[ ]" .  ?☐)
-            ("[X]" . ?☑ )
-            ("[-]" . ?❍ )
-            ("lambda" . ?λ)
-            ("#+header:" . ?)
-            ("#+name:" . ?﮸)
-            ("#+results:" . ?)
-            ("#+call:" . ?)
-            (":properties:" . ?)
-            (":logbook:" . ?))))
-  (prettify-symbols-mode 1))
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/Documents/Org")
+
+(after! org
+  (setq org-agenda-files '("~/Documents/Org/agenda.org")
+        org-default-notes-file (expand-file-name "notes.org" org-directory)
+        org-journal-dir "~/Documents/Org/journal/"
+        org-journal-date-format "%B %d, %Y (%A) "
+        org-journal-file-format "%Y-%m-%d.org"
+        ))
 #+end_src
 
 *** Setup
 
 #+begin_src emacs-lisp
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Documents/Org/")
-
-(map! :leader
-      :desc "Org babel tangle" "m B" #'org-babel-tangle)
-
 (after! org
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-  (setq org-agenda-files '("~/Documents/Org/agenda.org")
-        org-default-notes-file (expand-file-name "notes.org" org-directory)
-        org-ellipsis " ▼ "
+  (setq org-ellipsis " ▼ "
+        org-agenda-start-with-log-mode t
+        org-log-into-drawer t
         org-log-done 'time
-        org-journal-dir "~/Documents/Org/journal/"
-        org-journal-date-format "%B %d, %Y (%A) "
-        org-journal-file-format "%Y-%m-%d.org"
         org-hide-emphasis-markers t
         ;; ex. of org-link-abbrev-alist in action
         ;; [[arch-wiki:Name_of_Page][Description]]
@@ -294,24 +281,50 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
           ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
           ("ddg" . "https://duckduckgo.com/?q=")
           ("wiki" . "https://en.wikipedia.org/wiki/"))))
-      #+end_src
+#+end_src
 
 *** Headings
 
 Setting the font sizes for each header level in Org mode.
 
 #+begin_src emacs-lisp
-;; (custom-set-faces
-;;   '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
-;;   '(org-level-2 ((t (:inherit outline-2 :height 1.0))))
-;;   '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
-;;   '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
-;;   '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
-;; )
+(after! org
+  (custom-set-faces
+   '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
+   '(org-level-2 ((t (:inherit outline-2 :height 1.1))))
+   '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
+   '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
+   '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
+   ))
+#+end_src
+
+*** Pretty Symbols
+
+#+begin_src emacs-lisp
+(defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
+       (interactive)
+       (setq prettify-symbols-alist
+             (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                     '(("#+begin_src" . ?)
+                       ("#+end_src" . ?)
+                       ("#+begin_example" . ?)
+                       ("#+end_example" . ?)
+                       ("#+DATE:" . ?⏱)
+                       ("#+AUTHOR:" . ?✏)
+                       ("[ ]" .  ?☐)
+                       ("[X]" . ?☑ )
+                       ("[-]" . ?❍ )
+                       ("lambda" . ?λ)
+                       ("#+header:" . ?)
+                       ("#+name:" . ?﮸)
+                       ("#+results:" . ?)
+                       ("#+call:" . ?)
+                       (":properties:" . ?)
+                       (":logbook:" . ?))))
+       (prettify-symbols-mode 1))
 #+end_src
 
 *** Manpage
-
 We need ox-man for "Org eXporting" to manpage format.
 
 #+BEGIN_SRC emacs-lisp
@@ -330,10 +343,11 @@ Enable syntax highlighting for .vim files
 #+end_src
 
 * Keybindings
-** General
+** Org Mode
 
 #+begin_src emacs-lisp
-
+(map! :leader
+      :desc "Org babel tangle" "m B" #'org-babel-tangle)
 #+end_src
 
 ** Buffers and Bookmarks
