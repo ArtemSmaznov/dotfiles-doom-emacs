@@ -111,8 +111,9 @@ Emojify is an Emacs extension to display emojis. It can display GitHub style emo
 ** Modeline
 
 #+begin_src emacs-lisp
-;; (after! doom-modeline
-;;   (serq doom-modeline-buffer-modification-icon t))
+(after! doom-modeline
+  (setq doom-modeline-major-mode-icon t
+        ))
 #+end_src
 
 ** Dashboard
