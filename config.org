@@ -112,8 +112,9 @@ Emojify is an Emacs extension to display emojis. It can display GitHub style emo
 
 #+begin_src emacs-lisp
 (after! doom-modeline
-  (setq doom-modeline-major-mode-icon t
-        ))
+  (remove-hook 'doom-modeline-mode-hook #'size-indication-mode) ; filesize in modeline
+  (setq doom-modeline-major-mode-icon t)
+  )
 #+end_src
 
 ** Dashboard
@@ -257,7 +258,7 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 (setq org-directory "~/Documents/Org")
 
 (after! org
-  (setq org-agenda-files '("~/Documents/Org/agenda.org")
+  (setq org-agenda-files '("~/Documents/Org")
         org-default-notes-file (expand-file-name "notes.org" org-directory)
         org-journal-dir "~/Documents/Org/journal/"
         org-journal-date-format "%B %d, %Y (%A) "
