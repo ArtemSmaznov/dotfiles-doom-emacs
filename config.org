@@ -278,7 +278,9 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 
 #+begin_src emacs-lisp
 (after! org
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (add-hook 'org-mode-hook (lambda ()
+                             (org-bullets-mode 1)
+                             (display-line-numbers-mode 0)))
   (setq org-ellipsis " ▼ "
         org-agenda-start-with-log-mode t
         org-log-into-drawer t
