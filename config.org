@@ -7,7 +7,7 @@
 - [[#introduction-to-the-config][Introduction to the Config]]
   - [[#personal-info][Personal Info]]
 - [[#ui][UI]]
-  - [[#tools][Tools]]
+  - [[#interface][Interface]]
   - [[#theme][Theme]]
   - [[#fonts][Fonts]]
   - [[#modeline][Modeline]]
@@ -51,12 +51,19 @@ clients, file templates and snippets.
 #+end_src
 
 * UI
-** Tools
+** Interface
+
+This determines the style of line numbers in effect.
+If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
 
 #+begin_src emacs-lisp
-;; This determines the style of line numbers in effect.
-;; If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
+#+end_src
+
+Set width of window dividers
+
+#+begin_src emacs-lisp
+(setq window-divider-default-right-width 6)
 #+end_src
 
 ** Theme
@@ -181,6 +188,7 @@ Uses the standard Unix password store "pass".
     (setq projectile-project-search-path '("~/projects")))
   (setq projectile-switch-project-action #'projectile-dired))
 #+end_src
+
 ** Windows
 
 #+begin_src emacs-lisp
