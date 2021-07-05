@@ -30,6 +30,7 @@
 - [[#keybindings][Keybindings]]
   - [[#org-mode-1][Org Mode]]
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
+  - [[#inserts][Inserts]]
 - [[#additional-notes][Additional Notes]]
 
 * Introduction to the Config
@@ -369,6 +370,14 @@ Enable syntax highlighting for .vim files
       (:prefix ("b". "buffer")
        :desc "List bookmarks" "L" #'list-bookmarks
        :desc "Save current bookmarks to bookmark file" "w" #'bookmark-save))
+#+end_src
+
+** Inserts
+
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("i". "insert")
+       :desc "Toilet pagga" "t" (cmd! (evil-ex "R!toilet -f pagga "))))
 #+end_src
 
 * Additional Notes
