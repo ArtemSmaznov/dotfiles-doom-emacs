@@ -383,6 +383,8 @@ Here are some additional functions/macros that could help you configure Doom:
 ;;   this file. Emacs searches the `load-path' when you load packages with
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
+
+(load! "local.el")
 #+END_SRC
 
 To get information about any of these functions/macros, move the cursor over
