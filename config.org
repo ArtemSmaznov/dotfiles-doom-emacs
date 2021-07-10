@@ -15,7 +15,7 @@
 - [[#behavior][Behavior]]
   - [[#which-key][Which-key]]
   - [[#password-store][Password Store]]
-  - [[#exit-confirmation][Exit confirmation]]
+  - [[#exit-confirmation][Exit Confirmation]]
   - [[#projectile][Projectile]]
   - [[#windows][Windows]]
   - [[#scrolling][Scrolling]]
@@ -175,7 +175,7 @@ Uses the standard Unix password store "pass".
 ;; (use-package! password-store)
 #+end_src
 
-** Exit confirmation
+** Exit Confirmation
 
 #+begin_src emacs-lisp
 (setq confirm-kill-emacs nil)
@@ -197,6 +197,7 @@ Uses the standard Unix password store "pass".
 (setq split-width-threshold 0
       split-height-threshold nil)
 #+end_src
+
 ** Scrolling
 
 #+begin_src emacs-lisp
@@ -350,6 +351,29 @@ We need ox-man for "Org eXporting" to manpage format.
 (use-package ox-man)
 (use-package ox-gemini)
 #+END_SRC
+
+*** Refiling
+
+#+begin_src emacs-lisp
+(setq org-refile-targets
+      '("archive.org" :maxlevel .1))
+#+end_src
+
+Save all org buffers after a refile
+
+#+begin_src emacs-lisp
+(advice-add 'org-refile :after 'org-save-all-org-buffers)
+#+end_src
+
+*** Babel
+
+#+begin_src emacs-lisp
+(require 'org-tempo)
+
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+#+end_src
 
 ** Vim
 
