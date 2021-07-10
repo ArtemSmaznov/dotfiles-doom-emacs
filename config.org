@@ -18,6 +18,7 @@
   - [[#exit-confirmation][Exit confirmation]]
   - [[#projectile][Projectile]]
   - [[#windows][Windows]]
+  - [[#scrolling][Scrolling]]
 - [[#navigation][Navigation]]
   - [[#neotree][Neotree]]
   - [[#dired][Dired]]
@@ -195,6 +196,11 @@ Uses the standard Unix password store "pass".
 #+begin_src emacs-lisp
 (setq split-width-threshold 0
       split-height-threshold nil)
+#+end_src
+** Scrolling
+
+#+begin_src emacs-lisp
+(setq scroll-margin 7)
 #+end_src
 
 * Navigation
@@ -392,8 +398,8 @@ Here are some additional functions/macros that could help you configure Doom:
 ;;   this file. Emacs searches the `load-path' when you load packages with
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
-
-(load! "local.el")
+(when (file-exists-p "local.el")
+  (load! "local.el"))
 #+END_SRC
 
 To get information about any of these functions/macros, move the cursor over
@@ -402,3 +408,4 @@ This will open documentation for it, including demos of how they are used.
 
 You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 they are implemented.
+
