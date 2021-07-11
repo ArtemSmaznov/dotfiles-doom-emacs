@@ -130,34 +130,32 @@ Emojify is an Emacs extension to display emojis. It can display GitHub style emo
 
 Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
 
-*** Configuring the Dashboard
 
 #+begin_src emacs-lisp
-;; (use-package dashboard
-;;   :init      ;; tweak dashboard config before loading it
-;;   (setq dashboard-set-heading-icons t)
-;;   (setq dashboard-set-file-icons t)
-;;   (setq dashboard-banner-logo-title "There is no place like home!")
-;;   (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-;;   ;; (setq dashboard-startup-banner "~/.config/doom/doom-emacs-dash.png")  ;; use custom image as banner
-;;   (setq dashboard-center-content t) ;; set to 't' for centered content
-;;   (setq dashboard-items '((recents . 10)
-;;                           (agenda . 5 )
-;;                           (bookmarks . 5)
-;;                           (projects . 5)
-;;                           (registers . 5)))
-;;   :config
-;;   (dashboard-setup-startup-hook)
-;;   (dashboard-modify-heading-icons '((recents . "file-text")
-;;                                     (bookmarks . "book"))))
+(use-package dashboard
+  :init      ;; tweak dashboard config before loading it
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "There is no place like home!")
+  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  ;; (setq dashboard-startup-banner "~/.config/doom/doom-emacs-dash.png")  ;; use custom image as banner
+  (setq dashboard-center-content t) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 10)
+                          (agenda . 5 )
+                          (bookmarks . 5)
+                          (projects . 5)
+                          (registers . 5)))
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+                                    (bookmarks . "book"))))
 #+end_src
-
-*** Dashboard in Emacsclient
 
 This setting ensures that emacsclient always opens on *dashboard* rather than *scratch*.
 
 #+begin_src emacs-lisp
-(setq doom-fallback-buffer "*dashboard*")
+(setq doom-fallback-buffer "*dashboard*"
+      doom-fallback-buffer-name "*dashboard*")
 #+end_src
 
 * Behavior
