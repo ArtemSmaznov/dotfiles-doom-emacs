@@ -365,6 +365,12 @@ Save all org buffers after a refile
 (advice-add 'org-refile :after 'org-save-all-org-buffers)
 #+end_src
 
+*** Unix Configs Support
+
+#+begin_src emacs-lisp
+(push '("conf-unix" . conf-unix) org-src-lang-modes)
+#+end_src
+
 *** Babel
 
 #+begin_src emacs-lisp
@@ -375,6 +381,18 @@ Save all org buffers after a refile
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
 (add-to-list 'org-structure-template-alist '("lu" . "src lua"))
+#+end_src
+
+Auto-tangle on save
+
+#+begin_src emacs-lisp
+;; (defun efs/org-babel-tagle-config ()
+;;   (when (string-equal (buffer-file-name)
+;;                       (expand-file-name "some org file location"))
+;;     (let ((org-confirm-babel-evaluate nil))
+;;       (org-babel-tangle))))
+
+;;   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 #+end_src
 
 ** Vim

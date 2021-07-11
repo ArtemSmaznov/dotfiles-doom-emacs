@@ -14,7 +14,7 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
-(defvar +literate-config-file
+(setq +literate-config-file
   (concat doom-private-dir "README.org"))
 
 (doom! :input
