@@ -6,19 +6,19 @@
 * Table of Contents :toc:
 - [[#introduction-to-the-config][Introduction to the Config]]
   - [[#personal-info][Personal Info]]
+- [[#dashboard][Dashboard]]
 - [[#ui][UI]]
-  - [[#interface][Interface]]
   - [[#theme][Theme]]
   - [[#fonts][Fonts]]
+  - [[#interface][Interface]]
   - [[#modeline][Modeline]]
-  - [[#dashboard][Dashboard]]
 - [[#behavior][Behavior]]
   - [[#which-key][Which-key]]
   - [[#password-store][Password Store]]
   - [[#exit-confirmation][Exit Confirmation]]
-  - [[#projectile][Projectile]]
   - [[#windows][Windows]]
   - [[#scrolling][Scrolling]]
+- [[#projectile][Projectile]]
 - [[#navigation][Navigation]]
   - [[#neotree][Neotree]]
   - [[#dired][Dired]]
@@ -52,22 +52,44 @@ clients, file templates and snippets.
 (setq user-full-name "Artem Smaznov")
 #+end_src
 
+* Dashboard
+Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
+
+#+begin_src emacs-lisp
+(use-package dashboard
+  :init      ;; tweak dashboard config before loading it
+  (setq
+   dashboard-set-heading-icons t
+   dashboard-set-file-icons t
+   dashboard-page-separator "\n \n"
+   dashboard-banner-logo-title "There is no place like home!"
+   ;; dashboard-startup-banner 'logo ;; use standard emacs logo as banner
+   dashboard-startup-banner "~/.config/doom/doom-emacs-logo.txt"  ;; use doom dashboard ASCII banner
+   ;; dashboard-startup-banner "~/.config/doom/doom-logo.png"  ;; use custom image as banner
+   dashboard-center-content t ;; set to 't' for centered content
+   dashboard-items '((recents . 10)
+                     (agenda . 5 )
+                     (bookmarks . 5)
+                     (projects . 5)
+                     (registers . 5))
+   )
+
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+                                    (bookmarks . "book"))))
+#+end_src
+
+This setting ensures that emacsclient always opens on *dashboard* rather than *scratch*.
+
+#+begin_src emacs-lisp
+(setq
+ doom-fallback-buffer "*dashboard*"
+ doom-fallback-buffer-name "*dashboard*"
+ )
+#+end_src
+
 * UI
-** Interface
-
-This determines the style of line numbers in effect.
-If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
-
-#+begin_src emacs-lisp
-(setq display-line-numbers-type 'relative)
-#+end_src
-
-Set width of window dividers
-
-#+begin_src emacs-lisp
-(setq window-divider-default-right-width 6)
-#+end_src
-
 ** Theme
 
 There are two ways to load a theme. Both assume the theme is installed and
@@ -117,6 +139,21 @@ Emojify is an Emacs extension to display emojis. It can display GitHub style emo
   :hook (after-init . global-emojify-mode))
 #+end_src
 
+** Interface
+
+This determines the style of line numbers in effect.
+If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
+
+#+begin_src emacs-lisp
+(setq display-line-numbers-type 'relative)
+#+end_src
+
+Set width of window dividers
+
+#+begin_src emacs-lisp
+(setq window-divider-default-right-width 6)
+#+end_src
+
 ** Modeline
 
 #+begin_src emacs-lisp
@@ -124,38 +161,6 @@ Emojify is an Emacs extension to display emojis. It can display GitHub style emo
   (remove-hook 'doom-modeline-mode-hook #'size-indication-mode) ; filesize in modeline
   (setq doom-modeline-major-mode-icon t)
   )
-#+end_src
-
-** Dashboard
-
-Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
-
-
-#+begin_src emacs-lisp
-(use-package dashboard
-  :init      ;; tweak dashboard config before loading it
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "There is no place like home!")
-  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  ;; (setq dashboard-startup-banner "~/.config/doom/doom-emacs-dash.png")  ;; use custom image as banner
-  (setq dashboard-center-content t) ;; set to 't' for centered content
-  (setq dashboard-items '((recents . 10)
-                          (agenda . 5 )
-                          (bookmarks . 5)
-                          (projects . 5)
-                          (registers . 5)))
-  :config
-  (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '((recents . "file-text")
-                                    (bookmarks . "book"))))
-#+end_src
-
-This setting ensures that emacsclient always opens on *dashboard* rather than *scratch*.
-
-#+begin_src emacs-lisp
-(setq doom-fallback-buffer "*dashboard*"
-      doom-fallback-buffer-name "*dashboard*")
 #+end_src
 
 * Behavior
@@ -179,16 +184,6 @@ Uses the standard Unix password store "pass".
 (setq confirm-kill-emacs nil)
 #+end_src
 
-** Projectile
-
-#+begin_src emacs-lisp
-(use-package! projectile
-  :init
-  (when (file-directory-p "~/projects")
-    (setq projectile-project-search-path '("~/projects")))
-  (setq projectile-switch-project-action #'projectile-dired))
-#+end_src
-
 ** Windows
 
 #+begin_src emacs-lisp
@@ -200,6 +195,16 @@ Uses the standard Unix password store "pass".
 
 #+begin_src emacs-lisp
 (setq scroll-margin 7)
+#+end_src
+
+* Projectile
+
+#+begin_src emacs-lisp
+(use-package! projectile
+  :init
+  (when (file-directory-p "~/projects")
+    (setq projectile-project-search-path '("~/projects")))
+  (setq projectile-switch-project-action #'projectile-dired))
 #+end_src
 
 * Navigation
