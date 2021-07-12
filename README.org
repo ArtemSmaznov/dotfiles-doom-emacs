@@ -234,10 +234,15 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
 ** Dired
 
 #+begin_src emacs-lisp
+(map! :leader
+      :desc "Dired" "t d" #'projectile-dired-other-window
+      )
+
 (map! :map dired-mode-map
       :n "<backspace>" 'dired-up-directory
       :n "h" 'dired-up-directory
-      :n "l"  'dired-open-file)
+      :n "l"  'dired-open-file
+      )
 #+end_src
 
 ** Evil Mode
