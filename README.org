@@ -33,11 +33,11 @@
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
   - [[#inserts][Inserts]]
 - [[#additional-notes][Additional Notes]]
+- [[#local-overwrite][Local Overwrite]]
 
 * Introduction to the Config
 
-Place your private configuration here! Remember, you do not need to run 'doom
-sync' after modifying this file!
+Place your private configuration here! Remember, you do not need to run 'doom sync' after modifying this file!
 
 #+begin_src emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
@@ -45,8 +45,7 @@ sync' after modifying this file!
 
 ** Personal Info
 
-Some functionality uses this to identify you, e.g. GPG configuration, email
-clients, file templates and snippets.
+Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets.
 
 #+begin_src emacs-lisp
 (setq user-full-name "Artem Smaznov")
@@ -64,20 +63,24 @@ Emacs Dashboard is an extensible startup screen showing you recent files, bookma
    dashboard-page-separator "\n \n"
    dashboard-banner-logo-title "There is no place like home!"
    ;; dashboard-startup-banner 'logo ;; use standard emacs logo as banner
-   dashboard-startup-banner "~/.config/doom/doom-emacs-logo.txt"  ;; use doom dashboard ASCII banner
-   ;; dashboard-startup-banner "~/.config/doom/doom-logo.png"  ;; use custom image as banner
+   ;; dashboard-startup-banner "~/.config/doom/doom-emacs-logo.txt"  ;; use doom dashboard ASCII banner
+   dashboard-startup-banner "~/.config/doom/doom-logo.png"  ;; use custom image as banner
    dashboard-center-content t ;; set to 't' for centered content
-   dashboard-items '((recents . 10)
+   dashboard-items '(
+                     (recents . 10)
                      (agenda . 5 )
                      (bookmarks . 5)
                      (projects . 5)
-                     (registers . 5))
+                     (registers . 5)
+                     )
    )
 
   :config
   (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '((recents . "file-text")
-                                    (bookmarks . "book"))))
+  (dashboard-modify-heading-icons '(
+                                    (recents . "file-text")
+                                    (bookmarks . "book")
+                                    )))
 #+end_src
 
 This setting ensures that emacsclient always opens on *dashboard* rather than *scratch*.
@@ -116,16 +119,21 @@ They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 font string. You generally only need these two:
 
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Hack Nerd Font Mono" :size 16)
-      doom-variable-pitch-font (font-spec :family "Hack Nerd Font Mono" :size 18))
+(setq
+ doom-font (font-spec :family "Hack Nerd Font Mono" :size 16)
+ doom-variable-pitch-font (font-spec :family "Hack Nerd Font Mono" :size 18)
+ )
 
 (after! doom-themes
-  (setq doom-themes-enable-bold t
-        doom-themes-enable-italic t))
+  (setq
+   doom-themes-enable-bold t
+   doom-themes-enable-italic t
+   ))
 
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
-  '(font-lock-keyword-face :slant italic))
+  '(font-lock-keyword-face :slant italic)
+  )
 
 (setq global-prettify-symbols-mode t)
 #+end_src
@@ -136,7 +144,8 @@ Emojify is an Emacs extension to display emojis. It can display GitHub style emo
 
 #+begin_src emacs-lisp
 (use-package emojify
-  :hook (after-init . global-emojify-mode))
+  :hook (after-init . global-emojify-mode)
+  )
 #+end_src
 
 ** Interface
@@ -187,8 +196,10 @@ Uses the standard Unix password store "pass".
 ** Windows
 
 #+begin_src emacs-lisp
-(setq split-width-threshold 0
-      split-height-threshold nil)
+(setq
+ split-width-threshold 0
+ split-height-threshold nil
+ )
 #+end_src
 
 ** Scrolling
@@ -203,8 +214,10 @@ Uses the standard Unix password store "pass".
 (use-package! projectile
   :init
   (when (file-directory-p "~/projects")
-    (setq projectile-project-search-path '("~/projects")))
-  (setq projectile-switch-project-action #'projectile-dired))
+    (setq projectile-project-search-path '("~/projects"))
+    )
+  (setq projectile-switch-project-action #'projectile-dired)
+  )
 #+end_src
 
 * Navigation
@@ -214,14 +227,19 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
 
 #+begin_src emacs-lisp
 (after! neotree
-  (setq neo-smart-open t
-        neo-window-fixed-size nil))
+  (setq
+   neo-smart-open t
+   neo-window-fixed-size nil)
+  )
+
 (after! doom-themes
-  (setq doom-neotree-enable-variable-pitch t))
+  (setq doom-neotree-enable-variable-pitch t)
+  )
 
 (map! :leader
       :desc "Neotree" "t n" #'neotree-toggle
-      :desc "Open directory in neotree" "d n" #'neotree-dir)
+      :desc "Open directory in neotree" "d n" #'neotree-dir
+      )
 
 (map! :map neotree-mode-map
       :n "h" #'+neotree/collapse-or-up
@@ -250,7 +268,9 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
 #+begin_src emacs-lisp
 (use-package! evil
   :config
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join))
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+  (setq evil-cross-lines t)
+  )
 #+end_src
 
 ** Splits
@@ -260,10 +280,14 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 #+begin_src emacs-lisp
 (defun prefer-horizontal-split ()
   (set-variable 'split-height-threshold nil t)
-  (set-variable 'split-width-threshold 40 t)) ; make this as low as needed
+  (set-variable 'split-width-threshold 40 t) ; make this as low as needed
+  )
+
 (add-hook 'markdown-mode-hook 'prefer-horizontal-split)
+
 (map! :leader
-      :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
+      :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window
+      )
 #+end_src
 
 ** Mouse Support
@@ -282,12 +306,13 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 (setq org-directory "~/Documents/Org")
 
 (after! org
-  (setq org-agenda-files '("~/Documents/Org")
-        org-default-notes-file (expand-file-name "notes.org" org-directory)
-        org-journal-dir "~/Documents/Org/journal/"
-        org-journal-date-format "%B %d, %Y (%A) "
-        org-journal-file-format "%Y-%m-%d.org"
-        ))
+  (setq
+   org-agenda-files '("~/Documents/Org")
+   org-default-notes-file (expand-file-name "notes.org" org-directory)
+   org-journal-dir "~/Documents/Org/journal/"
+   org-journal-date-format "%B %d, %Y (%A) "
+   org-journal-file-format "%Y-%m-%d.org"
+   ))
 #+end_src
 
 *** Setup
@@ -296,7 +321,8 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 (after! org
   (add-hook 'org-mode-hook (lambda ()
                              (org-bullets-mode 1)
-                             (display-line-numbers-mode 0)))
+                             (display-line-numbers-mode 0)
+                             ))
   (setq org-ellipsis " ▼ "
         org-agenda-start-with-log-mode t
         org-log-into-drawer t
@@ -305,10 +331,13 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
         ;; ex. of org-link-abbrev-alist in action
         ;; [[arch-wiki:Name_of_Page][Description]]
         org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
-        '(("google" . "http://www.google.com/search?q=")
+        '(
+          ("google" . "http://www.google.com/search?q=")
           ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
           ("ddg" . "https://duckduckgo.com/?q=")
-          ("wiki" . "https://en.wikipedia.org/wiki/"))))
+          ("wiki" . "https://en.wikipedia.org/wiki/")
+          )
+        ))
 #+end_src
 
 *** Headings
@@ -331,25 +360,28 @@ Setting the font sizes for each header level in Org mode.
 #+begin_src emacs-lisp
 (defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
        (interactive)
-       (setq prettify-symbols-alist
-             (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-                     '(("#+begin_src" . ?)
-                       ("#+end_src" . ?)
-                       ("#+begin_example" . ?)
-                       ("#+end_example" . ?)
-                       ("#+DATE:" . ?⏱)
-                       ("#+AUTHOR:" . ?✏)
-                       ("[ ]" .  ?☐)
-                       ("[X]" . ?☑ )
-                       ("[-]" . ?❍ )
-                       ("lambda" . ?λ)
-                       ("#+header:" . ?)
-                       ("#+name:" . ?﮸)
-                       ("#+results:" . ?)
-                       ("#+call:" . ?)
-                       (":properties:" . ?)
-                       (":logbook:" . ?))))
-       (prettify-symbols-mode 1))
+       (setq
+        prettify-symbols-mode 1
+        prettify-symbols-alist
+        (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                '(
+                  ("#+begin_src" . ?)
+                  ("#+end_src" . ?)
+                  ("#+begin_example" . ?)
+                  ("#+end_example" . ?)
+                  ("#+DATE:" . ?⏱)
+                  ("#+AUTHOR:" . ?✏)
+                  ("[ ]" .  ?☐)
+                  ("[X]" . ?☑ )
+                  ("[-]" . ?❍ )
+                  ("lambda" . ?λ)
+                  ("#+header:" . ?)
+                  ("#+name:" . ?﮸)
+                  ("#+results:" . ?)
+                  ("#+call:" . ?)
+                  (":properties:" . ?)
+                  (":logbook:" . ?)
+                  ))))
 #+end_src
 
 *** Manpage
@@ -363,8 +395,9 @@ We need ox-man for "Org eXporting" to manpage format.
 *** Refiling
 
 #+begin_src emacs-lisp
-(setq org-refile-targets
-      '("archive.org" :maxlevel .1))
+(setq
+ org-refile-targets '("archive.org" :maxlevel .1)
+ )
 #+end_src
 
 Save all org buffers after a refile
@@ -418,7 +451,8 @@ Enable syntax highlighting for .vim files
 
 #+begin_src emacs-lisp
 (map! :leader
-      :desc "Org babel tangle" "m B" #'org-babel-tangle)
+      :desc "Org babel tangle" "m B" #'org-babel-tangle
+      )
 #+end_src
 
 ** Buffers and Bookmarks
@@ -427,7 +461,8 @@ Enable syntax highlighting for .vim files
 (map! :leader
       (:prefix ("b". "buffer")
        :desc "List bookmarks" "L" #'list-bookmarks
-       :desc "Save current bookmarks to bookmark file" "w" #'bookmark-save))
+       :desc "Save current bookmarks to bookmark file" "w" #'bookmark-save
+       ))
 #+end_src
 
 ** Inserts
@@ -435,7 +470,8 @@ Enable syntax highlighting for .vim files
 #+begin_src emacs-lisp
 (map! :leader
       (:prefix ("i". "insert")
-       :desc "Toilet pagga" "t" (cmd! (evil-ex "R!toilet -f pagga "))))
+       :desc "Toilet pagga" "t" (cmd! (evil-ex "R!toilet -f pagga "))
+       ))
 #+end_src
 
 * Additional Notes
@@ -450,8 +486,6 @@ Here are some additional functions/macros that could help you configure Doom:
 ;;   this file. Emacs searches the `load-path' when you load packages with
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
-(when (file-exists-p "local.el")
-  (load! "local.el"))
 #+END_SRC
 
 To get information about any of these functions/macros, move the cursor over
@@ -461,3 +495,10 @@ This will open documentation for it, including demos of how they are used.
 You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 they are implemented.
 
+* Local Overwrite
+
+#+begin_src emacs-lisp
+(when (file-exists-p (expand-file-name "local.el" doom-private-dir))
+  (load! (expand-file-name "local.el" doom-private-dir))
+  )
+#+end_src
