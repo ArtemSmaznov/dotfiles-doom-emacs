@@ -36,6 +36,7 @@
   - [[#org-mode-1][Org Mode]]
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
   - [[#inserts][Inserts]]
+  - [[#rainbow-mode][Rainbow Mode]]
 - [[#additional-notes][Additional Notes]]
 - [[#local-overwrite][Local Overwrite]]
 
@@ -511,6 +512,15 @@ Enable syntax highlighting for .vim files
 (map! :leader
       (:prefix ("i". "insert")
        :desc "Toilet pagga" "t" (cmd! (evil-ex "R!toilet -f pagga "))
+       ))
+#+end_src
+
+** Rainbow Mode
+
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("t". "toggle")
+       :desc "Colors" "C" #'rainbow-mode
        ))
 #+end_src
 
