@@ -28,6 +28,7 @@
 - [[#lsp][LSP]]
   - [[#header-breadcrumb][Header Breadcrumb]]
   - [[#company-mode][Company Mode]]
+  - [[#ui-1][UI]]
   - [[#org-mode][ORG Mode]]
   - [[#vim][Vim]]
 - [[#spell-checking][Spell Checking]]
@@ -319,6 +320,14 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
     :custom
     (company-minimum-prefix-length 1)
     ))
+#+end_src
+
+** UI
+
+#+begin_src emacs-lisp
+(use-package! lsp-ui
+  :config
+  (setq lsp-ui-doc-position 'bottom))
 #+end_src
 
 ** ORG Mode
