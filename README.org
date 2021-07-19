@@ -27,6 +27,7 @@
   - [[#mouse-support][Mouse Support]]
 - [[#lsp][LSP]]
   - [[#header-breadcrumb][Header Breadcrumb]]
+  - [[#company-mode][Company Mode]]
   - [[#org-mode][ORG Mode]]
   - [[#vim][Vim]]
 - [[#spell-checking][Spell Checking]]
@@ -305,6 +306,19 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 (after! lsp-mode
   (add-hook 'lsp-mode-hook 'lsp-headerline-breadcrumb-mode)
   )
+#+end_src
+
+** Company Mode
+
+#+begin_src emacs-lisp
+(after! lsp-mode
+  (use-package! company
+    :bind
+    (:map company-active-map ("<tab>" . company-complete-selection))
+    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
+    :custom
+    (company-minimum-prefix-length 1)
+    ))
 #+end_src
 
 ** ORG Mode
