@@ -26,6 +26,7 @@
   - [[#splits][Splits]]
   - [[#mouse-support][Mouse Support]]
 - [[#lsp][LSP]]
+  - [[#header-breadcrumb][Header Breadcrumb]]
   - [[#org-mode][ORG Mode]]
   - [[#vim][Vim]]
 - [[#spell-checking][Spell Checking]]
@@ -298,6 +299,14 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 #+end_src
 
 * LSP
+** Header Breadcrumb
+
+#+begin_src emacs-lisp
+(after! lsp-mode
+  (add-hook 'lsp-mode-hook 'lsp-headerline-breadcrumb-mode)
+  )
+#+end_src
+
 ** ORG Mode
 *** Paths
 
