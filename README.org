@@ -257,15 +257,24 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
 ** Dired
 
 #+begin_src emacs-lisp
-(map! :leader
-      :desc "Dired" "t d" #'projectile-dired-other-window
-      )
+(use-package! dired
+  :ensure nil
+  :commands (dired dired-jump)
+  :config
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "h" 'dired-up-directory
+    "l" 'dired-find-file
+    ))
+#+end_src
 
-(map! :map dired-mode-map
-      :n "<backspace>" 'dired-up-directory
-      :n "h" 'dired-up-directory
-      :n "l"  'dired-open-file
-      )
+Toggle hidden files in Dired
+
+#+begin_src emacs-lisp
+(use-package! dired-hide-dotfiles
+  :hook (dired-mode . dired-hide-dotfiles-mode)
+  :config
+  (evil-collection-define-key 'normal 'dired-mode-map
+    "H" 'dired-hide-dotfiles-mode))
 #+end_src
 
 ** Evil Mode

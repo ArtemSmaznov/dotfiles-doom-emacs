@@ -14,6 +14,8 @@
 (package! calfw-org)
 (package! dashboard)
 (package! dired-open)
+(package! dired-hide-dotfiles)
+(package! dired-single)
 (package! dmenu)
 (package! elpher)
 (package! emojify)
