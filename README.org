@@ -28,6 +28,7 @@
 - [[#lsp][LSP]]
   - [[#org-mode][ORG Mode]]
   - [[#vim][Vim]]
+- [[#spell-checking][Spell Checking]]
 - [[#keybindings][Keybindings]]
   - [[#org-mode-1][Org Mode]]
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
@@ -444,6 +445,13 @@ Enable syntax highlighting for .vim files
 (require 'vimrc-mode)
 (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
 (add-hook 'vimrc-mode-hook #'lsp)
+#+end_src
+
+* Spell Checking
+
+#+begin_src emacs-lisp
+(after! spell-fu
+  (setq ispell-dictionary "english"))
 #+end_src
 
 * Keybindings
