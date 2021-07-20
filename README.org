@@ -227,7 +227,6 @@ Uses the standard Unix password store "pass".
 
 * Navigation
 ** Neotree
-
 Neotree is a file tree viewer. When you open neotree, it jumps to the current file thanks to neo-smart-open. The neo-window-fixed-size setting makes the neotree width be adjustable. Doom Emacs had no keybindings set for neotree. Since Doom Emacs uses ‘SPC t’ for ‘toggle’ keybindings, I used ‘SPC t n’ for toggle-neotree.
 
 #+begin_src emacs-lisp
@@ -235,30 +234,29 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
   (setq
    neo-smart-open t
    neo-window-fixed-size nil)
+
+  (after! doom-themes
+    (setq doom-neotree-enable-variable-pitch t)
+    )
+
+  (map! :map neotree-mode-map
+        :n "h" #'+neotree/collapse-or-up
+        :n "l" #'+neotree/expand-or-open
+        :n "s" #'neotree-enter-horizontal-split
+        :n "v" #'neotree-enter-vertical-split
+        )
   )
 
-(after! doom-themes
-  (setq doom-neotree-enable-variable-pitch t)
-  )
-
-(map! :leader
-      :desc "Neotree" "t n" #'neotree-toggle
-      :desc "Open directory in neotree" "d n" #'neotree-dir
-      )
-
-(map! :map neotree-mode-map
-      :n "h" #'+neotree/collapse-or-up
-      :n "l" #'+neotree/expand-or-open
-      :n "s" #'neotree-enter-horizontal-split
-      :n "v" #'neotree-enter-vertical-split
-      )
+;; (map! :leader
+;;       :desc "Neotree" "t n" #'neotree-toggle
+;;       :desc "Open directory in neotree" "d n" #'neotree-dir
+;;       )
 #+end_src
 
 ** Dired
 
 #+begin_src emacs-lisp
 (use-package! dired
-  :ensure nil
   :commands (dired dired-jump)
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
