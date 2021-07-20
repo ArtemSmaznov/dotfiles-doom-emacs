@@ -29,6 +29,7 @@
   - [[#breadcrumb][Breadcrumb]]
   - [[#company-mode][Company Mode]]
   - [[#ui-1][UI]]
+  - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#org-mode][ORG Mode]]
 - [[#spell-checking][Spell Checking]]
@@ -337,6 +338,21 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
   :hook (lsp-mode . lsp-ui-mode)
   :config
   (setq lsp-ui-doc-position 'bottom))
+#+end_src
+
+** Cucumber
+
+#+begin_src emacs-lisp
+(use-package feature-mode
+  :defer t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.feature$" . feature-mode))
+  :config
+  (setq
+   feature-default-language "en"
+   ;; feature-step-search-path "features/../**/*step*/*.js"
+   )
+  )
 #+end_src
 
 ** Vim
