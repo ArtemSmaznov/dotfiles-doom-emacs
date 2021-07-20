@@ -26,11 +26,11 @@
   - [[#splits][Splits]]
   - [[#mouse-support][Mouse Support]]
 - [[#lsp][LSP]]
-  - [[#header-breadcrumb][Header Breadcrumb]]
+  - [[#breadcrumb][Breadcrumb]]
   - [[#company-mode][Company Mode]]
   - [[#ui-1][UI]]
-  - [[#org-mode][ORG Mode]]
   - [[#vim][Vim]]
+  - [[#org-mode][ORG Mode]]
 - [[#spell-checking][Spell Checking]]
 - [[#keybindings][Keybindings]]
   - [[#org-mode-1][Org Mode]]
@@ -311,7 +311,7 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 #+end_src
 
 * LSP
-** Header Breadcrumb
+** Breadcrumb
 
 #+begin_src emacs-lisp
 (after! lsp-mode
@@ -336,8 +336,19 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 
 #+begin_src emacs-lisp
 (use-package! lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
   :config
   (setq lsp-ui-doc-position 'bottom))
+#+end_src
+
+** Vim
+Enable syntax highlighting for .vim files
+
+#+begin_src emacs-lisp
+(use-package vimrc-mode
+  :mode "\\.vim\\(rc\\)?\\'"
+  :hook (vimrc-mode . lsp-deferred)
+  )
 #+end_src
 
 ** ORG Mode
@@ -477,16 +488,6 @@ Auto-tangle on save
 ;;       (org-babel-tangle))))
 
 ;;   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
-#+end_src
-
-** Vim
-
-Enable syntax highlighting for .vim files
-
-#+begin_src emacs-lisp
-(require 'vimrc-mode)
-(add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
-(add-hook 'vimrc-mode-hook #'lsp)
 #+end_src
 
 * Spell Checking
