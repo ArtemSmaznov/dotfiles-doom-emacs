@@ -474,10 +474,11 @@ Save all org buffers after a refile
 (advice-add 'org-refile :after 'org-save-all-org-buffers)
 #+end_src
 
-*** Unix Configs Support
+*** Extra SRC Block Languages
 
 #+begin_src emacs-lisp
 (push '("conf-unix" . conf-unix) org-src-lang-modes)
+(push '("toml" . conf-toml) org-src-lang-modes)
 #+end_src
 
 *** Babel
