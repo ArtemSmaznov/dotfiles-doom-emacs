@@ -38,6 +38,7 @@
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
   - [[#inserts][Inserts]]
   - [[#rainbow-mode][Rainbow Mode]]
+- [[#mu4e][mu4e]]
 - [[#local-overwrite][Local Overwrite]]
 - [[#additional-notes][Additional Notes]]
 
@@ -54,7 +55,9 @@ Place your private configuration here! Remember, you do not need to run 'doom sy
 Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets.
 
 #+begin_src emacs-lisp
-(setq user-full-name "Artem Smaznov")
+(when (file-exists-p (expand-file-name "personal.el" doom-private-dir))
+  (load! (expand-file-name "personal.el" doom-private-dir))
+  )
 #+end_src
 
 * Dashboard
@@ -548,6 +551,42 @@ Highlight colors in file
       (:prefix ("t". "toggle")
        :desc "Colors" "C" #'rainbow-mode
        ))
+#+end_src
+
+* mu4e
+
+#+begin_src emacs-lisp
+(use-package! mu4e
+  :ensure nil
+  :defer 20
+  :config
+  (setq
+   ;; Set auto-sync interval 10 min
+   mu4e-update-interval (* 10 60)
+   mu4e-maildir "~/Maildir/gmail"
+   mu4e-maildir-shortcuts
+   '(
+     ("/inbox" . ?i)
+     ("/starred" . ?s)
+     ("/important" . ?I)
+     ("/sent" . ?t)
+     ("/drafts" . ?d)
+     ("/spam" . ?j)
+     ("/archive" . ?a)
+     ("/trash" . ?T)
+     )
+   mu4e-bookmarks
+   '(
+     (:name "Unread messages" :query "flag:unread AND NOT flag:trashed AND NOT maildir:\"/spam\"" :key ?i)
+     (:name "Today's messages" :query "date:today..now AND NOT maildir:\"/spam\"" :key ?t)
+     (:name "Last 7 days" :query "date:7d..now AND NOT maildir:\"/spam\"" :hide-unread t :key ?w)
+     (:name "Messages with images" :query "mime:image/* AND NOT maildir:\"/spam\"" :key ?p)
+     )
+   )
+
+  ;; Enable auto-sync
+  (mu4e t)
+  )
 #+end_src
 
 * Local Overwrite
