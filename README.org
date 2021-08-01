@@ -48,7 +48,8 @@
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
   - [[#inserts][Inserts]]
   - [[#rainbow-mode][Rainbow Mode]]
-- [[#mu4e][mu4e]]
+- [[#modules][Modules]]
+  - [[#mu4e][mu4e]]
 - [[#local-overwrite][Local Overwrite]]
 - [[#additional-notes][Additional Notes]]
 
@@ -569,7 +570,8 @@ Highlight colors in file
        ))
 #+end_src
 
-* mu4e
+* Modules
+** mu4e
 
 #+begin_src emacs-lisp
 (use-package! mu4e
