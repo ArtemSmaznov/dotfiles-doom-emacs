@@ -563,7 +563,7 @@ Highlight colors in file
   (setq
    ;; Set auto-sync interval 10 min
    mu4e-update-interval (* 10 60)
-   mu4e-maildir "~/Maildir/gmail"
+   ;; mu4e-maildir "~/Maildir/gmail"
    mu4e-maildir-shortcuts
    '(
      ("/inbox" . ?i)
@@ -571,17 +571,17 @@ Highlight colors in file
      ("/important" . ?I)
      ("/sent" . ?t)
      ("/drafts" . ?d)
-     ("/spam" . ?j)
+     ;; ("/spam" . ?j)
      ("/archive" . ?a)
      ("/trash" . ?T)
      )
-   mu4e-bookmarks
-   '(
-     (:name "Unread messages" :query "flag:unread AND NOT flag:trashed AND NOT maildir:\"/spam\"" :key ?i)
-     (:name "Today's messages" :query "date:today..now AND NOT maildir:\"/spam\"" :key ?t)
-     (:name "Last 7 days" :query "date:7d..now AND NOT maildir:\"/spam\"" :hide-unread t :key ?w)
-     (:name "Messages with images" :query "mime:image/* AND NOT maildir:\"/spam\"" :key ?p)
-     )
+   ;; mu4e-bookmarks
+   ;; '(
+   ;;   (:name "Unread messages" :query "flag:unread AND NOT flag:trashed AND NOT maildir:\"/spam\"" :key ?i)
+   ;;   (:name "Today's messages" :query "date:today..now AND NOT maildir:\"/spam\"" :key ?t)
+   ;;   (:name "Last 7 days" :query "date:7d..now AND NOT maildir:\"/spam\"" :hide-unread t :key ?w)
+   ;;   (:name "Messages with images" :query "mime:image/* AND NOT maildir:\"/spam\"" :key ?p)
+   ;;   )
    )
 
   ;; Enable auto-sync
