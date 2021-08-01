@@ -7,6 +7,8 @@
 - [[#introduction-to-the-config][Introduction to the Config]]
   - [[#personal-info][Personal Info]]
 - [[#dashboard][Dashboard]]
+  - [[#emacs-dashboard][Emacs Dashboard]]
+  - [[#doom-dashboard][Doom Dashboard]]
 - [[#ui][UI]]
   - [[#theme][Theme]]
   - [[#fonts][Fonts]]
@@ -69,44 +71,50 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
 #+end_src
 
 * Dashboard
-Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
+** Emacs Dashboard
+# Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
+
+# #+begin_src emacs-lisp
+# (use-package! dashboard
+#   :init      ;; tweak dashboard config before loading it
+#   (setq
+#    dashboard-set-heading-icons t
+#    dashboard-set-file-icons t
+#    dashboard-page-separator "\n \n"
+#    dashboard-banner-logo-title "There is no place like home!"
+#    ;; dashboard-startup-banner 'logo ;; use standard emacs logo as banner
+#    ;; dashboard-startup-banner "~/.config/doom/doom-emacs-logo.txt"  ;; use doom dashboard ASCII banner
+#    dashboard-startup-banner "~/.config/doom/doom-logo.png"  ;; use custom image as banner
+#    dashboard-center-content t ;; set to 't' for centered content
+#    dashboard-items '(
+#                      (recents . 10)
+#                      (agenda . 5 )
+#                      (bookmarks . 5)
+#                      (projects . 5)
+#                      (registers . 5)
+#                      )
+#    )
+
+#   :config
+#   (dashboard-setup-startup-hook)
+#   (dashboard-modify-heading-icons '(
+#                                     (recents . "file-text")
+#                                     (bookmarks . "book")
+#                                     )))
+# #+end_src
+
+# This setting ensures that emacsclient always opens on *dashboard* rather than *scratch*.
+
+# #+begin_src emacs-lisp
+# (setq
+#  doom-fallback-buffer "*dashboard*"
+#  doom-fallback-buffer-name "*dashboard*"
+#  )
+# #+end_src
+** Doom Dashboard
 
 #+begin_src emacs-lisp
-(use-package dashboard
-  :init      ;; tweak dashboard config before loading it
-  (setq
-   dashboard-set-heading-icons t
-   dashboard-set-file-icons t
-   dashboard-page-separator "\n \n"
-   dashboard-banner-logo-title "There is no place like home!"
-   ;; dashboard-startup-banner 'logo ;; use standard emacs logo as banner
-   ;; dashboard-startup-banner "~/.config/doom/doom-emacs-logo.txt"  ;; use doom dashboard ASCII banner
-   dashboard-startup-banner "~/.config/doom/doom-logo.png"  ;; use custom image as banner
-   dashboard-center-content t ;; set to 't' for centered content
-   dashboard-items '(
-                     (recents . 10)
-                     (agenda . 5 )
-                     (bookmarks . 5)
-                     (projects . 5)
-                     (registers . 5)
-                     )
-   )
-
-  :config
-  (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '(
-                                    (recents . "file-text")
-                                    (bookmarks . "book")
-                                    )))
-#+end_src
-
-This setting ensures that emacsclient always opens on *dashboard* rather than *scratch*.
-
-#+begin_src emacs-lisp
-(setq
- doom-fallback-buffer "*dashboard*"
- doom-fallback-buffer-name "*dashboard*"
- )
+(setq fancy-splash-image "~/.config/doom/doom-logo.png")
 #+end_src
 
 * UI

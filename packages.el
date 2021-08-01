@@ -12,7 +12,7 @@
 (package! async)
 (package! calfw)
 (package! calfw-org)
-(package! dashboard)
+;; (package! dashboard)
 (package! dired-open)
 (package! dired-hide-dotfiles)
 (package! dired-single)
