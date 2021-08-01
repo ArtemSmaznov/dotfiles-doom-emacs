@@ -31,7 +31,15 @@
   - [[#ui-1][UI]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
-  - [[#org-mode][ORG Mode]]
+- [[#org-mode][ORG Mode]]
+  - [[#paths][Paths]]
+  - [[#setup][Setup]]
+  - [[#headings][Headings]]
+  - [[#pretty-symbols][Pretty Symbols]]
+  - [[#manpage][Manpage]]
+  - [[#refiling][Refiling]]
+  - [[#extra-src-block-languages][Extra SRC Block Languages]]
+  - [[#babel][Babel]]
 - [[#spell-checking][Spell Checking]]
 - [[#keybindings][Keybindings]]
   - [[#org-mode-1][Org Mode]]
@@ -368,8 +376,8 @@ Enable syntax highlighting for .vim files
   )
 #+end_src
 
-** ORG Mode
-*** Paths
+* ORG Mode
+** Paths
 
 #+begin_src emacs-lisp
 ;; If you use `org' and don't want your org files in the default location below,
@@ -386,7 +394,7 @@ Enable syntax highlighting for .vim files
    ))
 #+end_src
 
-*** Setup
+** Setup
 
 #+begin_src emacs-lisp
 (after! org
@@ -411,7 +419,7 @@ Enable syntax highlighting for .vim files
         ))
 #+end_src
 
-*** Headings
+** Headings
 
 Setting the font sizes for each header level in Org mode.
 
@@ -426,7 +434,7 @@ Setting the font sizes for each header level in Org mode.
    ))
 #+end_src
 
-*** Pretty Symbols
+** Pretty Symbols
 
 #+begin_src emacs-lisp
 (defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
@@ -455,7 +463,7 @@ Setting the font sizes for each header level in Org mode.
                   ))))
 #+end_src
 
-*** Manpage
+** Manpage
 We need ox-man for "Org eXporting" to manpage format.
 
 #+BEGIN_SRC emacs-lisp
@@ -463,7 +471,7 @@ We need ox-man for "Org eXporting" to manpage format.
 (use-package ox-gemini)
 #+END_SRC
 
-*** Refiling
+** Refiling
 
 #+begin_src emacs-lisp
 (setq
@@ -477,14 +485,14 @@ Save all org buffers after a refile
 (advice-add 'org-refile :after 'org-save-all-org-buffers)
 #+end_src
 
-*** Extra SRC Block Languages
+** Extra SRC Block Languages
 
 #+begin_src emacs-lisp
 (push '("conf-unix" . conf-unix) org-src-lang-modes)
 (push '("toml" . conf-toml) org-src-lang-modes)
 #+end_src
 
-*** Babel
+** Babel
 
 #+begin_src emacs-lisp
 (require 'org-tempo)
