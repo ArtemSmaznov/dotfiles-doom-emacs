@@ -9,6 +9,7 @@
 - [[#dashboard][Dashboard]]
   - [[#emacs-dashboard][Emacs Dashboard]]
   - [[#doom-dashboard][Doom Dashboard]]
+  - [[#learn-emacs-22][Learn Emacs]]
 - [[#ui][UI]]
   - [[#theme][Theme]]
   - [[#fonts][Fonts]]
@@ -36,6 +37,7 @@
 - [[#org-mode][ORG Mode]]
   - [[#paths][Paths]]
   - [[#setup][Setup]]
+  - [[#agenda][Agenda]]
   - [[#headings][Headings]]
   - [[#pretty-symbols][Pretty Symbols]]
   - [[#manpage][Manpage]]
@@ -117,6 +119,11 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
 #+begin_src emacs-lisp
 (setq fancy-splash-image "~/.config/doom/doom-logo.png")
 #+end_src
+
+** DONE Learn Emacs [2/2]
+CLOSED: [2021-06-28 Mon 19:29]
+- [X] Start using Emacs instead of Vim
+- [X] Add Emacs keymapping for qTile
 
 * UI
 ** Theme
@@ -412,7 +419,6 @@ Enable syntax highlighting for .vim files
                              (display-line-numbers-mode 0)
                              ))
   (setq org-ellipsis " ▼ "
-        org-agenda-start-with-log-mode t
         org-log-into-drawer t
         org-log-done 'time
         org-hide-emphasis-markers t
@@ -426,6 +432,18 @@ Enable syntax highlighting for .vim files
           ("wiki" . "https://en.wikipedia.org/wiki/")
           )
         ))
+#+end_src
+
+** Agenda
+
+#+begin_src emacs-lisp
+(after! org
+  (setq
+   org-agenda-start-with-log-mode t
+   org-agenda-start-day nil
+   org-agenda-span 'week
+   org-agenda-start-on-weekday 1
+   ))
 #+end_src
 
 ** Headings
