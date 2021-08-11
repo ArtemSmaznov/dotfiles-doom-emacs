@@ -41,6 +41,7 @@
   - [[#headings][Headings]]
   - [[#pretty-symbols][Pretty Symbols]]
   - [[#manpage][Manpage]]
+  - [[#archiving][Archiving]]
   - [[#refiling][Refiling]]
   - [[#extra-src-block-languages][Extra SRC Block Languages]]
   - [[#babel][Babel]]
@@ -464,30 +465,32 @@ Setting the font sizes for each header level in Org mode.
 ** Pretty Symbols
 
 #+begin_src emacs-lisp
-(defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
-       (interactive)
-       (setq
-        prettify-symbols-mode 1
-        prettify-symbols-alist
-        (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-                '(
-                  ("#+begin_src" . ?)
-                  ("#+end_src" . ?)
-                  ("#+begin_example" . ?)
-                  ("#+end_example" . ?)
-                  ("#+DATE:" . ?⏱)
-                  ("#+AUTHOR:" . ?✏)
-                  ("[ ]" .  ?☐)
-                  ("[X]" . ?☑ )
-                  ("[-]" . ?❍ )
-                  ("lambda" . ?λ)
-                  ("#+header:" . ?)
-                  ("#+name:" . ?﮸)
-                  ("#+results:" . ?)
-                  ("#+call:" . ?)
-                  (":properties:" . ?)
-                  (":logbook:" . ?)
-                  ))))
+(after! org
+  (defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
+         (interactive)
+         (setq
+          prettify-symbols-mode 1
+          prettify-symbols-alist
+          (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                  '(
+                    ("#+begin_src" . ?)
+                    ("#+end_src" . ?)
+                    ("#+begin_example" . ?)
+                    ("#+end_example" . ?)
+                    ("#+DATE:" . ?⏱)
+                    ("#+AUTHOR:" . ?✏)
+                    ("[ ]" .  ?☐)
+                    ("[X]" . ?☑ )
+                    ("[-]" . ?❍ )
+                    ("lambda" . ?λ)
+                    ("#+header:" . ?)
+                    ("#+name:" . ?﮸)
+                    ("#+results:" . ?)
+                    ("#+call:" . ?)
+                    (":properties:" . ?)
+                    (":logbook:" . ?)
+                    ))))
+  )
 #+end_src
 
 ** Manpage
@@ -498,37 +501,53 @@ We need ox-man for "Org eXporting" to manpage format.
 (use-package ox-gemini)
 #+END_SRC
 
+** Archiving
+
+#+begin_src emacs-lisp
+(after! org
+  (setq
+   org-archive-location "archive.org::"
+   ))
+#+end_src
+
 ** Refiling
 
 #+begin_src emacs-lisp
-(setq
- org-refile-targets '("archive.org" :maxlevel .1)
- )
+(after! org
+  (setq
+   org-refile-targets '((org-agenda-files :maxlevel . 1))
+   ))
 #+end_src
 
 Save all org buffers after a refile
 
 #+begin_src emacs-lisp
-(advice-add 'org-refile :after 'org-save-all-org-buffers)
+(after! org
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+  )
 #+end_src
 
 ** Extra SRC Block Languages
 
 #+begin_src emacs-lisp
-(push '("conf-unix" . conf-unix) org-src-lang-modes)
-(push '("toml" . conf-toml) org-src-lang-modes)
+(after! org
+  (push '("conf-unix" . conf-unix) org-src-lang-modes)
+  (push '("toml" . conf-toml) org-src-lang-modes)
+  )
 #+end_src
 
 ** Babel
 
 #+begin_src emacs-lisp
-(require 'org-tempo)
+(after! org
+  (require 'org-tempo)
 
-(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("py" . "src python"))
-(add-to-list 'org-structure-template-alist '("js" . "src javascript"))
-(add-to-list 'org-structure-template-alist '("lu" . "src lua"))
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
+  (add-to-list 'org-structure-template-alist '("lu" . "src lua"))
+  )
 #+end_src
 
 Auto-tangle on save
