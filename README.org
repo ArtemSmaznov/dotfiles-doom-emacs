@@ -467,7 +467,7 @@ We need ox-man for "Org eXporting" to manpage format.
 #+begin_src emacs-lisp
 (after! org
   (setq
-   org-archive-location "archive.org::"
+   org-archive-location (expand-file-name "archive.org::datetree/" org-directory)
    ))
 #+end_src
 
