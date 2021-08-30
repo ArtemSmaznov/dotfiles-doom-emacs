@@ -46,6 +46,7 @@
   - [[#babel][Babel]]
 - [[#spell-checking][Spell Checking]]
 - [[#keybindings][Keybindings]]
+  - [[#editing][Editing]]
   - [[#org-mode-1][Org Mode]]
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
   - [[#inserts][Inserts]]
@@ -268,6 +269,7 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-up-directory
     "l" 'dired-find-file
+    "S" 'dired-do-symlink
     ))
 #+end_src
 
@@ -525,6 +527,15 @@ Auto-tangle on save
 #+end_src
 
 * Keybindings
+** Editing
+Highlight colors in file
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("t". "toggle")
+       :desc "Fill Column Indicator" "|" #'global-display-fill-column-indicator-mode
+       ))
+#+end_src
+
 ** Org Mode
 #+begin_src emacs-lisp
 (map! :leader
@@ -554,7 +565,7 @@ Highlight colors in file
 #+begin_src emacs-lisp
 (map! :leader
       (:prefix ("t". "toggle")
-       :desc "Colors" "C" #'rainbow-mode
+       :desc "Colors" "c" #'rainbow-mode
        ))
 #+end_src
 
