@@ -64,7 +64,6 @@
 - [[#additional-notes][Additional Notes]]
 
 * Introduction to the Config
-
 Place your private configuration here! Remember, you do not need to run 'doom sync' after modifying this file!
 #+begin_src emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
@@ -127,7 +126,6 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
 
 * UI
 ** Theme
-
 There are two ways to load a theme. Both assume the theme is installed and
 available. You can either set `doom-theme' or manually load a theme with the
 `load-theme' function. This is the default:
@@ -136,7 +134,6 @@ available. You can either set `doom-theme' or manually load a theme with the
 #+end_src
 
 ** Fonts
-
 Doom exposes five (optional) variables for controlling fonts in Doom. Here
 are the three important ones:
 
@@ -179,7 +176,6 @@ Emojify is an Emacs extension to display emojis. It can display GitHub style emo
 #+end_src
 
 ** Interface
-
 This determines the style of line numbers in effect.
 If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
 #+begin_src emacs-lisp
@@ -333,7 +329,7 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
   (use-package! company
     :bind
     (:map company-active-map ("<tab>" . company-complete-selection))
-    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
+    (:map lsp-mode-map ("<tab>"       . company-indent-or-complete-common))
     :custom
     (company-minimum-prefix-length 1)
     ))
@@ -402,10 +398,10 @@ Enable syntax highlighting for .vim files
         ;; [[arch-wiki:Name_of_Page][Description]]
         org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
         '(
-          ("google" . "http://www.google.com/search?q=")
+          ("google"    . "http://www.google.com/search?q=")
           ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
-          ("ddg" . "https://duckduckgo.com/?q=")
-          ("wiki" . "https://en.wikipedia.org/wiki/")
+          ("ddg"       . "https://duckduckgo.com/?q=")
+          ("wiki"      . "https://en.wikipedia.org/wiki/")
           )
         ))
 #+end_src
@@ -445,22 +441,22 @@ Setting the font sizes for each header level in Org mode.
           prettify-symbols-alist
           (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
                   '(
-                    ("#+begin_src" . ?)
-                    ("#+end_src" . ?)
+                    ("#+begin_src"     . ?)
+                    ("#+end_src"       . ?)
                     ("#+begin_example" . ?)
-                    ("#+end_example" . ?)
-                    ("#+DATE:" . ?⏱)
-                    ("#+AUTHOR:" . ?✏)
-                    ("[ ]" .  ?☐)
-                    ("[X]" . ?☑ )
-                    ("[-]" . ?❍ )
-                    ("lambda" . ?λ)
-                    ("#+header:" . ?)
-                    ("#+name:" . ?﮸)
-                    ("#+results:" . ?)
-                    ("#+call:" . ?)
-                    (":properties:" . ?)
-                    (":logbook:" . ?)
+                    ("#+end_example"   . ?)
+                    ("#+DATE:"         . ?⏱)
+                    ("#+AUTHOR:"       . ?✏)
+                    ("[ ]"             .  ?☐)
+                    ("[X]"             . ?☑ )
+                    ("[-]"             . ?❍ )
+                    ("lambda"          . ?λ)
+                    ("#+header:"       . ?)
+                    ("#+name:"         . ?﮸)
+                    ("#+results:"      . ?)
+                    ("#+call:"         . ?)
+                    (":properties:"    . ?)
+                    (":logbook:"       . ?)
                     ))))
   )
 #+end_src
@@ -499,7 +495,7 @@ Save all org buffers after a refile
 #+begin_src emacs-lisp
 (after! org
   (push '("conf-unix" . conf-unix) org-src-lang-modes)
-  (push '("toml" . conf-toml) org-src-lang-modes)
+  (push '("toml"      . conf-toml) org-src-lang-modes)
   )
 #+end_src
 
