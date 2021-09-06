@@ -29,10 +29,12 @@
   - [[#mouse-support][Mouse Support]]
 - [[#lsp][LSP]]
   - [[#breadcrumb][Breadcrumb]]
-  - [[#company-mode][Company Mode]]
   - [[#ui-1][UI]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
+- [[#completion][Completion]]
+  - [[#company-mode][Company Mode]]
+  - [[#yasnippets][yasnippets]]
 - [[#org-mode][ORG Mode]]
   - [[#paths][Paths]]
   - [[#setup][Setup]]
@@ -323,18 +325,6 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
   )
 #+end_src
 
-** Company Mode
-#+begin_src emacs-lisp
-(after! lsp-mode
-  (use-package! company
-    :bind
-    (:map company-active-map ("<tab>" . company-complete-selection))
-    (:map lsp-mode-map ("<tab>"       . company-indent-or-complete-common))
-    :custom
-    (company-minimum-prefix-length 1)
-    ))
-#+end_src
-
 ** UI
 #+begin_src emacs-lisp
 (use-package! lsp-ui
@@ -363,6 +353,39 @@ Enable syntax highlighting for .vim files
 (use-package vimrc-mode
   :mode "\\.vim\\(rc\\)?\\'"
   :hook (vimrc-mode . lsp-deferred)
+  )
+#+end_src
+
+* Completion
+** Company Mode
+#+begin_src emacs-lisp
+(use-package! company
+  :bind
+  ;; (:map company-active-map ("<tab>" . company-complete-selection))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-tooltip-idle-delay 2)
+  (company-idle-delay 1.5)
+  )
+#+end_src
+
+LSP Mode
+#+begin_src emacs-lisp
+(after! lsp-mode
+  (use-package! company
+    :bind
+    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
+    )
+  )
+#+end_src
+
+** yasnippets
+This doesn't work but keeping it anyways
+#+begin_src emacs-lisp
+(after! yasnippet
+  (define-key yas-minor-mode-map [(tab)]        nil)
+  (define-key yas-minor-mode-map (kbd "TAB")    nil)
+  (define-key yas-minor-mode-map (kbd "<tab>")  nil)
   )
 #+end_src
 
