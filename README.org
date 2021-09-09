@@ -32,6 +32,7 @@
   - [[#ui-1][UI]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
+  - [[#logs][Logs]]
 - [[#completion][Completion]]
   - [[#company-mode][Company Mode]]
   - [[#yasnippets][yasnippets]]
@@ -72,7 +73,6 @@ Place your private configuration here! Remember, you do not need to run 'doom sy
 #+end_src
 
 ** Personal Info
-
 Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets.
 #+begin_src emacs-lisp
 (when (file-exists-p (expand-file-name "personal.el" doom-private-dir))
@@ -354,6 +354,28 @@ Enable syntax highlighting for .vim files
   :mode "\\.vim\\(rc\\)?\\'"
   :hook (vimrc-mode . lsp-deferred)
   )
+#+end_src
+
+** Logs
+#+begin_src emacs-lisp
+(use-package! syslog-mode
+  :defer t
+  :mode
+  "\\.log$"
+  "\\.log\\."
+  "\\.[0-9]+$"
+  :hook
+  (syslog-mode . display-line-numbers-mode)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(after! syslog-mode
+  (add-hook 'syslog-mode-hook
+            (lambda ()
+              (make-local-variable 'display-line-numbers-type)
+              (setq display-line-numbers-type t)
+              )))
 #+end_src
 
 * Completion
