@@ -169,10 +169,9 @@ font string. You generally only need these two:
 #+end_src
 
 *** Emojis
-
 Emojify is an Emacs extension to display emojis. It can display GitHub style emojis like :smile: or plain ASCII ones like :).
 #+begin_src emacs-lisp
-(use-package emojify
+(use-package! emojify
   :hook (after-init . global-emojify-mode)
   )
 #+end_src
@@ -204,7 +203,6 @@ Set width of window dividers
 #+end_src
 
 ** Password Store
-
 Uses the standard Unix password store "pass".
 #+begin_src emacs-lisp
 ;; (use-package! password-store)
@@ -328,17 +326,20 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 ** UI
 #+begin_src emacs-lisp
 (use-package! lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
+  :hook
+  (lsp-mode . lsp-ui-mode)
   :config
-  (setq lsp-ui-doc-position 'bottom))
+  (setq
+   lsp-ui-doc-position 'bottom
+   ))
 #+end_src
 
 ** Cucumber
 #+begin_src emacs-lisp
-(use-package feature-mode
+(use-package! feature-mode
   :defer t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.feature$" . feature-mode))
+  :mode
+  "\\.feature$"
   :config
   (setq
    feature-default-language "en"
@@ -350,9 +351,11 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 ** Vim
 Enable syntax highlighting for .vim files
 #+begin_src emacs-lisp
-(use-package vimrc-mode
-  :mode "\\.vim\\(rc\\)?\\'"
-  :hook (vimrc-mode . lsp-deferred)
+(use-package! vimrc-mode
+  :mode
+  "\\.vim\\(rc\\)?\\'"
+  :hook
+  (vimrc-mode . lsp-deferred)
   )
 #+end_src
 
@@ -361,9 +364,8 @@ Enable syntax highlighting for .vim files
 (use-package! syslog-mode
   :defer t
   :mode
-  "\\.log$"
-  "\\.log\\."
-  "\\.[0-9]+$"
+  "\\.log"
+  "\\.[0-9]+\\'"
   :hook
   (syslog-mode . display-line-numbers-mode)
   )
@@ -661,7 +663,6 @@ A custom variable containing an email address string needs to be defined for eac
 
 ** Headers
 =Headers= is the view listing the emails (i.e. Inbox, Trash, Search Results, etc.)
-
 #+begin_src emacs-lisp
 (use-package! mu4e
   :ensure nil
@@ -762,7 +763,11 @@ compose or reply command (=SPC u= with ~evil~, =C-u= otherwise).
 
 Color for bold text after conversion
 #+begin_src emacs-lisp
-;; (setq +org-msg-accent-color "#282828")
+;; (use-package! org-msg
+;;   :ensure nil
+;;   :config
+;;   (setq +org-msg-accent-color "#282828")
+;;   )
 #+end_src
 
 Disable Org-msg for composing by default
