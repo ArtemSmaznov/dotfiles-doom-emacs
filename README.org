@@ -54,6 +54,7 @@
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
   - [[#inserts][Inserts]]
   - [[#rainbow-mode][Rainbow Mode]]
+- [[#magit][Magit]]
 - [[#email][Email]]
   - [[#dependencies][Dependencies]]
   - [[#home][Home]]
@@ -617,6 +618,12 @@ Highlight colors in file
       (:prefix ("t". "toggle")
        :desc "Colors" "c" #'rainbow-mode
        ))
+#+end_src
+
+* Magit
+Open =magit= in a side window
+#+begin_src emacs-lisp
+;; (setq magit-display-buffer-function 'magit-display-buffer-traditional)
 #+end_src
 
 * Email
