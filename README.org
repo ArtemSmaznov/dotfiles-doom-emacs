@@ -42,11 +42,12 @@
   - [[#agenda][Agenda]]
   - [[#headings][Headings]]
   - [[#pretty-symbols][Pretty Symbols]]
-  - [[#manpage][Manpage]]
   - [[#archiving][Archiving]]
   - [[#refiling][Refiling]]
   - [[#extra-src-block-languages][Extra SRC Block Languages]]
   - [[#babel][Babel]]
+  - [[#export][Export]]
+  - [[#publish][Publish]]
 - [[#spell-checking][Spell Checking]]
 - [[#keybindings][Keybindings]]
   - [[#editing][Editing]]
@@ -57,6 +58,7 @@
 - [[#magit][Magit]]
 - [[#email][Email]]
   - [[#dependencies][Dependencies]]
+  - [[#authentication][Authentication]]
   - [[#home][Home]]
   - [[#headers][Headers]]
   - [[#message][Message]]
@@ -390,7 +392,7 @@ Enable syntax highlighting for .vim files
   :custom
   (company-minimum-prefix-length 1)
   (company-tooltip-idle-delay 2)
-  (company-idle-delay 1.5)
+  (company-idle-delay 0.5)
   )
 #+end_src
 
@@ -509,13 +511,6 @@ Setting the font sizes for each header level in Org mode.
   )
 #+end_src
 
-** Manpage
-We need ox-man for "Org eXporting" to manpage format.
-#+BEGIN_SRC emacs-lisp
-(use-package ox-man)
-(use-package ox-gemini)
-#+END_SRC
-
 ** Archiving
 #+begin_src emacs-lisp
 (after! org
@@ -569,6 +564,30 @@ Auto-tangle on save
 ;;       (org-babel-tangle))))
 
 ;;   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+#+end_src
+
+** Export
+We need ox-man for "Org eXporting" to manpage format.
+#+begin_src emacs-lisp
+(use-package ox-man)
+(use-package ox-gemini)
+#+end_src
+
+** Publish
+#+begin_src emacs-lisp
+(setq org-publish-project-alist
+      '(
+        ("github.io"
+         :base-directory "~/projects/artemsmaznov.github.io/org"
+         :base-extension "org"
+         :publishing-directory "~/projects/artemsmaznov.github.io"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :headline-levels 4
+         :auto-preamble t
+         :exclude "header.org"
+         )
+        ))
 #+end_src
 
 * Spell Checking
@@ -636,6 +655,16 @@ A custom variable containing an email address string needs to be defined for eac
 #+begin_example elisp
 (defvar my/email/main "example@email.com" "My primary email address")
 #+end_example
+
+** Authentication
+Function used by =mbsync= for authentication with the email server
+#+begin_src emacs-lisp
+(defun my/lookup-password (&rest keys)
+  (let ((result (apply #'auth-source-search keys)))
+    (if result
+        (funcall (plist-get (car result) :secret))
+        nil)))
+#+end_src
 
 ** Home
 #+begin_src emacs-lisp
@@ -850,12 +879,12 @@ Disable Org-msg for composing by default
 ** Auto-start
 Start mu4e in the background so it auto-syncs emails
 #+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (mu4e t)
-  )
+;; (use-package! mu4e
+;;   :ensure nil
+;;   :defer 20
+;;   :config
+;;   (mu4e t)
+;;   )
 #+end_src
 
 * Local Overwrite
@@ -868,7 +897,7 @@ Load custom configuration overwrites from and external file
 
 * Additional Notes
 Here are some additional functions/macros that could help you configure Doom:
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package!' for configuring packages
 ;; - `after!' for running code after a package has loaded
@@ -876,7 +905,7 @@ Here are some additional functions/macros that could help you configure Doom:
 ;;   this file. Emacs searches the `load-path' when you load packages with
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
-#+END_SRC
+#+end_src
 
 To get information about any of these functions/macros, move the cursor over
 the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
