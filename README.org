@@ -1,6 +1,6 @@
 #+TITLE: Doom Emacs
 #+AUTHOR: Artem Smaznov
-#+DESCRIPTION: Artem's personal config for Doom Emacs
+#+DESCRIPTION: Emacs is to Vim as Vim is to Notepad
 #+STARTUP: overview
 
 * Table of Contents :toc:
