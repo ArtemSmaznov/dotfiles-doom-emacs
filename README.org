@@ -436,9 +436,16 @@ This doesn't work but keeping it anyways
 ** Setup
 #+begin_src emacs-lisp
 (after! org
+  (map! :map org-mode-map
+        :n "<M-up>" #'drag-stuff-up
+        :n "<M-down>" #'drag-stuff-down
+        :n "<M-left>" #'drag-stuff-left
+        :n "<M-right>" #'drag-stuff-right
+        )
   (add-hook 'org-mode-hook (lambda ()
+                             (make-local-variable 'display-line-numbers)
+                             (setq display-line-numbers 'visual)
                              (org-bullets-mode 1)
-                             (display-line-numbers-mode 0)
                              ))
   (setq org-ellipsis " ▼ "
         org-log-into-drawer t
