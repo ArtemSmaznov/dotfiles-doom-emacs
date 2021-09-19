@@ -66,6 +66,7 @@
   - [[#contexts][Contexts]]
   - [[#modeline-1][Modeline]]
   - [[#auto-start][Auto-start]]
+- [[#calendar][Calendar]]
 - [[#local-overwrite][Local Overwrite]]
 - [[#additional-notes][Additional Notes]]
 
@@ -885,6 +886,27 @@ Start mu4e in the background so it auto-syncs emails
 ;;   :config
 ;;   (mu4e t)
 ;;   )
+#+end_src
+
+* Calendar
+#+begin_src emacs-lisp
+(use-package! calfw
+  :bind
+  (:map cfw:calendar-mode-map ("T" . cfw:change-view-two-weeks))
+  ;; (:map cfw:org-custom-map ("T" . cfw:change-view-two-weeks))
+  :config
+  (setq
+   calendar-week-start-day 1
+   ;; cfw:org-overwrite-default-keybinding t
+   )
+  )
+#+end_src
+
+Keybindings
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Calendar" "o c" #'cfw:open-org-calendar
+      )
 #+end_src
 
 * Local Overwrite

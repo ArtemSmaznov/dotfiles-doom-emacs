@@ -17,6 +17,17 @@
 (setq +literate-config-file
   (concat doom-private-dir "README.org"))
 
+(setq
+   holiday-general-holidays nil
+   holiday-local-holidays nil
+   holiday-christian-holidays nil
+   holiday-hebrew-holidays nil
+   holiday-islamic-holidays nil
+   holiday-bahai-holidays nil
+   holiday-oriental-holidays nil
+   holiday-solar-holidays nil
+   )
+
 (doom! :input
        ;;chinese
        ;;japanese
@@ -180,7 +191,7 @@
        ;;(wanderlust +gmail)
 
        :app
-       ;;calendar
+       calendar
        ;;emms
        ;;everywhere          ; *leave* Emacs!? You must be joking
        ;;irc                 ; how neckbeards socialize
