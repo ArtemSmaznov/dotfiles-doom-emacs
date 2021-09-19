@@ -441,6 +441,8 @@ This doesn't work but keeping it anyways
         :n "<M-down>" #'drag-stuff-down
         :n "<M-left>" #'drag-stuff-left
         :n "<M-right>" #'drag-stuff-right
+        :n "<up>" #'evil-previous-visual-line
+        :n "<down>" #'evil-next-visual-line
         )
   (add-hook 'org-mode-hook (lambda ()
                              (make-local-variable 'display-line-numbers)
