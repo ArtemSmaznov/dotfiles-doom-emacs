@@ -54,7 +54,7 @@
   - [[#org-mode-1][Org Mode]]
   - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
   - [[#inserts][Inserts]]
-  - [[#rainbow-mode][Rainbow Mode]]
+- [[#rainbow-mode][Rainbow Mode]]
 - [[#magit][Magit]]
 - [[#email][Email]]
   - [[#dependencies][Dependencies]]
@@ -299,7 +299,6 @@ Toggle hidden files in Dired
 #+end_src
 
 ** Splits
-
 I set splits to default to opening on the right using ‘prefer-horizontal-split’. I set a keybinding for ‘clone-indirect-buffer-other-window’ for when I want to have the same document in two splits. The text of the indirect buffer is always identical to the text of its base buffer; changes made by editing either one are visible immediately in the other. But in all other respects, the indirect buffer and its base buffer are completely separate. For example, I can fold one split but other will be unfolded.
 #+begin_src emacs-lisp
 (defun prefer-horizontal-split ()
@@ -602,9 +601,8 @@ We need ox-man for "Org eXporting" to manpage format.
 Highlight colors in file
 #+begin_src emacs-lisp
 (map! :leader
-      (:prefix ("t". "toggle")
-       :desc "Fill Column Indicator" "|" #'global-display-fill-column-indicator-mode
-       ))
+      :desc "Fill Column Indicator" "t |" #'global-display-fill-column-indicator-mode
+      )
 #+end_src
 
 ** Org Mode
@@ -617,27 +615,27 @@ Highlight colors in file
 ** Buffers and Bookmarks
 #+begin_src emacs-lisp
 (map! :leader
-      (:prefix ("b". "buffer")
-       :desc "List bookmarks" "L" #'list-bookmarks
-       :desc "Save current bookmarks to bookmark file" "w" #'bookmark-save
-       ))
+      :desc "List bookmarks" "b L" #'list-bookmarks
+      :desc "Save current bookmarks to bookmark file" "b w" #'bookmark-save
+      )
 #+end_src
 
 ** Inserts
 #+begin_src emacs-lisp
 (map! :leader
-      (:prefix ("i". "insert")
-       :desc "Toilet pagga" "t" (cmd! (evil-ex "R!toilet -f pagga "))
-       ))
+      :desc "Toilet pagga" "i t" (cmd! (evil-ex "R!toilet -f pagga "))
+      )
 #+end_src
 
-** Rainbow Mode
+* Rainbow Mode
 Highlight colors in file
 #+begin_src emacs-lisp
-(map! :leader
-      (:prefix ("t". "toggle")
-       :desc "Colors" "c" #'rainbow-mode
-       ))
+(use-package! rainbow-mode
+  :init
+  (map! :leader
+        :desc "Colors" "t c" #'rainbow-mode
+        )
+  )
 #+end_src
 
 * Magit
