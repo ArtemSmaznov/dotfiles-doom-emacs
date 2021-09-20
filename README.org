@@ -27,15 +27,15 @@
   - [[#evil-mode][Evil Mode]]
   - [[#splits][Splits]]
   - [[#mouse-support][Mouse Support]]
+- [[#completion][Completion]]
+  - [[#company-mode][Company Mode]]
+  - [[#yasnippets][yasnippets]]
 - [[#lsp][LSP]]
   - [[#breadcrumb][Breadcrumb]]
   - [[#ui-1][UI]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
-- [[#completion][Completion]]
-  - [[#company-mode][Company Mode]]
-  - [[#yasnippets][yasnippets]]
 - [[#org-mode][ORG Mode]]
   - [[#paths][Paths]]
   - [[#setup][Setup]]
@@ -318,6 +318,39 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
 (xterm-mouse-mode 1)
 #+end_src
 
+* Completion
+** Company Mode
+#+begin_src emacs-lisp
+(use-package! company
+  :bind
+  ;; (:map company-active-map ("<tab>" . company-complete-selection))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-tooltip-idle-delay 2)
+  (company-idle-delay 0.5)
+  )
+#+end_src
+
+LSP Mode
+#+begin_src emacs-lisp
+(after! lsp-mode
+  (use-package! company
+    :bind
+    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
+    )
+  )
+#+end_src
+
+** yasnippets
+This doesn't work but keeping it anyways
+#+begin_src emacs-lisp
+(after! yasnippet
+  (define-key yas-minor-mode-map [(tab)]        nil)
+  (define-key yas-minor-mode-map (kbd "TAB")    nil)
+  (define-key yas-minor-mode-map (kbd "<tab>")  nil)
+  )
+#+end_src
+
 * LSP
 ** Breadcrumb
 #+begin_src emacs-lisp
@@ -370,49 +403,11 @@ Enable syntax highlighting for .vim files
   "\\.log"
   "\\.[0-9]+\\'"
   :hook
-  (syslog-mode . display-line-numbers-mode)
-  )
-#+end_src
-
-#+begin_src emacs-lisp
-(after! syslog-mode
-  (add-hook 'syslog-mode-hook
-            (lambda ()
-              (make-local-variable 'display-line-numbers-type)
-              (setq display-line-numbers-type t)
-              )))
-#+end_src
-
-* Completion
-** Company Mode
-#+begin_src emacs-lisp
-(use-package! company
-  :bind
-  ;; (:map company-active-map ("<tab>" . company-complete-selection))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-tooltip-idle-delay 2)
-  (company-idle-delay 0.5)
-  )
-#+end_src
-
-LSP Mode
-#+begin_src emacs-lisp
-(after! lsp-mode
-  (use-package! company
-    :bind
-    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
-    )
-  )
-#+end_src
-
-** yasnippets
-This doesn't work but keeping it anyways
-#+begin_src emacs-lisp
-(after! yasnippet
-  (define-key yas-minor-mode-map [(tab)]        nil)
-  (define-key yas-minor-mode-map (kbd "TAB")    nil)
-  (define-key yas-minor-mode-map (kbd "<tab>")  nil)
+  (syslog-mode . (lambda ()
+                   (make-local-variable 'display-line-numbers-type)
+                   (setq display-line-numbers-type t)
+                   (display-line-numbers-mode 1)
+                   ))
   )
 #+end_src
 
@@ -421,9 +416,10 @@ This doesn't work but keeping it anyways
 #+begin_src emacs-lisp
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Documents/Org")
-
-(after! org
+(use-package! org
+  :init
+  (setq org-directory "~/Documents/Org")
+  :config
   (setq
    org-agenda-files '("~/Documents/Org")
    org-default-notes-file (expand-file-name "notes.org" org-directory)
@@ -435,20 +431,23 @@ This doesn't work but keeping it anyways
 
 ** Setup
 #+begin_src emacs-lisp
-(after! org
-  (map! :map org-mode-map
-        :n "<M-up>" #'drag-stuff-up
-        :n "<M-down>" #'drag-stuff-down
-        :n "<M-left>" #'drag-stuff-left
-        :n "<M-right>" #'drag-stuff-right
-        :n "<up>" #'evil-previous-visual-line
-        :n "<down>" #'evil-next-visual-line
-        )
-  (add-hook 'org-mode-hook (lambda ()
-                             (make-local-variable 'display-line-numbers)
-                             (setq display-line-numbers 'visual)
-                             (org-bullets-mode 1)
-                             ))
+(use-package! org
+  :hook
+  (org-mode . (lambda ()
+                (make-local-variable 'display-line-numbers)
+                (setq display-line-numbers 'visual)
+                (org-bullets-mode 1)
+                ))
+  :bind
+  (:map org-mode-map
+   ("<M-up>" . drag-stuff-up)
+   ("<M-down>" . drag-stuff-down)
+   ("<M-left>" . drag-stuff-left)
+   ("<M-right>" . drag-stuff-right)
+   ("<up>" . evil-previous-visual-line)
+   ("<down>" . evil-next-visual-line)
+   )
+  :config
   (setq org-ellipsis " ▼ "
         org-log-into-drawer t
         org-log-done 'time
@@ -467,7 +466,8 @@ This doesn't work but keeping it anyways
 
 ** Agenda
 #+begin_src emacs-lisp
-(after! org
+(use-package! org
+  :config
   (setq
    org-agenda-start-with-log-mode t
    org-agenda-start-day nil
@@ -480,7 +480,8 @@ This doesn't work but keeping it anyways
 ** Headings
 Setting the font sizes for each header level in Org mode.
 #+begin_src emacs-lisp
-(after! org
+(use-package! org
+  :config
   (custom-set-faces
    '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
    '(org-level-2 ((t (:inherit outline-2 :height 1.1))))
@@ -492,7 +493,8 @@ Setting the font sizes for each header level in Org mode.
 
 ** Pretty Symbols
 #+begin_src emacs-lisp
-(after! org
+(use-package! org
+  :config
   (defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
          (interactive)
          (setq
@@ -522,7 +524,8 @@ Setting the font sizes for each header level in Org mode.
 
 ** Archiving
 #+begin_src emacs-lisp
-(after! org
+(use-package! org
+  :config
   (setq
    org-archive-location (expand-file-name "archive.org::datetree/" org-directory)
    ))
@@ -530,7 +533,8 @@ Setting the font sizes for each header level in Org mode.
 
 ** Refiling
 #+begin_src emacs-lisp
-(after! org
+(use-package! org
+  :config
   (setq
    org-refile-targets '((org-agenda-files :maxlevel . 1))
    ))
@@ -538,14 +542,16 @@ Setting the font sizes for each header level in Org mode.
 
 Save all org buffers after a refile
 #+begin_src emacs-lisp
-(after! org
+(use-package! org
+  :config
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
   )
 #+end_src
 
 ** Extra SRC Block Languages
 #+begin_src emacs-lisp
-(after! org
+(use-package! org
+  :config
   (push '("conf-unix" . conf-unix) org-src-lang-modes)
   (push '("toml"      . conf-toml) org-src-lang-modes)
   )
@@ -553,9 +559,9 @@ Save all org buffers after a refile
 
 ** Babel
 #+begin_src emacs-lisp
-(after! org
+(use-package! org
+  :config
   (require 'org-tempo)
-
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python"))
@@ -565,43 +571,48 @@ Save all org buffers after a refile
 #+end_src
 
 Auto-tangle on save
-#+begin_src emacs-lisp
-;; (defun efs/org-babel-tagle-config ()
-;;   (when (string-equal (buffer-file-name)
-;;                       (expand-file-name "some org file location"))
-;;     (let ((org-confirm-babel-evaluate nil))
-;;       (org-babel-tangle))))
+#+begin_example emacs-lisp
+(defun efs/org-babel-tagle-config ()
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "some org file location"))
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
 
-;;   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
-#+end_src
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+#+end_example
 
 ** Export
 We need ox-man for "Org eXporting" to manpage format.
 #+begin_src emacs-lisp
-(use-package ox-man)
-(use-package ox-gemini)
+(after! org
+  (use-package ox-man)
+  (use-package ox-gemini)
+  )
 #+end_src
 
 ** Publish
 #+begin_src emacs-lisp
-(setq org-publish-project-alist
-      '(
-        ("github.io"
-         :base-directory "~/projects/artemsmaznov.github.io/org"
-         :base-extension "org"
-         :publishing-directory "~/projects/artemsmaznov.github.io"
-         :recursive t
-         :publishing-function org-html-publish-to-html
-         :headline-levels 4
-         :auto-preamble t
-         :exclude "header.org"
-         )
-        ))
+(use-package! org
+  :config
+  (setq org-publish-project-alist
+        '(
+          ("github.io"
+           :base-directory "~/projects/artemsmaznov.github.io/org"
+           :base-extension "org"
+           :publishing-directory "~/projects/artemsmaznov.github.io"
+           :recursive t
+           :publishing-function org-html-publish-to-html
+           :headline-levels 4
+           :auto-preamble t
+           :exclude "header.org"
+           )
+          )))
 #+end_src
 
 * Spell Checking
 #+begin_src emacs-lisp
-(after! spell-fu
+(use-package! spell-fu
+  :config
   (setq ispell-dictionary "english"))
 #+end_src
 
