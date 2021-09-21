@@ -5,7 +5,6 @@
 
 * Table of Contents :toc:
 - [[#introduction-to-the-config][Introduction to the Config]]
-  - [[#personal-info][Personal Info]]
 - [[#dashboard][Dashboard]]
   - [[#emacs-dashboard][Emacs Dashboard]]
   - [[#doom-dashboard][Doom Dashboard]]
@@ -15,30 +14,24 @@
   - [[#interface][Interface]]
   - [[#modeline][Modeline]]
 - [[#behavior][Behavior]]
-  - [[#which-key][Which-key]]
-  - [[#password-store][Password Store]]
-  - [[#exit-confirmation][Exit Confirmation]]
-  - [[#windows][Windows]]
-  - [[#scrolling][Scrolling]]
 - [[#projectile][Projectile]]
 - [[#navigation][Navigation]]
-  - [[#neotree][Neotree]]
+  - [[#kill-neotree][KILL Neotree]]
   - [[#dired][Dired]]
   - [[#evil-mode][Evil Mode]]
-  - [[#splits][Splits]]
   - [[#mouse-support][Mouse Support]]
 - [[#completion][Completion]]
   - [[#company-mode][Company Mode]]
   - [[#yasnippets][yasnippets]]
 - [[#lsp][LSP]]
-  - [[#breadcrumb][Breadcrumb]]
-  - [[#ui-1][UI]]
+  - [[#setup][Setup]]
+  - [[#rainbow-mode][Rainbow Mode]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
 - [[#org-mode][ORG Mode]]
   - [[#paths][Paths]]
-  - [[#setup][Setup]]
+  - [[#setup-1][Setup]]
   - [[#agenda][Agenda]]
   - [[#headings][Headings]]
   - [[#pretty-symbols][Pretty Symbols]]
@@ -50,12 +43,8 @@
   - [[#publish][Publish]]
 - [[#spell-checking][Spell Checking]]
 - [[#keybindings][Keybindings]]
-  - [[#editing][Editing]]
-  - [[#org-mode-1][Org Mode]]
-  - [[#buffers-and-bookmarks][Buffers and Bookmarks]]
-  - [[#inserts][Inserts]]
-- [[#rainbow-mode][Rainbow Mode]]
 - [[#magit][Magit]]
+- [[#pass][Pass]]
 - [[#email][Email]]
   - [[#dependencies][Dependencies]]
   - [[#authentication][Authentication]]
@@ -76,7 +65,7 @@ Place your private configuration here! Remember, you do not need to run 'doom sy
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 #+end_src
 
-** Personal Info
+Personal Info
 Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets.
 #+begin_src emacs-lisp
 (when (file-exists-p (expand-file-name "personal.el" doom-private-dir))
@@ -194,30 +183,25 @@ Set width of window dividers
 
 ** Modeline
 #+begin_src emacs-lisp
-(after! doom-modeline
+(use-package! doom-modeline
+  :config
   (remove-hook 'doom-modeline-mode-hook #'size-indication-mode) ; filesize in modeline
   (setq doom-modeline-major-mode-icon t)
   )
 #+end_src
 
 * Behavior
-** Which-key
+Which-key
 #+begin_src emacs-lisp
 (setq which-key-idle-delay 0.4)
 #+end_src
 
-** Password Store
-Uses the standard Unix password store "pass".
-#+begin_src emacs-lisp
-;; (use-package! password-store)
-#+end_src
-
-** Exit Confirmation
+Exit Confirmation
 #+begin_src emacs-lisp
 (setq confirm-kill-emacs nil)
 #+end_src
 
-** Windows
+Windows
 #+begin_src emacs-lisp
 (setq
  split-width-threshold 0
@@ -225,7 +209,7 @@ Uses the standard Unix password store "pass".
  )
 #+end_src
 
-** Scrolling
+Scrolling
 #+begin_src emacs-lisp
 (setq scroll-margin 7)
 #+end_src
@@ -235,14 +219,13 @@ Uses the standard Unix password store "pass".
 (use-package! projectile
   :init
   (when (file-directory-p "~/projects")
-    (setq projectile-project-search-path '("~/projects"))
-    )
+    (setq projectile-project-search-path '("~/projects")))
   (setq projectile-switch-project-action #'projectile-dired)
   )
 #+end_src
 
 * Navigation
-** Neotree
+** KILL Neotree
 Neotree is a file tree viewer. When you open neotree, it jumps to the current file thanks to neo-smart-open. The neo-window-fixed-size setting makes the neotree width be adjustable. Doom Emacs had no keybindings set for neotree. Since Doom Emacs uses ‘SPC t’ for ‘toggle’ keybindings, I used ‘SPC t n’ for toggle-neotree.
 #+begin_src emacs-lisp
 (after! neotree
@@ -298,21 +281,6 @@ Toggle hidden files in Dired
   )
 #+end_src
 
-** Splits
-I set splits to default to opening on the right using ‘prefer-horizontal-split’. I set a keybinding for ‘clone-indirect-buffer-other-window’ for when I want to have the same document in two splits. The text of the indirect buffer is always identical to the text of its base buffer; changes made by editing either one are visible immediately in the other. But in all other respects, the indirect buffer and its base buffer are completely separate. For example, I can fold one split but other will be unfolded.
-#+begin_src emacs-lisp
-(defun prefer-horizontal-split ()
-  (set-variable 'split-height-threshold nil t)
-  (set-variable 'split-width-threshold 40 t) ; make this as low as needed
-  )
-
-(add-hook 'markdown-mode-hook 'prefer-horizontal-split)
-
-(map! :leader
-      :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window
-      )
-#+end_src
-
 ** Mouse Support
 #+begin_src emacs-lisp
 (xterm-mouse-mode 1)
@@ -331,7 +299,6 @@ I set splits to default to opening on the right using ‘prefer-horizontal-split
   )
 #+end_src
 
-LSP Mode
 #+begin_src emacs-lisp
 (after! lsp-mode
   (use-package! company
@@ -352,14 +319,15 @@ This doesn't work but keeping it anyways
 #+end_src
 
 * LSP
-** Breadcrumb
+** Setup
+Breadcrumb
 #+begin_src emacs-lisp
-(after! lsp-mode
-  (add-hook 'lsp-mode-hook 'lsp-headerline-breadcrumb-mode)
-  )
+(use-package! lsp-mode
+  :hook
+  (lsp-mode . lsp-headerline-breadcrumb-mode))
 #+end_src
 
-** UI
+UI
 #+begin_src emacs-lisp
 (use-package! lsp-ui
   :hook
@@ -368,6 +336,16 @@ This doesn't work but keeping it anyways
   (setq
    lsp-ui-doc-position 'bottom
    ))
+#+end_src
+
+** Rainbow Mode
+Highlight colors in file
+#+begin_src emacs-lisp
+(use-package! rainbow-mode
+  :init
+  (map! :leader
+        :desc "Colors" "t c" #'rainbow-mode
+        ))
 #+end_src
 
 ** Cucumber
@@ -380,8 +358,7 @@ This doesn't work but keeping it anyways
   (setq
    feature-default-language "en"
    ;; feature-step-search-path "features/../**/*step*/*.js"
-   )
-  )
+   ))
 #+end_src
 
 ** Vim
@@ -432,6 +409,10 @@ Enable syntax highlighting for .vim files
 ** Setup
 #+begin_src emacs-lisp
 (use-package! org
+  :init
+  (map! :leader
+        :desc "Org babel tangle" "m B" #'org-babel-tangle
+        )
   :hook
   (org-mode . (lambda ()
                 (make-local-variable 'display-line-numbers)
@@ -617,51 +598,39 @@ We need ox-man for "Org eXporting" to manpage format.
 #+end_src
 
 * Keybindings
-** Editing
-Highlight colors in file
+Buffers and Bookmarks
 #+begin_src emacs-lisp
 (map! :leader
-      :desc "Fill Column Indicator" "t |" #'global-display-fill-column-indicator-mode
-      )
-#+end_src
-
-** Org Mode
-#+begin_src emacs-lisp
-(map! :leader
-      :desc "Org babel tangle" "m B" #'org-babel-tangle
-      )
-#+end_src
-
-** Buffers and Bookmarks
-#+begin_src emacs-lisp
-(map! :leader
+      ;; :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window
       :desc "List bookmarks" "b L" #'list-bookmarks
       :desc "Save current bookmarks to bookmark file" "b w" #'bookmark-save
       )
 #+end_src
 
-** Inserts
+Inserts
 #+begin_src emacs-lisp
 (map! :leader
       :desc "Toilet pagga" "i t" (cmd! (evil-ex "R!toilet -f pagga "))
       )
 #+end_src
 
-* Rainbow Mode
-Highlight colors in file
+Toggles
 #+begin_src emacs-lisp
-(use-package! rainbow-mode
-  :init
-  (map! :leader
-        :desc "Colors" "t c" #'rainbow-mode
-        )
-  )
+(map! :leader
+      :desc "Fill Column Indicator" "t |" #'global-display-fill-column-indicator-mode
+      )
 #+end_src
 
 * Magit
 Open =magit= in a side window
 #+begin_src emacs-lisp
 ;; (setq magit-display-buffer-function 'magit-display-buffer-traditional)
+#+end_src
+
+* Pass
+Uses the standard Unix password store "pass".
+#+begin_src emacs-lisp
+;; (use-package! password-store)
 #+end_src
 
 * Email
@@ -909,6 +878,10 @@ Start mu4e in the background so it auto-syncs emails
 * Calendar
 #+begin_src emacs-lisp
 (use-package! calfw
+  :init
+  (map! :leader
+        :desc "Calendar" "o c" #'cfw:open-org-calendar
+        )
   :bind
   (:map cfw:calendar-mode-map ("T" . cfw:change-view-two-weeks))
   ;; (:map cfw:org-custom-map ("T" . cfw:change-view-two-weeks))
@@ -918,13 +891,6 @@ Start mu4e in the background so it auto-syncs emails
    ;; cfw:org-overwrite-default-keybinding t
    )
   )
-#+end_src
-
-Keybindings
-#+begin_src emacs-lisp
-(map! :leader
-      :desc "Calendar" "o c" #'cfw:open-org-calendar
-      )
 #+end_src
 
 * Local Overwrite
