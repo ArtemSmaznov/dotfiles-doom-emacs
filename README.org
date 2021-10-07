@@ -27,6 +27,7 @@
   - [[#setup][Setup]]
   - [[#rainbow-mode][Rainbow Mode]]
   - [[#cucumber][Cucumber]]
+  - [[#javascript][JavaScript]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
 - [[#org-mode][ORG Mode]]
@@ -359,6 +360,15 @@ Highlight colors in file
    feature-default-language "en"
    ;; feature-step-search-path "features/../**/*step*/*.js"
    ))
+#+end_src
+
+** JavaScript
+#+begin_src emacs-lisp
+(use-package! typescript-mode
+  :defer t
+  :mode
+  "\\.js$"
+   )
 #+end_src
 
 ** Vim
