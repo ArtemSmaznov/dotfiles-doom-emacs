@@ -508,7 +508,7 @@ Setting the font sizes for each header level in Org mode.
 (use-package! org
   :config
   (setq
-   org-archive-location (expand-file-name "archive.org::datetree/" org-directory)
+   org-archive-location (expand-file-name "archive.org::datetree/* %s" org-directory)
    ))
 #+end_src
 
@@ -641,7 +641,7 @@ Uses the standard Unix password store "pass".
 
 A custom variable containing an email address string needs to be defined for each context
 #+begin_example elisp
-(defvar my/email/main "example@email.com" "My primary email address")
+(defvar my/email/main "example@gmail.com" "My primary email address")
 #+end_example
 
 ** Authentication
@@ -654,6 +654,11 @@ Function used by =mbsync= for authentication with the email server
         nil)))
 #+end_src
 
+Setting up =~/.authinfo.gpg= with credentials
+#+begin_example authinfo
+machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
+#+end_example
+
 ** Home
 #+begin_src emacs-lisp
 (use-package! mu4e
@@ -662,7 +667,7 @@ Function used by =mbsync= for authentication with the email server
   :config
   (setq
    ;; Set auto-sync interval 10 min
-   mu4e-update-interval (* 10 60)
+   mu4e-update-interval (* 15 60)
    mu4e-maildir "~/Maildir"
 
    mu4e-maildir-shortcuts
@@ -831,11 +836,14 @@ Disable Org-msg for composing by default
        :name "Artem"
        :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/artem)))
        :vars `(
-               (user-mail-address  . ,my/email/artem)
-               (mu4e-drafts-folder . "/[Gmail]/Drafts")
-               (mu4e-sent-folder   . "/[Gmail]/Sent Mail")
-               (mu4e-refile-folder . "/[Gmail]/All Mail")
-               (mu4e-trash-folder  . "/[Gmail]/Trash")
+               (smtpmail-smtp-server  . "smtp.gmail.com")
+               (smtpmail-smtp-service . 465)
+               (smtpmail-stream-type  . ssl)
+               (user-mail-address     . ,my/email/artem)
+               (mu4e-drafts-folder    . "/[Gmail]/Drafts")
+               (mu4e-sent-folder      . "/[Gmail]/Sent Mail")
+               (mu4e-refile-folder    . "/[Gmail]/All Mail")
+               (mu4e-trash-folder     . "/[Gmail]/Trash")
                ))
      ,(make-mu4e-context
        :name "Main"
