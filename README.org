@@ -20,19 +20,9 @@
   - [[#dired][Dired]]
   - [[#evil-mode][Evil Mode]]
   - [[#mouse-support][Mouse Support]]
-- [[#completion][Completion]]
-  - [[#company-mode][Company Mode]]
-  - [[#yasnippets][yasnippets]]
-- [[#lsp][LSP]]
-  - [[#setup][Setup]]
-  - [[#rainbow-mode][Rainbow Mode]]
-  - [[#cucumber][Cucumber]]
-  - [[#javascript][JavaScript]]
-  - [[#vim][Vim]]
-  - [[#logs][Logs]]
 - [[#org-mode][ORG Mode]]
   - [[#paths][Paths]]
-  - [[#setup-1][Setup]]
+  - [[#setup][Setup]]
   - [[#agenda][Agenda]]
   - [[#headings][Headings]]
   - [[#pretty-symbols][Pretty Symbols]]
@@ -42,6 +32,19 @@
   - [[#babel][Babel]]
   - [[#export][Export]]
   - [[#publish][Publish]]
+- [[#lsp][LSP]]
+  - [[#lsp-mode][LSP Mode]]
+  - [[#lsp-ui][LSP UI]]
+  - [[#ivy][Ivy]]
+  - [[#treemacs][Treemacs]]
+  - [[#rainbow-mode][Rainbow Mode]]
+  - [[#cucumber][Cucumber]]
+  - [[#javascript][JavaScript]]
+  - [[#vim][Vim]]
+  - [[#logs][Logs]]
+- [[#completion][Completion]]
+  - [[#company-mode][Company Mode]]
+  - [[#yasnippets][yasnippets]]
 - [[#spell-checking][Spell Checking]]
 - [[#keybindings][Keybindings]]
 - [[#magit][Magit]]
@@ -287,117 +290,6 @@ Toggle hidden files in Dired
 (xterm-mouse-mode 1)
 #+end_src
 
-* Completion
-** Company Mode
-#+begin_src emacs-lisp
-(use-package! company
-  :bind
-  ;; (:map company-active-map ("<tab>" . company-complete-selection))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-tooltip-idle-delay 2)
-  (company-idle-delay 0.5)
-  )
-#+end_src
-
-#+begin_src emacs-lisp
-(after! lsp-mode
-  (use-package! company
-    :bind
-    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
-    )
-  )
-#+end_src
-
-** yasnippets
-This doesn't work but keeping it anyways
-#+begin_src emacs-lisp
-(after! yasnippet
-  (define-key yas-minor-mode-map [(tab)]        nil)
-  (define-key yas-minor-mode-map (kbd "TAB")    nil)
-  (define-key yas-minor-mode-map (kbd "<tab>")  nil)
-  )
-#+end_src
-
-* LSP
-** Setup
-Breadcrumb
-#+begin_src emacs-lisp
-(use-package! lsp-mode
-  :hook
-  (lsp-mode . lsp-headerline-breadcrumb-mode))
-#+end_src
-
-UI
-#+begin_src emacs-lisp
-(use-package! lsp-ui
-  :hook
-  (lsp-mode . lsp-ui-mode)
-  :config
-  (setq
-   lsp-ui-doc-position 'bottom
-   ))
-#+end_src
-
-** Rainbow Mode
-Highlight colors in file
-#+begin_src emacs-lisp
-(use-package! rainbow-mode
-  :init
-  (map! :leader
-        :desc "Colors" "t c" #'rainbow-mode
-        ))
-#+end_src
-
-** Cucumber
-#+begin_src emacs-lisp
-(use-package! feature-mode
-  :defer t
-  :mode
-  "\\.feature$"
-  :config
-  (setq
-   feature-default-language "en"
-   ;; feature-step-search-path "features/../**/*step*/*.js"
-   ))
-#+end_src
-
-** JavaScript
-#+begin_src emacs-lisp
-(use-package! typescript-mode
-  :defer t
-  :mode
-  "\\.js$"
-   )
-#+end_src
-
-** Vim
-Enable syntax highlighting for .vim files
-#+begin_src emacs-lisp
-(use-package! vimrc-mode
-  :mode
-  "\\.vim\\(rc\\)?\\'"
-  :hook
-  (vimrc-mode . lsp-deferred)
-  )
-#+end_src
-
-** Logs
-#+begin_src emacs-lisp
-(use-package! syslog-mode
-  :defer t
-  :mode
-  "\\.log"
-  "\\.[0-9]+\\'"
-  :hook
-  (syslog-mode . (lambda ()
-                   (make-local-variable 'display-line-numbers-type)
-                   (setq display-line-numbers-type t)
-                   (display-line-numbers-mode 1)
-                   ))
-  )
-#+end_src
-
 * ORG Mode
 ** Paths
 #+begin_src emacs-lisp
@@ -598,6 +490,129 @@ We need ox-man for "Org eXporting" to manpage format.
            :exclude "header.org"
            )
           )))
+#+end_src
+
+* LSP
+** LSP Mode
+#+begin_src emacs-lisp
+(use-package! lsp-mode
+  :commands (lsp lsp-deferred)
+  :hook
+  (rjsx-mode    . lsp-deferred)
+  (python-mode  . lsp-deferred)
+  (feature-mode . lsp-deferred)
+  (vimrc-mode   . lsp-deferred)
+  (syslog-mode  . lsp-deferred)
+  :custom
+  (lsp-headerline-breadcrumb-enable t))
+#+end_src
+
+** LSP UI
+#+begin_src emacs-lisp
+(use-package! lsp-ui
+  :commands lsp-ui-mode
+  :hook
+  (lsp-mode . lsp-ui-mode)
+  :config
+  (setq
+   lsp-ui-doc-position 'bottom))
+#+end_src
+
+** Ivy
+#+begin_src emacs-lisp
+(use-package lsp-ivy
+  :commands lsp-ivy-workspace-symbol)
+#+end_src
+
+** Treemacs
+#+begin_src emacs-lisp
+(use-package! lsp-treemacs
+  :commands lsp-treemacs-errors-list)
+#+end_src
+
+** Rainbow Mode
+Highlight colors in file
+#+begin_src emacs-lisp
+(use-package! rainbow-mode
+  :init
+  (map! :leader
+        :desc "Colors" "t c" #'rainbow-mode
+        ))
+#+end_src
+
+** Cucumber
+#+begin_src emacs-lisp
+(use-package! feature-mode
+  :defer t
+  :mode
+  "\\.feature\\'"
+  :config
+  (setq
+   feature-default-language "en"
+   ;; feature-step-search-path "features/../**/*step*/*.js"
+   ))
+#+end_src
+
+** JavaScript
+#+begin_src emacs-lisp
+;; (use-package! rjsx-mode
+;;   :ensure t
+;;   :mode "\\.js\\'")
+#+end_src
+
+** Vim
+Enable syntax highlighting for .vim files
+#+begin_src emacs-lisp
+(use-package! vimrc-mode
+  :mode "\\.vim\\(rc\\)?\\'")
+#+end_src
+
+** Logs
+#+begin_src emacs-lisp
+(use-package! syslog-mode
+  :defer t
+  :mode
+  "\\.log"
+  "\\.[0-9]+\\'"
+  :hook
+  (syslog-mode . (lambda ()
+                   (make-local-variable 'display-line-numbers-type)
+                   (setq display-line-numbers-type t)
+                   (display-line-numbers-mode 1)
+                   ))
+  )
+#+end_src
+
+* Completion
+** Company Mode
+#+begin_src emacs-lisp
+(use-package! company
+  :bind
+  ;; (:map company-active-map ("<tab>" . company-complete-selection))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-tooltip-idle-delay 2)
+  (company-idle-delay 0.5)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(after! lsp-mode
+  (use-package! company
+    :bind
+    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
+    )
+  )
+#+end_src
+
+** yasnippets
+This doesn't work but keeping it anyways
+#+begin_src emacs-lisp
+(after! yasnippet
+  (define-key yas-minor-mode-map [(tab)]        nil)
+  (define-key yas-minor-mode-map (kbd "TAB")    nil)
+  (define-key yas-minor-mode-map (kbd "<tab>")  nil)
+  )
 #+end_src
 
 * Spell Checking
