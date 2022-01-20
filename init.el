@@ -102,14 +102,14 @@
        ;;ansible
        ;;debugger            ; FIXME stepping through code, to help you add bugs
        ;;direnv
-       ;;docker
+       docker
        ;;editorconfig        ; let someone else argue about tabs vs spaces
        ;;ein                 ; tame Jupyter notebooks with emacs
        (eval +overlay)       ; run code, run (also, repls)
        ;;gist                ; interacting with github gists
        (lookup +dictionary)  ; navigate your code and its documentation
        lsp
-       (magit +forge)        ; a git porcelain for Emacs
+       magit        ; a git porcelain for Emacs
        ;;make                ; run make tasks from Emacs
        pass                  ; password manager for nerds
        ;; pdf                ; pdf enhancements
@@ -146,7 +146,7 @@
        ;;fstar               ; (dependent) types and (monadic) effects and Z3
        ;;gdscript            ; the language you waited for
        ;;(go +lsp)           ; the hipster dialect
-       ;;(haskell +dante)    ; a language that's lazier than I am
+       (haskell +dante +lsp) ; a language that's lazier than I am
        ;;hy                  ; readability of scheme w/ speed of python
        ;;idris               ; a language you can depend on
        (json +lsp)           ; At least it ain't XML
