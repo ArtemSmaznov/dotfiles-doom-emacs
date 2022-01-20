@@ -264,6 +264,7 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
     "h" 'dired-up-directory
     "l" 'dired-find-file
     "S" 'dired-do-symlink
+    "-" 'dired-create-empty-file
     ))
 #+end_src
 
@@ -312,7 +313,8 @@ Toggle hidden files in Dired
 #+begin_src emacs-lisp
 (use-package! org
   :init
-  (map! :leader
+  (map! :map org-mode-map
+        :leader
         :desc "Org babel tangle" "m B" #'org-babel-tangle
         )
   :hook
@@ -323,12 +325,12 @@ Toggle hidden files in Dired
                 ))
   :bind
   (:map org-mode-map
-   ("<M-up>" . drag-stuff-up)
-   ("<M-down>" . drag-stuff-down)
-   ("<M-left>" . drag-stuff-left)
+   ("<M-up>"    . drag-stuff-up)
+   ("<M-down>"  . drag-stuff-down)
+   ("<M-left>"  . drag-stuff-left)
    ("<M-right>" . drag-stuff-right)
-   ("<up>" . evil-previous-visual-line)
-   ("<down>" . evil-next-visual-line)
+   ("<up>"      . evil-previous-visual-line)
+   ("<down>"    . evil-next-visual-line)
    )
   :config
   (setq org-ellipsis " ▼ "
