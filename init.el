@@ -43,7 +43,7 @@
        ;;deft                ; notational velocity for Emacs
        doom                  ; what makes DOOM look the way it does
        doom-dashboard        ; a nifty splash screen for Emacs
-       ;;doom-quit           ; DOOM quit-message prompts when you quit Emacs
+       doom-quit             ; DOOM quit-message prompts when you quit Emacs
        (emoji +unicode)      ; 🙂
        ;;fill-column         ; a `fill-column' indicator
        hl-todo               ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
@@ -56,7 +56,7 @@
        ;; neotree            ; a project drawer, like NERDTree for vim
        ophints               ; highlight the region an operation acts on
        (popup +defaults)     ; tame sudden yet inevitable temporary windows
-       ;;tabs                ; a tab bar for Emacs
+       ;; tabs               ; a tab bar for Emacs
        (treemacs +lsp)       ; a project drawer, like neotree but cooler
        ;;unicode             ; extended unicode support for various languages
        vc-gutter             ; vcs diff in the fringe
@@ -109,14 +109,14 @@
        ;;gist                ; interacting with github gists
        (lookup +dictionary)  ; navigate your code and its documentation
        lsp
-       magit        ; a git porcelain for Emacs
+       magit                 ; a git porcelain for Emacs
        ;;make                ; run make tasks from Emacs
        pass                  ; password manager for nerds
        ;; pdf                ; pdf enhancements
        ;;prodigy             ; FIXME managing external services & code builders
        rgb                   ; creating color strings
        ;;taskrunner          ; taskrunner for all your projects
-       ;;terraform           ; infrastructure as code
+       terraform             ; infrastructure as code
        ;;tmux                ; an API for interacting with tmux
        ;;upload              ; map local to remote projects via ssh/ftp
 
@@ -163,7 +163,7 @@
        ;;nix                 ; I hereby declare "nix geht mehr!"
        ;;ocaml               ; an objective camel
        (org +org-bullets)    ; organize your plain life in plain text
-       ;;php                 ; perl's insecure younger brother
+       (php +lsp)            ; perl's insecure younger brother
        ;;plantuml            ; diagrams for confusing people more
        ;;purescript          ; javascript, but functional
        (python +lsp)         ; beautiful is better than ugly
