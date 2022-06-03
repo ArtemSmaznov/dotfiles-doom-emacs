@@ -35,6 +35,7 @@
 - [[#lsp][LSP]]
   - [[#lsp-mode][LSP Mode]]
   - [[#lsp-ui][LSP UI]]
+  - [[#indent-guides][Indent Guides]]
   - [[#ivy][Ivy]]
   - [[#treemacs][Treemacs]]
   - [[#rainbow-mode][Rainbow Mode]]
@@ -518,6 +519,12 @@ We need ox-man for "Org eXporting" to manpage format.
   :config
   (setq
    lsp-ui-doc-position 'bottom))
+#+end_src
+
+** Indent Guides
+#+begin_src emacs-lisp
+(after! highlight-indent-guides
+  (setq highlight-indent-guides-method 'fill))
 #+end_src
 
 ** Ivy
