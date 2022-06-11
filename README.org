@@ -32,6 +32,7 @@
   - [[#babel][Babel]]
   - [[#export][Export]]
   - [[#publish][Publish]]
+  - [[#auto-tangle][Auto Tangle]]
 - [[#lsp][LSP]]
   - [[#lsp-mode][LSP Mode]]
   - [[#lsp-ui][LSP UI]]
@@ -494,6 +495,24 @@ We need ox-man for "Org eXporting" to manpage format.
            :exclude "header.org"
            )
           )))
+#+end_src
+
+** Auto Tangle
+Put at the header of the =Org= document to enable auto tangle on save for it
+#+begin_example emacs-lisp
+#+auto_tangle: t
+#+end_example
+
+#+begin_src emacs-lisp
+(use-package! org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode)
+  :config
+  (setq org-auto-tangle-babel-safelist '(
+                                     "README.org"
+                                     "SHELLS.org"
+                                     "local.org"
+)))
 #+end_src
 
 * LSP
