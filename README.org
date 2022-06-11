@@ -543,8 +543,10 @@ Put at the header of the =Org= document to enable auto tangle on save for it
 
 ** Indent Guides
 #+begin_src emacs-lisp
-(after! highlight-indent-guides
-  (setq highlight-indent-guides-method 'fill))
+(use-package! highlight-indent-guides
+  :defer t
+  :config
+    (setq highlight-indent-guides-method 'fill))
 #+end_src
 
 ** Ivy
