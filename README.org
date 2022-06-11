@@ -39,8 +39,9 @@
   - [[#ivy][Ivy]]
   - [[#treemacs][Treemacs]]
   - [[#rainbow-mode][Rainbow Mode]]
-  - [[#cucumber][Cucumber]]
   - [[#javascript][JavaScript]]
+  - [[#groovy][Groovy]]
+  - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
 - [[#completion][Completion]]
@@ -549,6 +550,27 @@ Highlight colors in file
         ))
 #+end_src
 
+** JavaScript
+#+begin_src emacs-lisp
+;; (use-package! rjsx-mode
+;;   :ensure t
+;;   :mode "\\.js\\'")
+#+end_src
+
+** Groovy
+#+begin_src emacs-lisp
+(use-package! groovy-mode
+  :defer t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.PIPE$" . groovy-mode))
+  (setq groovy-indent-offset 2)
+  :hook
+  (groovy-mode . (lambda ()
+                   (rainbow-delimiters-mode 1)
+                   ))
+  )
+#+end_src
+
 ** Cucumber
 #+begin_src emacs-lisp
 (use-package! feature-mode
@@ -560,13 +582,6 @@ Highlight colors in file
    feature-default-language "en"
    ;; feature-step-search-path "features/../**/*step*/*.js"
    ))
-#+end_src
-
-** JavaScript
-#+begin_src emacs-lisp
-;; (use-package! rjsx-mode
-;;   :ensure t
-;;   :mode "\\.js\\'")
 #+end_src
 
 ** Vim
