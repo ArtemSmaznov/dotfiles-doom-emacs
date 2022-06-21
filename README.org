@@ -525,6 +525,7 @@ Put at the header of the =Org= document to enable auto tangle on save for it
   (python-mode  . lsp-deferred)
   (feature-mode . lsp-deferred)
   (vimrc-mode   . lsp-deferred)
+  (groovy-mode  . lsp-deferred)
   :custom
   (lsp-headerline-breadcrumb-enable t))
 #+end_src

@@ -8,35 +8,37 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
-(package! flycheck-aspell)
 (package! async)
 (package! calfw)
 (package! calfw-org)
 ;; (package! dashboard)
-(package! dired-open)
 (package! dired-hide-dotfiles)
+(package! dired-open)
 (package! dired-single)
 (package! dmenu)
 (package! elpher)
 (package! emojify)
 (package! evil-tutor)
+(package! flycheck-aspell)
 (package! hyperbole)
 (package! ivy-posframe)
+(package! org-auto-tangle)
 (package! org-bullets)
 (package! ox-gemini)
-(package! peep-dired)
 (package! password-store)
+(package! peep-dired)
 (package! rainbow-mode)
 (package! resize-window)
 (package! tldr)
-(package! vimrc-mode)
 (package! wc-mode)
+
+;; Lsp
 (package! feature-mode)
-(package! salt-mode)
 (package! groovy-mode)
 (package! qml-mode)
+(package! salt-mode)
 (package! syslog-mode)
-(package! org-auto-tangle)
+(package! vimrc-mode)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
