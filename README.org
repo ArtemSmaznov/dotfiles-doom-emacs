@@ -218,7 +218,7 @@ Windows
 
 Scrolling
 #+begin_src emacs-lisp
-(setq scroll-margin 7)
+(setq scroll-margin 2)
 #+end_src
 
 * Projectile
