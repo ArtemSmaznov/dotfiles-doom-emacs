@@ -687,7 +687,16 @@ Inserts
 Toggles
 #+begin_src emacs-lisp
 (map! :leader
-      :desc "Fill Column Indicator" "t |" #'global-display-fill-column-indicator-mode
+      :desc "Fill column indicator" "t |" #'global-display-fill-column-indicator-mode
+      :desc "Toggle scroll bars" "t S" #'scroll-bar-mode
+      )
+#+end_src
+
+Workspaces
+#+begin_src emacs-lisp
+(map! :leader
+      :desc "Move workspace left" "TAB <" #'+workspace/swap-left
+      :desc "Move workspace right" "TAB >" #'+workspace/swap-right
       )
 #+end_src
 
