@@ -575,7 +575,9 @@ Highlight colors in file
 #+begin_src emacs-lisp
 ;; (use-package! rjsx-mode
 ;;   :ensure t
-;;   :mode "\\.js\\'")
+;;   :mode 
+;;   "\\.js\\'"
+;; )
 #+end_src
 
 ** Groovy
@@ -609,7 +611,11 @@ Highlight colors in file
 Enable syntax highlighting for .vim files
 #+begin_src emacs-lisp
 (use-package! vimrc-mode
-  :mode "\\.vim\\(rc\\)?\\'")
+  :defer t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+  :config
+  (setq evil-shift-width 2))
 #+end_src
 
 ** Logs
@@ -624,8 +630,7 @@ Enable syntax highlighting for .vim files
                    (make-local-variable 'display-line-numbers-type)
                    (setq display-line-numbers-type t)
                    (display-line-numbers-mode 1)
-                   ))
-  )
+                   )))
 #+end_src
 
 * Completion
