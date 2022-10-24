@@ -63,6 +63,10 @@
   - [[#modeline-1][Modeline]]
   - [[#auto-start][Auto-start]]
 - [[#calendar][Calendar]]
+  - [[#calfw][CalFW]]
+  - [[#icalendar][iCalendar]]
+  - [[#caldav-sync][CalDAV sync]]
+- [[#authinfo][AuthInfo]]
 - [[#local-overwrite][Local Overwrite]]
 - [[#additional-notes][Additional Notes]]
 
@@ -312,12 +316,12 @@ Toggle hidden files in Dired
 ;; change `org-directory'. It must be set before org loads!
 (use-package! org
   :init
-  (setq org-directory "~/Documents/Org")
+  (setq org-directory "~/Documents/org")
   :config
   (setq
-   org-agenda-files '("~/Documents/Org")
+   org-agenda-files (list org-directory)
    org-default-notes-file (expand-file-name "notes.org" org-directory)
-   org-journal-dir "~/Documents/Org/journal/"
+   org-journal-dir "~/Documents/org/journal/"
    org-journal-date-format "%B %d, %Y (%A) "
    org-journal-file-format "%Y-%m-%d.org"
    ))
@@ -749,11 +753,6 @@ Function used by =mbsync= for authentication with the email server
         nil)))
 #+end_src
 
-Setting up =~/.authinfo.gpg= with credentials
-#+begin_example authinfo
-machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
-#+end_example
-
 ** Home
 #+begin_src emacs-lisp
 (use-package! mu4e
@@ -979,6 +978,7 @@ Start mu4e in the background so it auto-syncs emails
 #+end_src
 
 * Calendar
+** CalFW
 #+begin_src emacs-lisp
 (use-package! calfw
   :init
@@ -991,10 +991,51 @@ Start mu4e in the background so it auto-syncs emails
   :config
   (setq
    calendar-week-start-day 1
+   calendar-date-style 'european
    ;; cfw:org-overwrite-default-keybinding t
-   )
-  )
+))
 #+end_src
+
+** iCalendar
+#+begin_src emacs-lisp
+(setq
+ org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
+ org-icalendar-use-deadline '(event-if-todo-not-done)
+ )
+#+end_src
+
+** CalDAV sync
+#+begin_src emacs-lisp
+(use-package! org-caldav
+  :config
+  (setq
+   org-caldav-delete-calendar-entries 'ask
+   org-caldav-delete-org-entries 'always
+   org-caldav-show-sync-results nil
+   org-caldav-backup-file "~/Documents/org/.caldav/backup.org"
+   org-caldav-location-newline-replacement ","
+   org-caldav-select-tags '("ical")
+   org-caldav-calendars '(
+     (:calendar-id "personal"
+      :inbox "~/Documents/org/inbox-personal.org"
+      :files ("~/Documents/org/todo.org" "~/Documents/org/agenda.org"))
+     (:calendar-id "housing"
+      :inbox "~/Documents/org/inbox-housing.org"
+      :files ("~/Documents/org/housing.org"))
+     (:calendar-id "work"
+      :inbox "~/Documents/org/inbox-work.org"
+      :files ("~/Documents/org/work.org"))
+     ;; (:calendar-id "shifts"
+     ;;  :inbox "~/Documents/org/inbox-shifts.org"
+     ;;  :files ("~/Documents/org/shifts.org"))
+     )))
+#+end_src
+
+* AuthInfo
+Setting up =~/.authinfo.gpg= with credentials
+#+begin_example authinfo
+machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
+#+end_example
 
 * Local Overwrite
 Load custom configuration overwrites from and external file
