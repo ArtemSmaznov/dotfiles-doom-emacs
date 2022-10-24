@@ -11,6 +11,8 @@
 (package! async)
 (package! calfw)
 (package! calfw-org)
+(package! calfw-ical)
+(package! org-caldav)
 ;; (package! dashboard)
 (package! dired-hide-dotfiles)
 (package! dired-open)
