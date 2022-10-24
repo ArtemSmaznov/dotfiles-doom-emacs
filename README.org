@@ -14,9 +14,31 @@
   - [[#interface][Interface]]
   - [[#modeline][Modeline]]
 - [[#behavior][Behavior]]
-- [[#projectile][Projectile]]
-- [[#navigation][Navigation]]
+- [[#office][Office]]
+  - [[#authinfo][AuthInfo]]
+  - [[#email][Email]]
+  - [[#calendar][Calendar]]
+- [[#editing][Editing]]
+  - [[#spell-checking][Spell Checking]]
+  - [[#completion][Completion]]
+  - [[#rotate-text][Rotate Text]]
+- [[#development][Development]]
+  - [[#magit][Magit]]
+  - [[#projectile][Projectile]]
   - [[#kill-neotree][KILL Neotree]]
+- [[#lsp][LSP]]
+  - [[#lsp-mode][LSP Mode]]
+  - [[#lsp-ui][LSP UI]]
+  - [[#indent-guides][Indent Guides]]
+  - [[#ivy][Ivy]]
+  - [[#treemacs][Treemacs]]
+  - [[#rainbow-mode][Rainbow Mode]]
+  - [[#javascript][JavaScript]]
+  - [[#groovy][Groovy]]
+  - [[#cucumber][Cucumber]]
+  - [[#vim][Vim]]
+  - [[#logs][Logs]]
+- [[#navigation][Navigation]]
   - [[#dired][Dired]]
   - [[#evil-mode][Evil Mode]]
   - [[#mouse-support][Mouse Support]]
@@ -33,40 +55,8 @@
   - [[#export][Export]]
   - [[#publish][Publish]]
   - [[#auto-tangle][Auto Tangle]]
-- [[#lsp][LSP]]
-  - [[#lsp-mode][LSP Mode]]
-  - [[#lsp-ui][LSP UI]]
-  - [[#indent-guides][Indent Guides]]
-  - [[#ivy][Ivy]]
-  - [[#treemacs][Treemacs]]
-  - [[#rainbow-mode][Rainbow Mode]]
-  - [[#javascript][JavaScript]]
-  - [[#groovy][Groovy]]
-  - [[#cucumber][Cucumber]]
-  - [[#vim][Vim]]
-  - [[#logs][Logs]]
-- [[#completion][Completion]]
-  - [[#company-mode][Company Mode]]
-  - [[#yasnippets][yasnippets]]
-- [[#spell-checking][Spell Checking]]
-- [[#keybindings][Keybindings]]
-- [[#magit][Magit]]
 - [[#pass][Pass]]
-- [[#email][Email]]
-  - [[#dependencies][Dependencies]]
-  - [[#authentication][Authentication]]
-  - [[#home][Home]]
-  - [[#headers][Headers]]
-  - [[#message][Message]]
-  - [[#composing][Composing]]
-  - [[#contexts][Contexts]]
-  - [[#modeline-1][Modeline]]
-  - [[#auto-start][Auto-start]]
-- [[#calendar][Calendar]]
-  - [[#calfw][CalFW]]
-  - [[#icalendar][iCalendar]]
-  - [[#caldav-sync][CalDAV sync]]
-- [[#authinfo][AuthInfo]]
+- [[#keybindings][Keybindings]]
 - [[#local-overwrite][Local Overwrite]]
 - [[#additional-notes][Additional Notes]]
 
@@ -225,17 +215,353 @@ Scrolling
 (setq scroll-margin 2)
 #+end_src
 
-* Projectile
+* Office
+** AuthInfo
+Setting up =~/.authinfo.gpg= with credentials
+#+begin_example authinfo
+machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
+#+end_example
+
+** Email
+*** Dependencies
+- =mbsync=
+- =mu=
+- =mu4e=
+
+A custom variable containing an email address string needs to be defined for each context
+#+begin_example elisp
+(defvar my/email/main "example@gmail.com" "My primary email address")
+#+end_example
+
+*** Authentication
+Function used by =mbsync= for authentication with the email server
 #+begin_src emacs-lisp
-(use-package! projectile
-  :init
-  (when (file-directory-p "~/projects")
-    (setq projectile-project-search-path '("~/projects")))
-  (setq projectile-switch-project-action #'projectile-dired)
+(defun my/lookup-password (&rest keys)
+  (let ((result (apply #'auth-source-search keys)))
+    (if result
+        (funcall (plist-get (car result) :secret))
+        nil)))
+#+end_src
+
+*** Home
+#+begin_src emacs-lisp
+(use-package! mu4e
+  :ensure nil
+  :defer 20
+  :config
+  (setq
+   ;; Set auto-sync interval 10 min
+   mu4e-update-interval (* 15 60)
+   mu4e-maildir "~/Maildir"
+
+   mu4e-maildir-shortcuts
+   '(
+     ("/Inbox"             . ?i)
+     ("/Work"              . ?w)
+     ("/[Gmail]/Important" . ?I)
+     ("/[Gmail]/Sent Mail" . ?s)
+     ("/[Gmail]/Drafts"    . ?d)
+     ("/[Gmail]/All Mail"  . ?a)
+     ("/[Gmail]/Trash"     . ?t)
+     )
+
+   +mu4e-header--maildir-colors '(
+                                  ("/Inbox"      . all-the-icons-yellow)
+                                  ("/Work"       . all-the-icons-red)
+                                  ("[Gmail]"     . all-the-icons-dgreen)
+                                  )
+   )
   )
 #+end_src
 
-* Rotate Text
+*** Headers
+=Headers= is the view listing the emails (i.e. Inbox, Trash, Search Results, etc.)
+#+begin_src emacs-lisp
+(use-package! mu4e
+  :ensure nil
+  :defer 20
+  :config
+  (setq
+   mu4e-split-view 'vertical
+   mu4e-headers-visible-columns 80
+
+   mu4e-headers-time-format "%l:%M:%S %p"
+   mu4e-headers-date-format "%e %b %Y"
+   mu4e-headers-long-date-format "%a, %e %B %Y, %l:%M:%S %p"
+
+   ;; Colum layout for mail list
+   mu4e-headers-fields '(
+                         (:account-stripe . 1)
+                         (:flags          . 7)
+                         (:human-date     . 12)
+                         (:from-or-to     . 25)
+                         (:thread-subject . nil)
+                         )
+   ))
+#+end_src
+
+Keybindings
+#+begin_src emacs-lisp
+(after! mu4e
+  (map! :map mu4e-headers-mode-map
+        :n "m" #'mu4e-headers-mark-for-something
+        :n "M" #'mu4e-headers-mark-for-move
+        :n "t" #'mu4e-headers-mark-subthread
+        :n "T" #'mu4e-headers-mark-thread
+        )
+  )
+#+end_src
+
+*** Message
+#+begin_src emacs-lisp
+(use-package! mu4e
+  :ensure nil
+  :defer 20
+  :config
+  (setq
+   ;; Don't keep message buffers
+   message-kill-buffer-on-exit t
+
+   mu4e-view-prefer-html t
+   ;; mu4e-view-date-format "%c"
+   ;; mu4e-date-format-long "%c"
+   ))
+#+end_src
+
+Keybindings
+#+begin_src emacs-lisp
+(after! mu4e
+  (map! :map mu4e-view-mode-map
+        :n "m" #'mu4e-view-mark-for-something
+        :n "M" #'mu4e-view-mark-for-move
+        :n "t" #'mu4e-view-mark-subthread
+        :n "T" #'mu4e-view-mark-thread
+        )
+  )
+#+end_src
+
+*** Composing
+#+begin_src emacs-lisp
+(use-package! mu4e
+  :ensure nil
+  :defer 20
+  :config
+  (setq
+   ;; Use HTML formatting for outgoing emails
+   mu4e-compose-format-flowed t
+
+   mu4e-compose-dont-reply-to-self t
+   )
+  )
+#+end_src
+
+**** Org-msg
+To toggle org-msg for a single message, just apply the universal argument to the
+compose or reply command (=SPC u= with ~evil~, =C-u= otherwise).
+
+#+begin_src emacs-lisp
+(use-package! org-msg
+  :ensure nil
+  :config
+  (setq
+   org-msg-startup "hidestars indent inlineimages"
+   org-msg-greeting-fmt "Hello %s,\n\n"
+   org-msg-greeting-name-limit 3
+   org-msg-signature "\n\nCheers,\n
+#+begin_signature
+-- *Artem Smaznov*
+#+end_signature\n")
+  )
+#+end_src
+
+Color for bold text after conversion
+#+begin_src emacs-lisp
+;; (use-package! org-msg
+;;   :ensure nil
+;;   :config
+;;   (setq +org-msg-accent-color "#282828")
+;;   )
+#+end_src
+
+Disable Org-msg for composing by default
+#+begin_src emacs-lisp
+;; (use-package! mu4e
+;;   :ensure nil
+;;   :defer 20
+;;   :config
+;;   (setq
+;;    mu4e-compose--org-msg-toggle-next nil
+;;    )
+;;   )
+#+end_src
+
+*** Contexts
+#+begin_src emacs-lisp
+(use-package! mu4e
+  :ensure nil
+  :defer 20
+  :config
+  (setq
+   mu4e-context-policy 'pick-first
+   mu4e-compose-context-policy 'ask-if-none
+
+   ;; don't need to run cleanup after indexing for gmail
+   ;; mu4e-index-cleanup nil
+
+   ;; because gmail uses labels as folders we can use lazy check since
+   ;; messages don't really "move"
+   ;; mu4e-index-lazy-check t
+
+   user-full-name "Artem Smaznov"
+
+   mu4e-contexts
+   `(
+     ,(make-mu4e-context
+       :name "Artem"
+       :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/artem)))
+       :vars `(
+               (smtpmail-smtp-server  . "smtp.gmail.com")
+               (smtpmail-smtp-service . 465)
+               (smtpmail-stream-type  . ssl)
+               (user-mail-address     . ,my/email/artem)
+               (mu4e-drafts-folder    . "/[Gmail]/Drafts")
+               (mu4e-sent-folder      . "/[Gmail]/Sent Mail")
+               (mu4e-refile-folder    . "/[Gmail]/All Mail")
+               (mu4e-trash-folder     . "/[Gmail]/Trash")
+               ))
+     ,(make-mu4e-context
+       :name "Main"
+       :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/main)))
+       ;; :match-func (lambda (msg) (when msg (string-prefix-p "/Main" (mu4e-message-field msg :maildir))))
+       :vars `(
+               (user-mail-address  . ,my/email/main)
+               (mu4e-drafts-folder . "/[Gmail]/Drafts")
+               (mu4e-sent-folder   . "/[Gmail]/Sent Mail")
+               (mu4e-refile-folder . "/[Gmail]/All Mail")
+               (mu4e-trash-folder  . "/[Gmail]/Trash")
+               ))
+     )))
+#+end_src
+
+*** Modeline
+#+begin_src emacs-lisp
+(use-package! mu4e
+  :ensure nil
+  :defer 20
+  :config
+  (setq
+   mu4e-alert-interesting-mail-query "flag:unread AND NOT flag:trashed AND NOT maildir:\"/[Gmail]/All Mail\""
+   mu4e-display-update-status-in-modeline t
+   )
+  )
+#+end_src
+
+*** Auto-start
+Start mu4e in the background so it auto-syncs emails
+#+begin_src emacs-lisp
+;; (use-package! mu4e
+;;   :ensure nil
+;;   :defer 20
+;;   :config
+;;   (mu4e t)
+;;   )
+#+end_src
+
+** Calendar
+*** CalFW
+#+begin_src emacs-lisp
+(use-package! calfw
+  :init
+  (map! :leader
+        :desc "Calendar" "o c" #'cfw:open-org-calendar
+        )
+  :bind
+  (:map cfw:calendar-mode-map ("T" . cfw:change-view-two-weeks))
+  ;; (:map cfw:org-custom-map ("T" . cfw:change-view-two-weeks))
+  :config
+  (setq
+   calendar-week-start-day 1
+   calendar-date-style 'european
+   ;; cfw:org-overwrite-default-keybinding t
+))
+#+end_src
+
+*** iCalendar
+#+begin_src emacs-lisp
+(setq
+ org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
+ org-icalendar-use-deadline '(event-if-todo-not-done)
+ )
+#+end_src
+
+*** CalDAV sync
+#+begin_src emacs-lisp
+(use-package! org-caldav
+  :config
+  (setq
+   org-caldav-delete-calendar-entries 'ask
+   org-caldav-delete-org-entries 'always
+   org-caldav-show-sync-results nil
+   org-caldav-backup-file "~/Documents/org/.caldav/backup.org"
+   org-caldav-location-newline-replacement ","
+   org-caldav-select-tags '("ical")
+   org-caldav-calendars '(
+     (:calendar-id "personal"
+      :inbox "~/Documents/org/inbox-personal.org"
+      :files ("~/Documents/org/todo.org" "~/Documents/org/agenda.org"))
+     (:calendar-id "housing"
+      :inbox "~/Documents/org/inbox-housing.org"
+      :files ("~/Documents/org/housing.org"))
+     (:calendar-id "work"
+      :inbox "~/Documents/org/inbox-work.org"
+      :files ("~/Documents/org/work.org"))
+     ;; (:calendar-id "shifts"
+     ;;  :inbox "~/Documents/org/inbox-shifts.org"
+     ;;  :files ("~/Documents/org/shifts.org"))
+     )))
+#+end_src
+
+* Editing
+** Spell Checking
+#+begin_src emacs-lisp
+(use-package! spell-fu
+  :config
+  (setq ispell-dictionary "english"))
+#+end_src
+
+** Completion
+*** Company Mode
+#+begin_src emacs-lisp
+(use-package! company
+  :bind
+  ;; (:map company-active-map ("<tab>" . company-complete-selection))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-tooltip-idle-delay 2)
+  (company-idle-delay 0.5)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(after! lsp-mode
+  (use-package! company
+    :bind
+    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
+    )
+  )
+#+end_src
+
+*** yasnippets
+This doesn't work but keeping it anyways
+#+begin_src emacs-lisp
+(after! yasnippet
+  (define-key yas-minor-mode-map [(tab)]        nil)
+  (define-key yas-minor-mode-map (kbd "TAB")    nil)
+  (define-key yas-minor-mode-map (kbd "<tab>")  nil)
+  )
+#+end_src
+
+** Rotate Text
 To enable a set of items to cycle through globally, add the following to your configuration
 #+begin_src emacs-lisp
 (use-package! rotate-text
@@ -246,7 +572,23 @@ To enable a set of items to cycle through globally, add the following to your co
 ))
 #+end_src
 
-* Navigation
+* Development
+** Magit
+Open =magit= in a side window
+#+begin_src emacs-lisp
+;; (setq magit-display-buffer-function 'magit-display-buffer-traditional)
+#+end_src
+
+** Projectile
+#+begin_src emacs-lisp
+(use-package! projectile
+  :init
+  (when (file-directory-p "~/projects")
+    (setq projectile-project-search-path '("~/projects")))
+  (setq projectile-switch-project-action #'projectile-dired)
+  )
+#+end_src
+
 ** KILL Neotree
 Neotree is a file tree viewer. When you open neotree, it jumps to the current file thanks to neo-smart-open. The neo-window-fixed-size setting makes the neotree width be adjustable. Doom Emacs had no keybindings set for neotree. Since Doom Emacs uses ‘SPC t’ for ‘toggle’ keybindings, I used ‘SPC t n’ for toggle-neotree.
 #+begin_src emacs-lisp
@@ -273,6 +615,125 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
 ;;       )
 #+end_src
 
+* LSP
+** LSP Mode
+#+begin_src emacs-lisp
+(use-package! lsp-mode
+  :commands (lsp lsp-deferred)
+  :hook
+  (rjsx-mode    . lsp-deferred)
+  (python-mode  . lsp-deferred)
+  (feature-mode . lsp-deferred)
+  (vimrc-mode   . lsp-deferred)
+  (groovy-mode  . lsp-deferred)
+  :custom
+  (lsp-headerline-breadcrumb-enable t))
+#+end_src
+
+** LSP UI
+#+begin_src emacs-lisp
+(use-package! lsp-ui
+  :commands lsp-ui-mode
+  :hook
+  (lsp-mode . lsp-ui-mode)
+  :config
+  (setq
+   lsp-ui-doc-position 'bottom))
+#+end_src
+
+** Indent Guides
+#+begin_src emacs-lisp
+(use-package! highlight-indent-guides
+  :defer t
+  :config
+    (setq highlight-indent-guides-method 'fill))
+#+end_src
+
+** Ivy
+#+begin_src emacs-lisp
+(use-package lsp-ivy
+  :commands lsp-ivy-workspace-symbol)
+#+end_src
+
+** Treemacs
+#+begin_src emacs-lisp
+(use-package! lsp-treemacs
+  :commands lsp-treemacs-errors-list)
+#+end_src
+
+** Rainbow Mode
+Highlight colors in file
+#+begin_src emacs-lisp
+(use-package! rainbow-mode
+  :init
+  (map! :leader
+        :desc "Colors" "t c" #'rainbow-mode
+        ))
+#+end_src
+
+** JavaScript
+#+begin_src emacs-lisp
+;; (use-package! rjsx-mode
+;;   :ensure t
+;;   :mode
+;;   "\\.js\\'"
+;; )
+#+end_src
+
+** Groovy
+#+begin_src emacs-lisp
+(use-package! groovy-mode
+  :defer t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.PIPE$" . groovy-mode))
+  (setq groovy-indent-offset 2)
+  :hook
+  (groovy-mode . (lambda ()
+                   (rainbow-delimiters-mode 1)
+                   ))
+  )
+#+end_src
+
+** Cucumber
+#+begin_src emacs-lisp
+(use-package! feature-mode
+  :defer t
+  :mode
+  "\\.feature\\'"
+  :config
+  (setq
+   feature-default-language "en"
+   ;; feature-step-search-path "features/../**/*step*/*.js"
+   ))
+#+end_src
+
+** Vim
+Enable syntax highlighting for .vim files
+#+begin_src emacs-lisp
+(use-package! vimrc-mode
+  :defer t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+  :config
+  (setq evil-shift-width 2))
+#+end_src
+
+** Logs
+#+begin_src emacs-lisp
+(use-package! syslog-mode
+  :defer t
+  :mode
+  "\\.log"
+  "\\.[0-9]+\\'"
+  :hook
+  (syslog-mode . (lambda ()
+                   (make-local-variable 'display-line-numbers-type)
+                   (setq display-line-numbers-type t)
+                   (display-line-numbers-mode 1)
+                   )))
+#+end_src
+
+* Navigation
 ** Dired
 #+begin_src emacs-lisp
 (use-package! dired
@@ -530,161 +991,10 @@ Put at the header of the =Org= document to enable auto tangle on save for it
 )))
 #+end_src
 
-* LSP
-** LSP Mode
+* Pass
+Uses the standard Unix password store "pass".
 #+begin_src emacs-lisp
-(use-package! lsp-mode
-  :commands (lsp lsp-deferred)
-  :hook
-  (rjsx-mode    . lsp-deferred)
-  (python-mode  . lsp-deferred)
-  (feature-mode . lsp-deferred)
-  (vimrc-mode   . lsp-deferred)
-  (groovy-mode  . lsp-deferred)
-  :custom
-  (lsp-headerline-breadcrumb-enable t))
-#+end_src
-
-** LSP UI
-#+begin_src emacs-lisp
-(use-package! lsp-ui
-  :commands lsp-ui-mode
-  :hook
-  (lsp-mode . lsp-ui-mode)
-  :config
-  (setq
-   lsp-ui-doc-position 'bottom))
-#+end_src
-
-** Indent Guides
-#+begin_src emacs-lisp
-(use-package! highlight-indent-guides
-  :defer t
-  :config
-    (setq highlight-indent-guides-method 'fill))
-#+end_src
-
-** Ivy
-#+begin_src emacs-lisp
-(use-package lsp-ivy
-  :commands lsp-ivy-workspace-symbol)
-#+end_src
-
-** Treemacs
-#+begin_src emacs-lisp
-(use-package! lsp-treemacs
-  :commands lsp-treemacs-errors-list)
-#+end_src
-
-** Rainbow Mode
-Highlight colors in file
-#+begin_src emacs-lisp
-(use-package! rainbow-mode
-  :init
-  (map! :leader
-        :desc "Colors" "t c" #'rainbow-mode
-        ))
-#+end_src
-
-** JavaScript
-#+begin_src emacs-lisp
-;; (use-package! rjsx-mode
-;;   :ensure t
-;;   :mode 
-;;   "\\.js\\'"
-;; )
-#+end_src
-
-** Groovy
-#+begin_src emacs-lisp
-(use-package! groovy-mode
-  :defer t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.PIPE$" . groovy-mode))
-  (setq groovy-indent-offset 2)
-  :hook
-  (groovy-mode . (lambda ()
-                   (rainbow-delimiters-mode 1)
-                   ))
-  )
-#+end_src
-
-** Cucumber
-#+begin_src emacs-lisp
-(use-package! feature-mode
-  :defer t
-  :mode
-  "\\.feature\\'"
-  :config
-  (setq
-   feature-default-language "en"
-   ;; feature-step-search-path "features/../**/*step*/*.js"
-   ))
-#+end_src
-
-** Vim
-Enable syntax highlighting for .vim files
-#+begin_src emacs-lisp
-(use-package! vimrc-mode
-  :defer t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
-  :config
-  (setq evil-shift-width 2))
-#+end_src
-
-** Logs
-#+begin_src emacs-lisp
-(use-package! syslog-mode
-  :defer t
-  :mode
-  "\\.log"
-  "\\.[0-9]+\\'"
-  :hook
-  (syslog-mode . (lambda ()
-                   (make-local-variable 'display-line-numbers-type)
-                   (setq display-line-numbers-type t)
-                   (display-line-numbers-mode 1)
-                   )))
-#+end_src
-
-* Completion
-** Company Mode
-#+begin_src emacs-lisp
-(use-package! company
-  :bind
-  ;; (:map company-active-map ("<tab>" . company-complete-selection))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-tooltip-idle-delay 2)
-  (company-idle-delay 0.5)
-  )
-#+end_src
-
-#+begin_src emacs-lisp
-(after! lsp-mode
-  (use-package! company
-    :bind
-    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
-    )
-  )
-#+end_src
-
-** yasnippets
-This doesn't work but keeping it anyways
-#+begin_src emacs-lisp
-(after! yasnippet
-  (define-key yas-minor-mode-map [(tab)]        nil)
-  (define-key yas-minor-mode-map (kbd "TAB")    nil)
-  (define-key yas-minor-mode-map (kbd "<tab>")  nil)
-  )
-#+end_src
-
-* Spell Checking
-#+begin_src emacs-lisp
-(use-package! spell-fu
-  :config
-  (setq ispell-dictionary "english"))
+;; (use-package! password-store)
 #+end_src
 
 * Keybindings
@@ -719,323 +1029,6 @@ Workspaces
       :desc "Move workspace right" "TAB >" #'+workspace/swap-right
       )
 #+end_src
-
-* Magit
-Open =magit= in a side window
-#+begin_src emacs-lisp
-;; (setq magit-display-buffer-function 'magit-display-buffer-traditional)
-#+end_src
-
-* Pass
-Uses the standard Unix password store "pass".
-#+begin_src emacs-lisp
-;; (use-package! password-store)
-#+end_src
-
-* Email
-** Dependencies
-- =mbsync=
-- =mu=
-- =mu4e=
-
-A custom variable containing an email address string needs to be defined for each context
-#+begin_example elisp
-(defvar my/email/main "example@gmail.com" "My primary email address")
-#+end_example
-
-** Authentication
-Function used by =mbsync= for authentication with the email server
-#+begin_src emacs-lisp
-(defun my/lookup-password (&rest keys)
-  (let ((result (apply #'auth-source-search keys)))
-    (if result
-        (funcall (plist-get (car result) :secret))
-        nil)))
-#+end_src
-
-** Home
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   ;; Set auto-sync interval 10 min
-   mu4e-update-interval (* 15 60)
-   mu4e-maildir "~/Maildir"
-
-   mu4e-maildir-shortcuts
-   '(
-     ("/Inbox"             . ?i)
-     ("/Work"              . ?w)
-     ("/[Gmail]/Important" . ?I)
-     ("/[Gmail]/Sent Mail" . ?s)
-     ("/[Gmail]/Drafts"    . ?d)
-     ("/[Gmail]/All Mail"  . ?a)
-     ("/[Gmail]/Trash"     . ?t)
-     )
-
-   +mu4e-header--maildir-colors '(
-                                  ("/Inbox"      . all-the-icons-yellow)
-                                  ("/Work"       . all-the-icons-red)
-                                  ("[Gmail]"     . all-the-icons-dgreen)
-                                  )
-   )
-  )
-#+end_src
-
-** Headers
-=Headers= is the view listing the emails (i.e. Inbox, Trash, Search Results, etc.)
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   mu4e-split-view 'vertical
-   mu4e-headers-visible-columns 80
-
-   mu4e-headers-time-format "%l:%M:%S %p"
-   mu4e-headers-date-format "%e %b %Y"
-   mu4e-headers-long-date-format "%a, %e %B %Y, %l:%M:%S %p"
-
-   ;; Colum layout for mail list
-   mu4e-headers-fields '(
-                         (:account-stripe . 1)
-                         (:flags          . 7)
-                         (:human-date     . 12)
-                         (:from-or-to     . 25)
-                         (:thread-subject . nil)
-                         )
-   ))
-#+end_src
-
-Keybindings
-#+begin_src emacs-lisp
-(after! mu4e
-  (map! :map mu4e-headers-mode-map
-        :n "m" #'mu4e-headers-mark-for-something
-        :n "M" #'mu4e-headers-mark-for-move
-        :n "t" #'mu4e-headers-mark-subthread
-        :n "T" #'mu4e-headers-mark-thread
-        )
-  )
-#+end_src
-
-** Message
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   ;; Don't keep message buffers
-   message-kill-buffer-on-exit t
-
-   mu4e-view-prefer-html t
-   ;; mu4e-view-date-format "%c"
-   ;; mu4e-date-format-long "%c"
-   ))
-#+end_src
-
-Keybindings
-#+begin_src emacs-lisp
-(after! mu4e
-  (map! :map mu4e-view-mode-map
-        :n "m" #'mu4e-view-mark-for-something
-        :n "M" #'mu4e-view-mark-for-move
-        :n "t" #'mu4e-view-mark-subthread
-        :n "T" #'mu4e-view-mark-thread
-        )
-  )
-#+end_src
-
-** Composing
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   ;; Use HTML formatting for outgoing emails
-   mu4e-compose-format-flowed t
-
-   mu4e-compose-dont-reply-to-self t
-   )
-  )
-#+end_src
-
-*** Org-msg
-To toggle org-msg for a single message, just apply the universal argument to the
-compose or reply command (=SPC u= with ~evil~, =C-u= otherwise).
-
-#+begin_src emacs-lisp
-(use-package! org-msg
-  :ensure nil
-  :config
-  (setq
-   org-msg-startup "hidestars indent inlineimages"
-   org-msg-greeting-fmt "Hello %s,\n\n"
-   org-msg-greeting-name-limit 3
-   org-msg-signature "\n\nCheers,\n
-#+begin_signature
--- *Artem Smaznov*
-#+end_signature\n")
-  )
-#+end_src
-
-Color for bold text after conversion
-#+begin_src emacs-lisp
-;; (use-package! org-msg
-;;   :ensure nil
-;;   :config
-;;   (setq +org-msg-accent-color "#282828")
-;;   )
-#+end_src
-
-Disable Org-msg for composing by default
-#+begin_src emacs-lisp
-;; (use-package! mu4e
-;;   :ensure nil
-;;   :defer 20
-;;   :config
-;;   (setq
-;;    mu4e-compose--org-msg-toggle-next nil
-;;    )
-;;   )
-#+end_src
-
-** Contexts
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   mu4e-context-policy 'pick-first
-   mu4e-compose-context-policy 'ask-if-none
-
-   ;; don't need to run cleanup after indexing for gmail
-   ;; mu4e-index-cleanup nil
-
-   ;; because gmail uses labels as folders we can use lazy check since
-   ;; messages don't really "move"
-   ;; mu4e-index-lazy-check t
-
-   user-full-name "Artem Smaznov"
-
-   mu4e-contexts
-   `(
-     ,(make-mu4e-context
-       :name "Artem"
-       :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/artem)))
-       :vars `(
-               (smtpmail-smtp-server  . "smtp.gmail.com")
-               (smtpmail-smtp-service . 465)
-               (smtpmail-stream-type  . ssl)
-               (user-mail-address     . ,my/email/artem)
-               (mu4e-drafts-folder    . "/[Gmail]/Drafts")
-               (mu4e-sent-folder      . "/[Gmail]/Sent Mail")
-               (mu4e-refile-folder    . "/[Gmail]/All Mail")
-               (mu4e-trash-folder     . "/[Gmail]/Trash")
-               ))
-     ,(make-mu4e-context
-       :name "Main"
-       :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/main)))
-       ;; :match-func (lambda (msg) (when msg (string-prefix-p "/Main" (mu4e-message-field msg :maildir))))
-       :vars `(
-               (user-mail-address  . ,my/email/main)
-               (mu4e-drafts-folder . "/[Gmail]/Drafts")
-               (mu4e-sent-folder   . "/[Gmail]/Sent Mail")
-               (mu4e-refile-folder . "/[Gmail]/All Mail")
-               (mu4e-trash-folder  . "/[Gmail]/Trash")
-               ))
-     )))
-#+end_src
-
-** Modeline
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   mu4e-alert-interesting-mail-query "flag:unread AND NOT flag:trashed AND NOT maildir:\"/[Gmail]/All Mail\""
-   mu4e-display-update-status-in-modeline t
-   )
-  )
-#+end_src
-
-** Auto-start
-Start mu4e in the background so it auto-syncs emails
-#+begin_src emacs-lisp
-;; (use-package! mu4e
-;;   :ensure nil
-;;   :defer 20
-;;   :config
-;;   (mu4e t)
-;;   )
-#+end_src
-
-* Calendar
-** CalFW
-#+begin_src emacs-lisp
-(use-package! calfw
-  :init
-  (map! :leader
-        :desc "Calendar" "o c" #'cfw:open-org-calendar
-        )
-  :bind
-  (:map cfw:calendar-mode-map ("T" . cfw:change-view-two-weeks))
-  ;; (:map cfw:org-custom-map ("T" . cfw:change-view-two-weeks))
-  :config
-  (setq
-   calendar-week-start-day 1
-   calendar-date-style 'european
-   ;; cfw:org-overwrite-default-keybinding t
-))
-#+end_src
-
-** iCalendar
-#+begin_src emacs-lisp
-(setq
- org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
- org-icalendar-use-deadline '(event-if-todo-not-done)
- )
-#+end_src
-
-** CalDAV sync
-#+begin_src emacs-lisp
-(use-package! org-caldav
-  :config
-  (setq
-   org-caldav-delete-calendar-entries 'ask
-   org-caldav-delete-org-entries 'always
-   org-caldav-show-sync-results nil
-   org-caldav-backup-file "~/Documents/org/.caldav/backup.org"
-   org-caldav-location-newline-replacement ","
-   org-caldav-select-tags '("ical")
-   org-caldav-calendars '(
-     (:calendar-id "personal"
-      :inbox "~/Documents/org/inbox-personal.org"
-      :files ("~/Documents/org/todo.org" "~/Documents/org/agenda.org"))
-     (:calendar-id "housing"
-      :inbox "~/Documents/org/inbox-housing.org"
-      :files ("~/Documents/org/housing.org"))
-     (:calendar-id "work"
-      :inbox "~/Documents/org/inbox-work.org"
-      :files ("~/Documents/org/work.org"))
-     ;; (:calendar-id "shifts"
-     ;;  :inbox "~/Documents/org/inbox-shifts.org"
-     ;;  :files ("~/Documents/org/shifts.org"))
-     )))
-#+end_src
-
-* AuthInfo
-Setting up =~/.authinfo.gpg= with credentials
-#+begin_example authinfo
-machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
-#+end_example
 
 * Local Overwrite
 Load custom configuration overwrites from and external file
