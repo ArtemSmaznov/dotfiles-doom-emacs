@@ -55,6 +55,7 @@
   - [[#export][Export]]
   - [[#publish][Publish]]
   - [[#auto-tangle][Auto Tangle]]
+  - [[#presentations][Presentations]]
 - [[#pass][Pass]]
 - [[#keybindings][Keybindings]]
 - [[#local-overwrite][Local Overwrite]]
@@ -989,6 +990,47 @@ Put at the header of the =Org= document to enable auto tangle on save for it
                                      "SHELLS.org"
                                      "local.org"
 )))
+#+end_src
+
+** Presentations
+#+begin_src emacs-lisp
+(use-package! org-tree-slide
+  :init
+  (map! :map org-mode-map
+        :leader
+        :desc "Presentation" "t p" #'org-tree-slide-mode
+        )
+  :bind
+  (:map org-tree-slide-mode-map
+   ("C-h"   . org-tree-slide-move-previous-tree)
+   ("C-l"   . org-tree-slide-move-next-tree)
+   ("C-SPC" . org-tree-slide-content)
+   )
+  :hook ((org-tree-slide-play . my/presentation-start)
+         (org-tree-slide-stop . my/presentation-end))
+  :custom
+  (org-tree-slide-slide-in-effect t)
+  (org-tree-slide-activate-message "Presentation started!")
+  (org-tree-slide-deactivate-message "Presentation finished!")
+  (org-tree-slide-header t)
+  (org-tree-slide-breadcrumbs " > ")
+  (org-image-actual-width nil)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my/presentation-start ()
+  (writeroom-mode 1)
+  (display-line-numbers-mode 0)
+  (org-display-inline-images) ;; Can also use org-startup-with-inline-images
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my/presentation-end ()
+  (writeroom-mode 0)
+  (display-line-numbers-mode 1)
+  )
 #+end_src
 
 * Pass

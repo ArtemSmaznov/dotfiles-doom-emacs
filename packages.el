@@ -26,6 +26,7 @@
 (package! ivy-posframe)
 (package! org-auto-tangle)
 (package! org-bullets)
+(package! org-tree-slide)
 (package! ox-gemini)
 (package! password-store)
 (package! peep-dired)
