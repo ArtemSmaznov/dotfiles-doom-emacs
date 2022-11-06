@@ -503,22 +503,22 @@ Start mu4e in the background so it auto-syncs emails
    org-caldav-delete-calendar-entries 'ask
    org-caldav-delete-org-entries 'always
    org-caldav-show-sync-results nil
-   org-caldav-backup-file "~/Documents/org/.caldav/backup.org"
+   org-caldav-backup-file "~/documents/org/.caldav/backup.org"
    org-caldav-location-newline-replacement ","
    org-caldav-select-tags '("ical")
    org-caldav-calendars '(
      (:calendar-id "personal"
-      :inbox "~/Documents/org/inbox-personal.org"
-      :files ("~/Documents/org/todo.org" "~/Documents/org/agenda.org"))
+      :inbox "~/documents/org/inbox-personal.org"
+      :files ("~/documents/org/todo.org" "~/documents/org/agenda.org"))
      (:calendar-id "housing"
-      :inbox "~/Documents/org/inbox-housing.org"
-      :files ("~/Documents/org/housing.org"))
+      :inbox "~/documents/org/inbox-housing.org"
+      :files ("~/documents/org/housing.org"))
      (:calendar-id "work"
-      :inbox "~/Documents/org/inbox-work.org"
-      :files ("~/Documents/org/work.org"))
+      :inbox "~/documents/org/inbox-work.org"
+      :files ("~/documents/org/work.org"))
      ;; (:calendar-id "shifts"
-     ;;  :inbox "~/Documents/org/inbox-shifts.org"
-     ;;  :files ("~/Documents/org/shifts.org"))
+     ;;  :inbox "~/documents/org/inbox-shifts.org"
+     ;;  :files ("~/documents/org/shifts.org"))
      )))
 #+end_src
 
@@ -778,12 +778,12 @@ Toggle hidden files in Dired
 ;; change `org-directory'. It must be set before org loads!
 (use-package! org
   :init
-  (setq org-directory "~/Documents/org")
+  (setq org-directory "~/documents/org")
   :config
   (setq
    org-agenda-files (list org-directory)
    org-default-notes-file (expand-file-name "notes.org" org-directory)
-   org-journal-dir "~/Documents/org/journal/"
+   org-journal-dir "~/documents/org/journal/"
    org-journal-date-format "%B %d, %Y (%A) "
    org-journal-file-format "%Y-%m-%d.org"
    ))
