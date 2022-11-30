@@ -505,20 +505,25 @@ Start mu4e in the background so it auto-syncs emails
    org-caldav-show-sync-results nil
    org-caldav-backup-file "~/documents/org/.caldav/backup.org"
    org-caldav-location-newline-replacement ","
-   org-caldav-select-tags '("ical")
+   org-caldav-exclude-tags '("nocal")
    org-caldav-calendars '(
      (:calendar-id "personal"
-      :inbox "~/documents/org/inbox-personal.org"
-      :files ("~/documents/org/todo.org" "~/documents/org/agenda.org"))
+            :select-tags ("calgeneral")
+            :inbox "~/documents/org/inbox-personal.org"
+            :files ("~/documents/org/todo.org"
+                    "~/documents/org/agenda.org"
+                    "~/documents/org/archive.org"))
      (:calendar-id "housing"
-      :inbox "~/documents/org/inbox-housing.org"
-      :files ("~/documents/org/housing.org"))
+            :select-tags ("calhousing")
+            :inbox "~/documents/org/inbox-housing.org"
+            :files ("~/documents/org/todo.org"
+                    "~/documents/org/housing.org"
+                    "~/documents/org/archive.org"))
      (:calendar-id "work"
-      :inbox "~/documents/org/inbox-work.org"
-      :files ("~/documents/org/work.org"))
-     ;; (:calendar-id "shifts"
-     ;;  :inbox "~/documents/org/inbox-shifts.org"
-     ;;  :files ("~/documents/org/shifts.org"))
+            :select-tags ("calwork")
+            :inbox "~/documents/org/inbox-work.org"
+            :files ("~/documents/org/todo.org"
+                    "~/documents/org/archive.org"))
      )))
 #+end_src
 
