@@ -14,6 +14,20 @@
   - [[#interface][Interface]]
   - [[#modeline][Modeline]]
 - [[#behavior][Behavior]]
+- [[#org-mode][ORG Mode]]
+  - [[#paths][Paths]]
+  - [[#setup][Setup]]
+  - [[#agenda][Agenda]]
+  - [[#headings][Headings]]
+  - [[#pretty-symbols][Pretty Symbols]]
+  - [[#archiving][Archiving]]
+  - [[#refiling][Refiling]]
+  - [[#extra-src-block-languages][Extra SRC Block Languages]]
+  - [[#babel][Babel]]
+  - [[#export][Export]]
+  - [[#publish][Publish]]
+  - [[#auto-tangle][Auto Tangle]]
+  - [[#presentations][Presentations]]
 - [[#office][Office]]
   - [[#authinfo][AuthInfo]]
   - [[#email][Email]]
@@ -42,20 +56,6 @@
   - [[#dired][Dired]]
   - [[#evil-mode][Evil Mode]]
   - [[#mouse-support][Mouse Support]]
-- [[#org-mode][ORG Mode]]
-  - [[#paths][Paths]]
-  - [[#setup][Setup]]
-  - [[#agenda][Agenda]]
-  - [[#headings][Headings]]
-  - [[#pretty-symbols][Pretty Symbols]]
-  - [[#archiving][Archiving]]
-  - [[#refiling][Refiling]]
-  - [[#extra-src-block-languages][Extra SRC Block Languages]]
-  - [[#babel][Babel]]
-  - [[#export][Export]]
-  - [[#publish][Publish]]
-  - [[#auto-tangle][Auto Tangle]]
-  - [[#presentations][Presentations]]
 - [[#pass][Pass]]
 - [[#keybindings][Keybindings]]
 - [[#local-overwrite][Local Overwrite]]
@@ -214,6 +214,271 @@ Windows
 Scrolling
 #+begin_src emacs-lisp
 (setq scroll-margin 2)
+#+end_src
+
+* ORG Mode
+** Paths
+#+begin_src emacs-lisp
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(use-package! org
+  :init
+  (setq org-directory "~/documents/org")
+  :config
+  (setq
+   org-agenda-files (list org-directory)
+   org-default-notes-file (expand-file-name "notes.org" org-directory)
+   org-journal-dir "~/documents/org/journal/"
+   org-journal-date-format "%B %d, %Y (%A) "
+   org-journal-file-format "%Y-%m-%d.org"
+   ))
+#+end_src
+
+** Setup
+#+begin_src emacs-lisp
+(use-package! org
+  :init
+  (map! :map org-mode-map
+        :leader
+        :desc "Org babel tangle" "m B" #'org-babel-tangle
+        )
+  :hook
+  (org-mode . (lambda ()
+                (make-local-variable 'display-line-numbers)
+                (setq display-line-numbers 'visual)
+                (org-bullets-mode 1)
+                ))
+  :bind
+  (:map org-mode-map
+   ("<M-up>"    . drag-stuff-up)
+   ("<M-down>"  . drag-stuff-down)
+   ("<M-left>"  . drag-stuff-left)
+   ("<M-right>" . drag-stuff-right)
+   ("<up>"      . evil-previous-visual-line)
+   ("<down>"    . evil-next-visual-line)
+   )
+  :config
+  (setq org-ellipsis " ▼ "
+        org-log-into-drawer t
+        org-log-done 'time
+        org-hide-emphasis-markers t
+        ;; ex. of org-link-abbrev-alist in action
+        ;; [[arch-wiki:Name_of_Page][Description]]
+        org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
+        '(
+          ("google"    . "http://www.google.com/search?q=")
+          ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
+          ("ddg"       . "https://duckduckgo.com/?q=")
+          ("wiki"      . "https://en.wikipedia.org/wiki/")
+          )
+        ))
+#+end_src
+
+** Agenda
+#+begin_src emacs-lisp
+(use-package! org
+  :config
+  (setq
+   org-agenda-start-with-log-mode t
+   org-agenda-start-day nil
+   org-agenda-span 'week
+   org-agenda-start-on-weekday 1
+   org-deadline-warning-days 14
+   ))
+#+end_src
+
+** Headings
+Setting the font sizes for each header level in Org mode.
+#+begin_src emacs-lisp
+(use-package! org
+  :config
+  (custom-set-faces
+   '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
+   '(org-level-2 ((t (:inherit outline-2 :height 1.1))))
+   '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
+   '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
+   '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
+   ))
+#+end_src
+
+** Pretty Symbols
+#+begin_src emacs-lisp
+(use-package! org
+  :config
+  (defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
+         (interactive)
+         (setq
+          prettify-symbols-mode 1
+          prettify-symbols-alist
+          (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                  '(
+                    ("#+begin_src"     . ?)
+                    ("#+end_src"       . ?)
+                    ("#+begin_example" . ?)
+                    ("#+end_example"   . ?)
+                    ("#+DATE:"         . ?⏱)
+                    ("#+AUTHOR:"       . ?✏)
+                    ("[ ]"             .  ?☐)
+                    ("[X]"             . ?☑ )
+                    ("[-]"             . ?❍ )
+                    ("lambda"          . ?λ)
+                    ("#+header:"       . ?)
+                    ("#+name:"         . ?﮸)
+                    ("#+results:"      . ?)
+                    ("#+call:"         . ?)
+                    (":properties:"    . ?)
+                    (":logbook:"       . ?)
+                    ))))
+  )
+#+end_src
+
+** Archiving
+#+begin_src emacs-lisp
+(use-package! org
+  :config
+  (setq
+   ;; org-blank-before-new-entry ((heading . auto)
+   ;;                             (plain-list-item . auto))
+   ;; org-archive-location (expand-file-name "archive.org::datetree/* %s" org-directory)
+   org-archive-location (expand-file-name "archive.org::datetree/" org-directory)
+   ))
+#+end_src
+
+** Refiling
+#+begin_src emacs-lisp
+(use-package! org
+  :config
+  (setq
+   org-refile-targets '((org-agenda-files :maxlevel . 1))
+   ))
+#+end_src
+
+Save all org buffers after a refile
+#+begin_src emacs-lisp
+(use-package! org
+  :config
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+  )
+#+end_src
+
+** Extra SRC Block Languages
+#+begin_src emacs-lisp
+(use-package! org
+  :config
+  (push '("conf-unix" . conf-unix) org-src-lang-modes)
+  (push '("toml"      . conf-toml) org-src-lang-modes)
+  )
+#+end_src
+
+** Babel
+#+begin_src emacs-lisp
+(use-package! org
+  :config
+  (require 'org-tempo)
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
+  (add-to-list 'org-structure-template-alist '("lu" . "src lua"))
+  )
+#+end_src
+
+Auto-tangle on save
+#+begin_example emacs-lisp
+(defun efs/org-babel-tagle-config ()
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "some org file location"))
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+#+end_example
+
+** Export
+We need ox-man for "Org eXporting" to manpage format.
+#+begin_src emacs-lisp
+(after! org
+  (use-package ox-man)
+  (use-package ox-gemini)
+  )
+#+end_src
+
+** Publish
+#+begin_src emacs-lisp
+(use-package! org
+  :config
+  (setq org-publish-project-alist
+        '(
+          ("github.io"
+           :base-directory "~/projects/artemsmaznov.github.io/org"
+           :base-extension "org"
+           :publishing-directory "~/projects/artemsmaznov.github.io"
+           :recursive t
+           :publishing-function org-html-publish-to-html
+           :headline-levels 4
+           :auto-preamble t
+           :exclude "header.org"
+           )
+          )))
+#+end_src
+
+** Auto Tangle
+Put at the header of the =Org= document to enable auto tangle on save for it
+#+begin_example emacs-lisp
+#+auto_tangle: t
+#+end_example
+
+#+begin_src emacs-lisp
+(use-package! org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode)
+  :config
+  (setq org-auto-tangle-babel-safelist '(
+                                     "README.org"
+                                     "SHELLS.org"
+                                     "local.org"
+)))
+#+end_src
+
+** Presentations
+#+begin_src emacs-lisp
+(use-package! org-tree-slide
+  :init
+  (map! :map org-mode-map
+        :leader
+        :desc "Presentation" "t p" #'org-tree-slide-mode
+        )
+  :bind
+  (:map org-tree-slide-mode-map
+   ("C-h"   . org-tree-slide-move-previous-tree)
+   ("C-l"   . org-tree-slide-move-next-tree)
+   ("C-SPC" . org-tree-slide-content)
+   )
+  :hook ((org-tree-slide-play . my/presentation-start)
+         (org-tree-slide-stop . my/presentation-end))
+  :custom
+  (org-tree-slide-slide-in-effect t)
+  (org-tree-slide-activate-message "Presentation started!")
+  (org-tree-slide-deactivate-message "Presentation finished!")
+  (org-tree-slide-header t)
+  (org-tree-slide-breadcrumbs " > ")
+  (org-image-actual-width nil)
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my/presentation-start ()
+  (writeroom-mode 1)
+  (display-line-numbers-mode 0)
+  (org-display-inline-images) ;; Can also use org-startup-with-inline-images
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my/presentation-end ()
+  (writeroom-mode 0)
+  (display-line-numbers-mode 1)
+  )
 #+end_src
 
 * Office
@@ -774,268 +1039,6 @@ Toggle hidden files in Dired
 ** Mouse Support
 #+begin_src emacs-lisp
 (xterm-mouse-mode 1)
-#+end_src
-
-* ORG Mode
-** Paths
-#+begin_src emacs-lisp
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(use-package! org
-  :init
-  (setq org-directory "~/documents/org")
-  :config
-  (setq
-   org-agenda-files (list org-directory)
-   org-default-notes-file (expand-file-name "notes.org" org-directory)
-   org-journal-dir "~/documents/org/journal/"
-   org-journal-date-format "%B %d, %Y (%A) "
-   org-journal-file-format "%Y-%m-%d.org"
-   ))
-#+end_src
-
-** Setup
-#+begin_src emacs-lisp
-(use-package! org
-  :init
-  (map! :map org-mode-map
-        :leader
-        :desc "Org babel tangle" "m B" #'org-babel-tangle
-        )
-  :hook
-  (org-mode . (lambda ()
-                (make-local-variable 'display-line-numbers)
-                (setq display-line-numbers 'visual)
-                (org-bullets-mode 1)
-                ))
-  :bind
-  (:map org-mode-map
-   ("<M-up>"    . drag-stuff-up)
-   ("<M-down>"  . drag-stuff-down)
-   ("<M-left>"  . drag-stuff-left)
-   ("<M-right>" . drag-stuff-right)
-   ("<up>"      . evil-previous-visual-line)
-   ("<down>"    . evil-next-visual-line)
-   )
-  :config
-  (setq org-ellipsis " ▼ "
-        org-log-into-drawer t
-        org-log-done 'time
-        org-hide-emphasis-markers t
-        ;; ex. of org-link-abbrev-alist in action
-        ;; [[arch-wiki:Name_of_Page][Description]]
-        org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
-        '(
-          ("google"    . "http://www.google.com/search?q=")
-          ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
-          ("ddg"       . "https://duckduckgo.com/?q=")
-          ("wiki"      . "https://en.wikipedia.org/wiki/")
-          )
-        ))
-#+end_src
-
-** Agenda
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (setq
-   org-agenda-start-with-log-mode t
-   org-agenda-start-day nil
-   org-agenda-span 'week
-   org-agenda-start-on-weekday 1
-   org-deadline-warning-days 14
-   ))
-#+end_src
-
-** Headings
-Setting the font sizes for each header level in Org mode.
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (custom-set-faces
-   '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
-   '(org-level-2 ((t (:inherit outline-2 :height 1.1))))
-   '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
-   '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
-   '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
-   ))
-#+end_src
-
-** Pretty Symbols
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
-         (interactive)
-         (setq
-          prettify-symbols-mode 1
-          prettify-symbols-alist
-          (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-                  '(
-                    ("#+begin_src"     . ?)
-                    ("#+end_src"       . ?)
-                    ("#+begin_example" . ?)
-                    ("#+end_example"   . ?)
-                    ("#+DATE:"         . ?⏱)
-                    ("#+AUTHOR:"       . ?✏)
-                    ("[ ]"             .  ?☐)
-                    ("[X]"             . ?☑ )
-                    ("[-]"             . ?❍ )
-                    ("lambda"          . ?λ)
-                    ("#+header:"       . ?)
-                    ("#+name:"         . ?﮸)
-                    ("#+results:"      . ?)
-                    ("#+call:"         . ?)
-                    (":properties:"    . ?)
-                    (":logbook:"       . ?)
-                    ))))
-  )
-#+end_src
-
-** Archiving
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (setq
-   org-archive-location (expand-file-name "archive.org::datetree/* %s" org-directory)
-   ))
-#+end_src
-
-** Refiling
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (setq
-   org-refile-targets '((org-agenda-files :maxlevel . 1))
-   ))
-#+end_src
-
-Save all org buffers after a refile
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
-  )
-#+end_src
-
-** Extra SRC Block Languages
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (push '("conf-unix" . conf-unix) org-src-lang-modes)
-  (push '("toml"      . conf-toml) org-src-lang-modes)
-  )
-#+end_src
-
-** Babel
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (require 'org-tempo)
-  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python"))
-  (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
-  (add-to-list 'org-structure-template-alist '("lu" . "src lua"))
-  )
-#+end_src
-
-Auto-tangle on save
-#+begin_example emacs-lisp
-(defun efs/org-babel-tagle-config ()
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "some org file location"))
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
-
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
-#+end_example
-
-** Export
-We need ox-man for "Org eXporting" to manpage format.
-#+begin_src emacs-lisp
-(after! org
-  (use-package ox-man)
-  (use-package ox-gemini)
-  )
-#+end_src
-
-** Publish
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (setq org-publish-project-alist
-        '(
-          ("github.io"
-           :base-directory "~/projects/artemsmaznov.github.io/org"
-           :base-extension "org"
-           :publishing-directory "~/projects/artemsmaznov.github.io"
-           :recursive t
-           :publishing-function org-html-publish-to-html
-           :headline-levels 4
-           :auto-preamble t
-           :exclude "header.org"
-           )
-          )))
-#+end_src
-
-** Auto Tangle
-Put at the header of the =Org= document to enable auto tangle on save for it
-#+begin_example emacs-lisp
-#+auto_tangle: t
-#+end_example
-
-#+begin_src emacs-lisp
-(use-package! org-auto-tangle
-  :defer t
-  :hook (org-mode . org-auto-tangle-mode)
-  :config
-  (setq org-auto-tangle-babel-safelist '(
-                                     "README.org"
-                                     "SHELLS.org"
-                                     "local.org"
-)))
-#+end_src
-
-** Presentations
-#+begin_src emacs-lisp
-(use-package! org-tree-slide
-  :init
-  (map! :map org-mode-map
-        :leader
-        :desc "Presentation" "t p" #'org-tree-slide-mode
-        )
-  :bind
-  (:map org-tree-slide-mode-map
-   ("C-h"   . org-tree-slide-move-previous-tree)
-   ("C-l"   . org-tree-slide-move-next-tree)
-   ("C-SPC" . org-tree-slide-content)
-   )
-  :hook ((org-tree-slide-play . my/presentation-start)
-         (org-tree-slide-stop . my/presentation-end))
-  :custom
-  (org-tree-slide-slide-in-effect t)
-  (org-tree-slide-activate-message "Presentation started!")
-  (org-tree-slide-deactivate-message "Presentation finished!")
-  (org-tree-slide-header t)
-  (org-tree-slide-breadcrumbs " > ")
-  (org-image-actual-width nil)
-  )
-#+end_src
-
-#+begin_src emacs-lisp
-(defun my/presentation-start ()
-  (writeroom-mode 1)
-  (display-line-numbers-mode 0)
-  (org-display-inline-images) ;; Can also use org-startup-with-inline-images
-  )
-#+end_src
-
-#+begin_src emacs-lisp
-(defun my/presentation-end ()
-  (writeroom-mode 0)
-  (display-line-numbers-mode 1)
-  )
 #+end_src
 
 * Pass
