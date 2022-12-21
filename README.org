@@ -770,7 +770,7 @@ Start mu4e in the background so it auto-syncs emails
    org-caldav-show-sync-results nil
    org-caldav-backup-file "~/documents/org/.caldav/backup.org"
    org-caldav-location-newline-replacement ","
-   org-caldav-exclude-tags '("nocal")
+   org-caldav-exclude-tags '("calskip")
    org-caldav-calendars '(
      (:calendar-id "personal"
             :select-tags ("calgeneral")
