@@ -109,7 +109,7 @@
        ;;gist                ; interacting with github gists
        (lookup +dictionary)  ; navigate your code and its documentation
        lsp
-       magit                 ; a git porcelain for Emacs
+       (magit +magit-todos)  ; a git porcelain for Emacs
        ;;make                ; run make tasks from Emacs
        pass                  ; password manager for nerds
        ;; pdf                ; pdf enhancements
@@ -122,7 +122,7 @@
 
        :os
        (:if IS-MAC macos)    ; improve compatibility with macOS
-       ;;tty                 ; improve the terminal Emacs experience
+       tty                   ; improve the terminal Emacs experience
 
        :lang
        ;;agda                ; types of types of types of types...
