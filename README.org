@@ -768,6 +768,7 @@ Start mu4e in the background so it auto-syncs emails
    org-caldav-delete-calendar-entries 'ask
    org-caldav-delete-org-entries 'always
    org-caldav-show-sync-results nil
+   org-caldav-save-directory "~/documents/org/.caldav/"
    org-caldav-backup-file "~/documents/org/.caldav/backup.org"
    org-caldav-location-newline-replacement ","
    org-caldav-exclude-tags '("calskip")
