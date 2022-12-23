@@ -7,10 +7,7 @@
 
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
-;(package! some-package)
 (package! async)
-;; (package! calfw) ;; DEPRECATED already included
-;; (package! calfw-org) ;; DEPRECATED already included
 (package! calfw-ical)
 (package! org-caldav)
 ;; (package! dashboard)
@@ -30,7 +27,6 @@
 (package! ox-gemini)
 (package! password-store)
 (package! peep-dired)
-;; (package! rainbow-mode) ;; DEPRECATED already included
 (package! resize-window)
 (package! tldr)
 (package! wc-mode)
