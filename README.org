@@ -795,10 +795,17 @@ Start mu4e in the background so it auto-syncs emails
 
 * Editing
 ** Spell Checking
+- macOS: ~$ brew install aspell~
+- Arch Linux: ~$ pacman -S aspell aspell-en aspell-ru~
 #+begin_src emacs-lisp
 (use-package! spell-fu
+  :hook
+  (spell-fu-mode . (lambda ()
+                     (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "ru"))
+                     ))
   :config
-  (setq ispell-dictionary "english"))
+  (setq ispell-dictionary "english"
+        ispell-personal-dictionary (expand-file-name "dict/.pwd" (xdg-data-home))))
 #+end_src
 
 ** Completion
