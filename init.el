@@ -18,14 +18,14 @@
   (concat doom-user-dir "README.org"))
 
 (setq
-   holiday-general-holidays nil
-   holiday-local-holidays nil
-   holiday-christian-holidays nil
+   ;; holiday-local-holidays nil
+   ;; holiday-general-holidays nil
+   ;; holiday-christian-holidays nil
+   ;; holiday-solar-holidays nil
+   holiday-oriental-holidays nil
    holiday-hebrew-holidays nil
    holiday-islamic-holidays nil
    holiday-bahai-holidays nil
-   holiday-oriental-holidays nil
-   holiday-solar-holidays nil
    )
 
 (doom! :input
@@ -97,7 +97,6 @@
        :checkers
        syntax                    ; tasing you for every semicolon you forget
        (spell +aspell)           ; tasing you for misspelling mispelling
-       ;; (spell +flyspell)      ; tasing you for misspelling mispelling
        grammar                   ; tasing grammar mistake every you make
 
        :tools
