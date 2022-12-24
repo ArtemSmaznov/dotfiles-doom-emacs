@@ -223,14 +223,12 @@ Scrolling
 ;; change `org-directory'. It must be set before org loads!
 (use-package! org
   :init
-  (setq org-directory "~/documents/org")
+  (setq org-directory (expand-file-name "org" (xdg-user-dir "DOCUMENTS")))
   :config
   (setq
    org-agenda-files (list org-directory)
    org-default-notes-file (expand-file-name "notes.org" org-directory)
-   org-journal-dir "~/documents/org/journal/"
-   org-journal-date-format "%B %d, %Y (%A) "
-   org-journal-file-format "%Y-%m-%d.org"
+  +org-capture-journal-file (expand-file-name "journal.org" org-directory)
    ))
 #+end_src
 
