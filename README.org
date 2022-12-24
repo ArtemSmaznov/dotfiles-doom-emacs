@@ -803,7 +803,7 @@ Start mu4e in the background so it auto-syncs emails
                      ))
   :config
   (setq ispell-dictionary "english"
-        ispell-personal-dictionary (expand-file-name "dict/.pwd" (xdg-data-home))))
+        ispell-personal-dictionary (expand-file-name "dict/.pws" (xdg-data-home))))
 #+end_src
 
 ** Completion
