@@ -803,6 +803,7 @@ Start mu4e in the background so it auto-syncs emails
   :hook
   (spell-fu-mode . (lambda ()
                      (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "ru"))
+                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "ru" (expand-file-name "dict/.ru.pws" (xdg-data-home))))
                      ))
   :config
   (setq ispell-dictionary "english"
