@@ -22,8 +22,7 @@
   - [[#pretty-symbols][Pretty Symbols]]
   - [[#archiving][Archiving]]
   - [[#refiling][Refiling]]
-  - [[#extra-src-block-languages][Extra SRC Block Languages]]
-  - [[#templates][Templates]]
+  - [[#source-blocks][Source Blocks]]
   - [[#babel][Babel]]
   - [[#export][Export]]
   - [[#publish][Publish]]
@@ -31,9 +30,9 @@
   - [[#presentations][Presentations]]
 - [[#office][Office]]
   - [[#authinfo][AuthInfo]]
-  - [[#ledger][Ledger]]
-  - [[#email][Email]]
   - [[#calendar][Calendar]]
+  - [[#email][Email]]
+  - [[#ledger][Ledger]]
 - [[#editing][Editing]]
   - [[#spell-checking][Spell Checking]]
   - [[#completion][Completion]]
@@ -147,11 +146,12 @@ They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 font string. You generally only need these two:
 #+begin_src emacs-lisp
 (setq
- doom-font (font-spec :family "Hack Nerd Font Mono" :size 16)
+ doom-font                (font-spec :family "Hack Nerd Font Mono" :size 16)
  doom-variable-pitch-font (font-spec :family "Hack Nerd Font Mono" :size 18)
  )
 
-(after! doom-themes
+(use-package! doom-themes
+  :config
   (setq
    doom-themes-enable-bold t
    doom-themes-enable-italic t
@@ -237,27 +237,22 @@ Scrolling
 ** Setup
 #+begin_src emacs-lisp
 (use-package! org
-  :init
-  (map! :map org-mode-map
-        :leader
-        :desc "Org babel tangle" "m B" #'org-babel-tangle
-        )
-  :hook
-  (org-mode . (lambda ()
-                (make-local-variable 'display-line-numbers)
-                (setq display-line-numbers 'visual)
-                (org-bullets-mode 1)
-                ))
-  :bind
-  (:map org-mode-map
-   ("<M-up>"    . drag-stuff-up)
-   ("<M-down>"  . drag-stuff-down)
-   ("<M-left>"  . drag-stuff-left)
-   ("<M-right>" . drag-stuff-right)
-   ("<up>"      . evil-previous-visual-line)
-   ("<down>"    . evil-next-visual-line)
-   )
+  :hook (org-mode . (lambda ()
+                      (make-local-variable 'display-line-numbers)
+                      (setq display-line-numbers 'visual)
+                      (org-bullets-mode 1)
+                      ))
   :config
+  (map! :map org-mode-map
+        :nv "<M-up>"    #'drag-stuff-up
+        :nv "<M-down>"  #'drag-stuff-down
+        :nv "<M-left>"  #'drag-stuff-left
+        :nv "<M-right>" #'drag-stuff-right
+        :n  "<up>"      #'evil-previous-visual-line
+        :n  "<down>"    #'evil-next-visual-line
+        :leader
+        :prefix "m"
+        :n "B" #'org-babel-tangle)
   (setq org-ellipsis " ▼ "
         org-log-into-drawer t
         org-log-done 'time
@@ -311,8 +306,7 @@ Setting the font sizes for each header level in Org mode.
           prettify-symbols-mode 1
           prettify-symbols-alist
           (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-                  '(
-                    ("#+begin_src"     . ?)
+                  '(("#+begin_src"     . ?)
                     ("#+end_src"       . ?)
                     ("#+begin_example" . ?)
                     ("#+end_example"   . ?)
@@ -328,8 +322,7 @@ Setting the font sizes for each header level in Org mode.
                     ("#+call:"         . ?)
                     (":properties:"    . ?)
                     (":logbook:"       . ?)
-                    ))))
-  )
+                    )))))
 #+end_src
 
 ** Archiving
@@ -361,27 +354,23 @@ Save all org buffers after a refile
   )
 #+end_src
 
-** Extra SRC Block Languages
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (push '("conf-unix" . conf-unix) org-src-lang-modes)
-  (push '("toml"      . conf-toml) org-src-lang-modes)
-  )
-#+end_src
-
-** Templates
+** Source Blocks
 #+begin_src emacs-lisp
 (use-package! org
   :config
   (require 'org-tempo)
-  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python"))
-  (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
-  (add-to-list 'org-structure-template-alist '("lu" . "src lua"))
-  (add-to-list 'org-structure-template-alist '("ym" . "src yaml"))
-  )
+  (pushnew! org-structure-template-alist
+            '("el" . "src emacs-lisp")
+            '("js" . "src javascript")
+            '("lu" . "src lua")
+            '("py" . "src python")
+            '("sh" . "src shell")
+            '("ym" . "src yaml")
+            )
+  (pushnew! org-src-lang-modes
+            '("conf-unix" . conf-unix)
+            '("toml"      . conf-toml)
+            ))
 #+end_src
 
 ** Babel
@@ -448,24 +437,22 @@ Put at the header of the =Org= document to enable auto tangle on save for it
   :init
   (map! :map org-mode-map
         :leader
-        :desc "Presentation" "t p" #'org-tree-slide-mode
-        )
-  :bind
-  (:map org-tree-slide-mode-map
-   ("C-h"   . org-tree-slide-move-previous-tree)
-   ("C-l"   . org-tree-slide-move-next-tree)
-   ("C-SPC" . org-tree-slide-content)
-   )
+        :prefix "t"
+        :desc "Presentation" :e "p" #'org-tree-slide-mode)
   :hook ((org-tree-slide-play . my/presentation-start)
          (org-tree-slide-stop . my/presentation-end))
-  :custom
-  (org-tree-slide-slide-in-effect t)
-  (org-tree-slide-activate-message "Presentation started!")
-  (org-tree-slide-deactivate-message "Presentation finished!")
-  (org-tree-slide-header t)
-  (org-tree-slide-breadcrumbs " > ")
-  (org-image-actual-width nil)
-  )
+  :config
+  (map! :map org-tree-slide-mode-map
+        "C-h"   #'org-tree-slide-move-previous-tree
+        "C-l"   #'org-tree-slide-move-next-tree
+        "C-SPC" #'org-tree-slide-content)
+  (setq
+   org-tree-slide-activate-message "Presentation started!"
+   org-tree-slide-deactivate-message "Presentation finished!"
+   org-tree-slide-slide-in-effect t
+   org-tree-slide-header t
+   org-tree-slide-breadcrumbs " > "
+   org-image-actual-width nil))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -490,20 +477,66 @@ Setting up =~/.authinfo.gpg= with credentials
 machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 #+end_example
 
-** Ledger
+** Calendar
+*** CalFW
 #+begin_src emacs-lisp
-(use-package! ledger-mode
+(use-package! calfw
+  :init
+  (map! :leader
+        :prefix "o"
+        :desc "Calendar" :e "c" #'cfw:open-org-calendar)
   :config
+  (map! :map cfw:calendar-mode-map
+        ;; not active due to evil-snipe and evil-find-char
+        :n "F" #'cfw:change-view-two-weeks)
   (setq
-   ledger-default-date-format "%Y-%m-%d"
-   ))
+   calendar-week-start-day 1
+   calendar-date-style 'european
+))
+#+end_src
 
-;; :map and :after don't work
-;; test here before updating other locations
-(map! :after ledger-mode
-      :map ledger-mode-map
-      :leader
-      "m c" #'ledger-mode-clean-buffer)
+*** iCalendar
+#+begin_src emacs-lisp
+(setq
+ org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
+ org-icalendar-use-deadline '(event-if-todo-not-done))
+#+end_src
+
+*** CalDAV sync
+#+begin_src emacs-lisp
+(use-package! org-caldav
+  :config
+  (map! :map cfw:calendar-mode-map
+        :leader
+        :prefix "m"
+        :n "S" #'org-caldav-sync)
+  (setq
+   org-caldav-delete-calendar-entries 'ask
+   org-caldav-delete-org-entries 'always
+   org-caldav-show-sync-results nil
+   org-caldav-save-directory (expand-file-name ".caldav/" org-directory)
+   org-caldav-backup-file (expand-file-name "backup.org" org-caldav-save-directory)
+   org-caldav-location-newline-replacement ","
+   org-caldav-exclude-tags '("calskip")
+   org-caldav-calendars `(
+     (:calendar-id "personal"
+            :select-tags ("calgeneral")
+            :inbox ,(expand-file-name "inbox-personal.org" org-directory)
+            :files (,(expand-file-name "todo.org" org-directory)
+                    ,(expand-file-name "agenda.org" org-directory)
+                    ,(expand-file-name "archive.org" org-directory)))
+     (:calendar-id "housing"
+            :select-tags ("calhousing")
+            :inbox ,(expand-file-name "inbox-housing.org" org-directory)
+            :files (,(expand-file-name "todo.org" org-directory)
+                    ,(expand-file-name "housing.org" org-directory)
+                    ,(expand-file-name "archive.org" org-directory)))
+     (:calendar-id "work"
+            :select-tags ("calwork")
+            :inbox ,(expand-file-name "inbox-work.org" org-directory)
+            :files (,(expand-file-name "todo.org" org-directory)
+                    ,(expand-file-name "archive.org" org-directory)))
+     )))
 #+end_src
 
 ** Email
@@ -553,9 +586,7 @@ Function used by =mbsync= for authentication with the email server
                                   ("/Inbox"      . all-the-icons-yellow)
                                   ("/Work"       . all-the-icons-red)
                                   ("[Gmail]"     . all-the-icons-dgreen)
-                                  )
-   )
-  )
+                                  )))
 #+end_src
 
 *** Headers
@@ -580,20 +611,7 @@ Function used by =mbsync= for authentication with the email server
                          (:human-date     . 12)
                          (:from-or-to     . 25)
                          (:thread-subject . nil)
-                         )
-   ))
-#+end_src
-
-Keybindings
-#+begin_src emacs-lisp
-(after! mu4e
-  (map! :map mu4e-headers-mode-map
-        :n "m" #'mu4e-headers-mark-for-something
-        :n "M" #'mu4e-headers-mark-for-move
-        :n "t" #'mu4e-headers-mark-subthread
-        :n "T" #'mu4e-headers-mark-thread
-        )
-  )
+                         )))
 #+end_src
 
 *** Message
@@ -612,16 +630,22 @@ Keybindings
    ))
 #+end_src
 
+*** TODO Keybindings
 Keybindings
+Likely can be combined once I get mu4e working again
 #+begin_src emacs-lisp
 (after! mu4e
   (map! :map mu4e-view-mode-map
         :n "m" #'mu4e-view-mark-for-something
         :n "M" #'mu4e-view-mark-for-move
         :n "t" #'mu4e-view-mark-subthread
-        :n "T" #'mu4e-view-mark-thread
-        )
-  )
+        :n "T" #'mu4e-view-mark-thread)
+
+  (map! :map mu4e-headers-mode-map
+        :n "m" #'mu4e-headers-mark-for-something
+        :n "M" #'mu4e-headers-mark-for-move
+        :n "t" #'mu4e-headers-mark-subthread
+        :n "T" #'mu4e-headers-mark-thread))
 #+end_src
 
 *** Composing
@@ -751,64 +775,18 @@ Start mu4e in the background so it auto-syncs emails
 ;;   )
 #+end_src
 
-** Calendar
-*** CalFW
+** Ledger
 #+begin_src emacs-lisp
-(use-package! calfw
-  :init
-  (map! :leader
-        :desc "Calendar" "o c" #'cfw:open-org-calendar
-        )
-  :bind
-  (:map cfw:calendar-mode-map ("T" . cfw:change-view-two-weeks))
-  ;; (:map cfw:org-custom-map ("T" . cfw:change-view-two-weeks))
+(use-package! ledger-mode
   :config
+  ;; :map and :after don't work
+  ;; test here before updating other locations
+  (map! :map ledger-mode-map
+        :leader
+        :prefix "m"
+        :e "c" #'ledger-mode-clean-buffer)
   (setq
-   calendar-week-start-day 1
-   calendar-date-style 'european
-   ;; cfw:org-overwrite-default-keybinding t
-))
-#+end_src
-
-*** iCalendar
-#+begin_src emacs-lisp
-(setq
- org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
- org-icalendar-use-deadline '(event-if-todo-not-done)
- )
-#+end_src
-
-*** CalDAV sync
-#+begin_src emacs-lisp
-(use-package! org-caldav
-  :config
-  (setq
-   org-caldav-delete-calendar-entries 'ask
-   org-caldav-delete-org-entries 'always
-   org-caldav-show-sync-results nil
-   org-caldav-save-directory (expand-file-name ".caldav/" org-directory)
-   org-caldav-backup-file (expand-file-name "backup.org" org-caldav-save-directory)
-   org-caldav-location-newline-replacement ","
-   org-caldav-exclude-tags '("calskip")
-   org-caldav-calendars `(
-     (:calendar-id "personal"
-            :select-tags ("calgeneral")
-            :inbox ,(expand-file-name "inbox-personal.org" org-directory)
-            :files (,(expand-file-name "todo.org" org-directory)
-                    ,(expand-file-name "agenda.org" org-directory)
-                    ,(expand-file-name "archive.org" org-directory)))
-     (:calendar-id "housing"
-            :select-tags ("calhousing")
-            :inbox ,(expand-file-name "inbox-housing.org" org-directory)
-            :files (,(expand-file-name "todo.org" org-directory)
-                    ,(expand-file-name "housing.org" org-directory)
-                    ,(expand-file-name "archive.org" org-directory)))
-     (:calendar-id "work"
-            :select-tags ("calwork")
-            :inbox ,(expand-file-name "inbox-work.org" org-directory)
-            :files (,(expand-file-name "todo.org" org-directory)
-                    ,(expand-file-name "archive.org" org-directory)))
-     )))
+   ledger-default-date-format "%Y-%m-%d"))
 #+end_src
 
 * Editing
@@ -832,22 +810,16 @@ Start mu4e in the background so it auto-syncs emails
 *** Company Mode
 #+begin_src emacs-lisp
 (use-package! company
-  :bind
+  ;; :bind
   ;; (:map company-active-map ("<tab>" . company-complete-selection))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-tooltip-idle-delay 2)
-  (company-idle-delay 0.5)
-  )
-#+end_src
-
-#+begin_src emacs-lisp
-(after! lsp-mode
-  (use-package! company
-    :bind
-    (:map lsp-mode-map ("<tab>" . company-indent-or-complete-common))
-    )
-  )
+  :config
+  (map! :after lsp-mode
+        :map lsp-mode-map
+        :i "<tab>" #'company-indent-or-complete-common)
+  (setq
+   company-minimum-prefix-length 1
+   company-tooltip-idle-delay 2
+   company-idle-delay 0.5))
 #+end_src
 
 *** yasnippets
@@ -904,9 +876,7 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
         :n "h" #'+neotree/collapse-or-up
         :n "l" #'+neotree/expand-or-open
         :n "s" #'neotree-enter-horizontal-split
-        :n "v" #'neotree-enter-vertical-split
-        )
-  )
+        :n "v" #'neotree-enter-vertical-split))
 
 ;; (map! :leader
 ;;       :desc "Neotree" "t n" #'neotree-toggle
@@ -925,8 +895,8 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
   (feature-mode . lsp-deferred)
   (vimrc-mode   . lsp-deferred)
   (groovy-mode  . lsp-deferred)
-  :custom
-  (lsp-headerline-breadcrumb-enable t))
+  :config
+  (setq lsp-headerline-breadcrumb-enable t))
 #+end_src
 
 ** LSP UI
@@ -936,8 +906,7 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
   :hook
   (lsp-mode . lsp-ui-mode)
   :config
-  (setq
-   lsp-ui-doc-position 'bottom))
+  (setq lsp-ui-doc-position 'bottom))
 #+end_src
 
 ** Indent Guides
@@ -950,7 +919,7 @@ Neotree is a file tree viewer. When you open neotree, it jumps to the current fi
 
 ** Ivy
 #+begin_src emacs-lisp
-(use-package lsp-ivy
+(use-package! lsp-ivy
   :commands lsp-ivy-workspace-symbol)
 #+end_src
 
@@ -966,8 +935,8 @@ Highlight colors in file
 (use-package! rainbow-mode
   :init
   (map! :leader
-        :desc "Colors" "t c" #'rainbow-mode
-        ))
+        :prefix "t"
+        :desc "Colors" :e "c" #'rainbow-mode))
 #+end_src
 
 ** JavaScript
@@ -1038,12 +1007,11 @@ Enable syntax highlighting for .vim files
 (use-package! dired
   :commands (dired dired-jump)
   :config
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "h" 'dired-up-directory
-    "l" 'dired-find-file
-    "S" 'dired-do-symlink
-    "-" 'dired-create-empty-file
-    ))
+  (map! :map dired-mode-map
+        :n "h" #'dired-up-directory
+        :n "l" #'dired-find-file
+        :n "S" #'dired-do-symlink
+        :n "-" #'dired-create-empty-file))
 #+end_src
 
 Toggle hidden files in Dired
@@ -1051,17 +1019,17 @@ Toggle hidden files in Dired
 (use-package! dired-hide-dotfiles
   :hook (dired-mode . dired-hide-dotfiles-mode)
   :config
-  (evil-collection-define-key 'normal 'dired-mode-map
-    "H" 'dired-hide-dotfiles-mode))
+  (map! :map dired-mode-map
+        :n "H" #'dired-hide-dotfiles-mode))
 #+end_src
 
 ** Evil Mode
 #+begin_src emacs-lisp
 (use-package! evil
   :config
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-  (setq evil-cross-lines t)
-  )
+  (map! :map evil-insert-state-map
+        :i "<C-h>" #'evil-delete-backward-char-and-join)
+  (setq evil-cross-lines t))
 #+end_src
 
 ** Mouse Support
@@ -1079,33 +1047,33 @@ Uses the standard Unix password store "pass".
 Buffers and Bookmarks
 #+begin_src emacs-lisp
 (map! :leader
-      ;; :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window
-      :desc "List bookmarks" "b L" #'list-bookmarks
-      :desc "Save current bookmarks to bookmark file" "b w" #'bookmark-save
-      )
+      :prefix "b"
+      ;; :desc "Clone indirect buffer other window" "c" #'clone-indirect-buffer-other-window
+      :desc "List bookmarks"                          :e "L" #'list-bookmarks
+      :desc "Save current bookmarks to bookmark file" :e "w" #'bookmark-save)
 #+end_src
 
 Inserts
 #+begin_src emacs-lisp
 (map! :leader
-      :desc "Toilet pagga" "i t" (cmd! (evil-ex "R!toilet -f pagga "))
-      )
+      :prefix "i"
+      :desc "Toilet pagga" :e "t" (cmd! (evil-ex "R!toilet -f pagga ")))
 #+end_src
 
 Toggles
 #+begin_src emacs-lisp
 (map! :leader
-      :desc "Fill column indicator" "t |" #'global-display-fill-column-indicator-mode
-      :desc "Toggle scroll bars" "t S" #'scroll-bar-mode
-      )
+      :prefix "t"
+      :desc "Fill column indicator" :e "|" #'global-display-fill-column-indicator-mode
+      :desc "Toggle scroll bars"    :e "S" #'scroll-bar-mode)
 #+end_src
 
 Workspaces
 #+begin_src emacs-lisp
 (map! :leader
-      :desc "Move workspace left" "TAB <" #'+workspace/swap-left
-      :desc "Move workspace right" "TAB >" #'+workspace/swap-right
-      )
+      :prefix "TAB"
+      :desc "Move workspace left"  :e "<" #'+workspace/swap-left
+      :desc "Move workspace right" :e ">" #'+workspace/swap-right)
 #+end_src
 
 * Local Overwrite
