@@ -262,16 +262,16 @@ Scrolling
         org-log-into-drawer t
         org-log-done 'time
         org-hide-emphasis-markers t
-        ;; ex. of org-link-abbrev-alist in action
-        ;; [[arch-wiki:Name_of_Page][Description]]
-        org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
-        '(
-          ("google"    . "http://www.google.com/search?q=")
-          ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
-          ("ddg"       . "https://duckduckgo.com/?q=")
-          ("wiki"      . "https://en.wikipedia.org/wiki/")
-          )
-        ))
+        ;; e.g. [[arch-wiki:emacs][Emacs Page]]
+        org-link-abbrev-alist '(
+            ("arch-wiki" . "https://wiki.archlinux.org/title/")
+            ("pacman"    . "https://archlinux.org/packages/?name=")
+            ("aur"       . "https://aur.archlinux.org/packages/")
+            ("github"    . "https://github.com/")
+            ("google"    . "http://www.google.com/search?q=")
+            ("brave"     . "https://search.brave.com/search?q=")
+            ("wiki"      . "https://en.wikipedia.org/wiki/")
+          )))
 #+end_src
 
 ** Agenda
