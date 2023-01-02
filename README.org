@@ -31,6 +31,7 @@
   - [[#presentations][Presentations]]
 - [[#office][Office]]
   - [[#authinfo][AuthInfo]]
+  - [[#ledger][Ledger]]
   - [[#email][Email]]
   - [[#calendar][Calendar]]
 - [[#editing][Editing]]
@@ -488,6 +489,22 @@ Setting up =~/.authinfo.gpg= with credentials
 #+begin_example authinfo
 machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 #+end_example
+
+** Ledger
+#+begin_src emacs-lisp
+(use-package! ledger-mode
+  :config
+  (setq
+   ledger-default-date-format "%Y-%m-%d"
+   ))
+
+;; :map and :after don't work
+;; test here before updating other locations
+(map! :after ledger-mode
+      :map ledger-mode-map
+      :leader
+      "m c" #'ledger-mode-clean-buffer)
+#+end_src
 
 ** Email
 *** Dependencies
