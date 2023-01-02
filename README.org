@@ -40,7 +40,6 @@
 - [[#development][Development]]
   - [[#magit][Magit]]
   - [[#projectile][Projectile]]
-  - [[#kill-neotree][KILL Neotree]]
 - [[#lsp][LSP]]
   - [[#lsp-mode][LSP Mode]]
   - [[#lsp-ui][LSP UI]]
@@ -822,16 +821,6 @@ Start mu4e in the background so it auto-syncs emails
    company-idle-delay 0.5))
 #+end_src
 
-*** yasnippets
-This doesn't work but keeping it anyways
-#+begin_src emacs-lisp
-(after! yasnippet
-  (define-key yas-minor-mode-map [(tab)]        nil)
-  (define-key yas-minor-mode-map (kbd "TAB")    nil)
-  (define-key yas-minor-mode-map (kbd "<tab>")  nil)
-  )
-#+end_src
-
 ** Rotate Text
 To enable a set of items to cycle through globally, add the following to your configuration
 #+begin_src emacs-lisp
@@ -858,30 +847,6 @@ Open =magit= in a side window
     (setq projectile-project-search-path '("~/projects")))
   (setq projectile-switch-project-action #'projectile-dired)
   )
-#+end_src
-
-** KILL Neotree
-Neotree is a file tree viewer. When you open neotree, it jumps to the current file thanks to neo-smart-open. The neo-window-fixed-size setting makes the neotree width be adjustable. Doom Emacs had no keybindings set for neotree. Since Doom Emacs uses ‘SPC t’ for ‘toggle’ keybindings, I used ‘SPC t n’ for toggle-neotree.
-#+begin_src emacs-lisp
-(after! neotree
-  (setq
-   neo-smart-open t
-   neo-window-fixed-size nil)
-
-  (after! doom-themes
-    (setq doom-neotree-enable-variable-pitch t)
-    )
-
-  (map! :map neotree-mode-map
-        :n "h" #'+neotree/collapse-or-up
-        :n "l" #'+neotree/expand-or-open
-        :n "s" #'neotree-enter-horizontal-split
-        :n "v" #'neotree-enter-vertical-split))
-
-;; (map! :leader
-;;       :desc "Neotree" "t n" #'neotree-toggle
-;;       :desc "Open directory in neotree" "d n" #'neotree-dir
-;;       )
 #+end_src
 
 * LSP
