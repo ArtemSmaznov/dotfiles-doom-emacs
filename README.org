@@ -570,8 +570,7 @@ Function used by =mbsync= for authentication with the email server
   (setq
    ;; Set auto-sync interval 10 min
    mu4e-update-interval (* 15 60)
-   mu4e-maildir "~/Maildir"
-
+   mu4e-maildir (expand-file-name "mail" (xdg-data-home))
    mu4e-maildir-shortcuts
    '(
      ("/Inbox"             . ?i)
@@ -631,11 +630,10 @@ Function used by =mbsync= for authentication with the email server
    ))
 #+end_src
 
-*** TODO Keybindings
-Keybindings
-Likely can be combined once I get mu4e working again
+*** Keybindings
 #+begin_src emacs-lisp
-(after! mu4e
+(use-package! mu4e
+  :config
   (map! :map mu4e-view-mode-map
         :n "m" #'mu4e-view-mark-for-something
         :n "M" #'mu4e-view-mark-for-move
@@ -725,19 +723,19 @@ Disable Org-msg for composing by default
 
    mu4e-contexts
    `(
-     ,(make-mu4e-context
-       :name "Artem"
-       :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/artem)))
-       :vars `(
-               (smtpmail-smtp-server  . "smtp.gmail.com")
-               (smtpmail-smtp-service . 465)
-               (smtpmail-stream-type  . ssl)
-               (user-mail-address     . ,my/email/artem)
-               (mu4e-drafts-folder    . "/[Gmail]/Drafts")
-               (mu4e-sent-folder      . "/[Gmail]/Sent Mail")
-               (mu4e-refile-folder    . "/[Gmail]/All Mail")
-               (mu4e-trash-folder     . "/[Gmail]/Trash")
-               ))
+     ;; ,(make-mu4e-context
+     ;;   :name "Artem"
+     ;;   :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/artem)))
+     ;;   :vars `(
+     ;;           (smtpmail-smtp-server  . "smtp.gmail.com")
+     ;;           (smtpmail-smtp-service . 465)
+     ;;           (smtpmail-stream-type  . ssl)
+     ;;           (user-mail-address     . ,my/email/artem)
+     ;;           (mu4e-drafts-folder    . "/[Gmail]/Drafts")
+     ;;           (mu4e-sent-folder      . "/[Gmail]/Sent Mail")
+     ;;           (mu4e-refile-folder    . "/[Gmail]/All Mail")
+     ;;           (mu4e-trash-folder     . "/[Gmail]/Trash")
+     ;;           ))
      ,(make-mu4e-context
        :name "Main"
        :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/main)))
