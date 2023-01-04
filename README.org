@@ -224,7 +224,9 @@ Scrolling
 ;; change `org-directory'. It must be set before org loads!
 (use-package! org
   :init
-  (setq org-directory (expand-file-name "org" (xdg-user-dir "DOCUMENTS")))
+  ;; (setq org-directory (expand-file-name "org" (xdg-user-dir "DOCUMENTS")))
+  (setq org-directory (if IS-MAC "~/Documents/org"
+                        (expand-file-name "org" (xdg-user-dir "DOCUMENTS"))))
   :config
   (setq
    org-agenda-files (list org-directory)
