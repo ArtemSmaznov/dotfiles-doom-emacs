@@ -877,19 +877,20 @@ Show list of to-do items in Magit status buffer
   (python-mode  . lsp-deferred)
   (feature-mode . lsp-deferred)
   (vimrc-mode   . lsp-deferred)
-  (groovy-mode  . lsp-deferred)
-  :config
-  (setq lsp-headerline-breadcrumb-enable t))
+  (groovy-mode  . lsp-deferred))
 #+end_src
 
 ** LSP UI
+See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] for LSP UI elements and their respective variables
 #+begin_src emacs-lisp
 (use-package! lsp-ui
   :commands lsp-ui-mode
   :hook
   (lsp-mode . lsp-ui-mode)
   :config
-  (setq lsp-ui-doc-position 'bottom))
+  (setq
+   lsp-ui-doc-position 'bottom
+   lsp-headerline-breadcrumb-enable t))
 #+end_src
 
 ** Indent Guides
