@@ -207,7 +207,8 @@ Exit Confirmation
 Windows
 #+begin_src emacs-lisp
 (setq
- split-width-threshold 0
+ ;; HACK diable to allow peep-dired to work
+ ;; split-width-threshold 0
  split-height-threshold nil
  )
 #+end_src
@@ -1013,6 +1014,24 @@ Toggle hidden files in Dired
   :config
   (map! :map dired-mode-map
         :n "H" #'dired-hide-dotfiles-mode))
+#+end_src
+
+Peep
+#+begin_src emacs-lisp
+(use-package! peep-dired
+  :after dired
+  :config
+  (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+  (map! :map dired-mode-map
+        :n "p" #'peep-dired)
+  (map! :map peep-dired-mode-map
+        :n "k" #'peep-dired-prev-file
+        :n "j" #'peep-dired-next-file
+        :n "C-k" #'peep-dired-scroll-page-up
+        :n "C-j" #'peep-dired-scroll-page-down)
+  (setq
+   peep-dired-cleanup-eagerly nil
+   peep-dired-cleanup-on-disable 't))
 #+end_src
 
 ** Evil Mode
