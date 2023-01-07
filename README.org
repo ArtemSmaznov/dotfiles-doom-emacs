@@ -19,11 +19,11 @@
   - [[#setup][Setup]]
   - [[#agenda][Agenda]]
   - [[#headings][Headings]]
-  - [[#pretty-symbols][Pretty Symbols]]
+  - [[#kill-pretty-symbols][KILL Pretty Symbols]]
   - [[#archiving][Archiving]]
   - [[#refiling][Refiling]]
   - [[#source-blocks][Source Blocks]]
-  - [[#babel][Babel]]
+  - [[#kill-babel][KILL Babel]]
   - [[#export][Export]]
   - [[#publish][Publish]]
   - [[#auto-tangle][Auto Tangle]]
@@ -241,7 +241,6 @@ Scrolling
   :hook (org-mode . (lambda ()
                       (make-local-variable 'display-line-numbers)
                       (setq display-line-numbers 'visual)
-                      (org-bullets-mode 1)
                       ))
   :config
   (map! :map org-mode-map
@@ -297,8 +296,15 @@ Setting the font sizes for each header level in Org mode.
    ))
 #+end_src
 
-** Pretty Symbols
+UTF-8 bullets
 #+begin_src emacs-lisp
+(use-package! org-superstar
+  :after org
+  :hook (org-mode . org-superstar-mode))
+#+end_src
+
+** KILL Pretty Symbols
+#+begin_src emacs-lisp :tangle no
 (use-package! org
   :config
   (defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
@@ -374,7 +380,7 @@ Save all org buffers after a refile
             ))
 #+end_src
 
-** Babel
+** KILL Babel
 Auto-tangle on save
 #+begin_example emacs-lisp
 (defun efs/org-babel-tagle-config ()
@@ -422,19 +428,19 @@ Put at the header of the =Org= document to enable auto tangle on save for it
 
 #+begin_src emacs-lisp
 (use-package! org-auto-tangle
+  :after org
   :defer t
   :hook (org-mode . org-auto-tangle-mode)
   :config
-  (setq org-auto-tangle-babel-safelist '(
-                                     "README.org"
-                                     "SHELLS.org"
-                                     "local.org"
-)))
+  (setq org-auto-tangle-babel-safelist '("README.org"
+                                         "SHELLS.org"
+                                         "local.org")))
 #+end_src
 
 ** Presentations
 #+begin_src emacs-lisp
 (use-package! org-tree-slide
+  :after org
   :init
   (map! :map org-mode-map
         :leader
