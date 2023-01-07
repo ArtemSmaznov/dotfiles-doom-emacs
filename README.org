@@ -1013,7 +1013,10 @@ Toggle hidden files in Dired
   :hook (dired-mode . dired-hide-dotfiles-mode)
   :config
   (map! :map dired-mode-map
-        :n "H" #'dired-hide-dotfiles-mode))
+        :desc "Hide dot files"   :n "zo" (lambda () (interactive) (dired-hide-dotfiles-mode 0))
+        :desc "Show dot files"   :n "zm" (lambda () (interactive) (dired-hide-dotfiles-mode 1))
+        :desc "Toggle dot files" :n "za" #'dired-hide-dotfiles-mode
+        :desc "Toggle dot files" :n "z." #'dired-hide-dotfiles-mode))
 #+end_src
 
 Peep
