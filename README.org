@@ -639,6 +639,8 @@ Function used by =mbsync= for authentication with the email server
 *** Keybindings
 #+begin_src emacs-lisp
 (use-package! mu4e
+  :ensure nil
+  :defer 20
   :config
   (map! :map mu4e-view-mode-map
         :n "m" #'mu4e-view-mark-for-something
