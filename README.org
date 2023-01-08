@@ -5,58 +5,44 @@
 
 * Table of Contents :toc:
 - [[#introduction-to-the-config][Introduction to the Config]]
-- [[#dashboard][Dashboard]]
-  - [[#emacs-dashboard][Emacs Dashboard]]
-  - [[#doom-dashboard][Doom Dashboard]]
-- [[#ui][UI]]
-  - [[#theme][Theme]]
-  - [[#fonts][Fonts]]
-  - [[#interface][Interface]]
+- [[#global-options][Global Options]]
+- [[#spell-checking][Spell Checking]]
+- [[#fonts][Fonts]]
+- [[#core][Core]]
+  - [[#dashboard][Dashboard]]
   - [[#modeline][Modeline]]
-- [[#behavior][Behavior]]
-- [[#org-mode][ORG Mode]]
-  - [[#paths][Paths]]
-  - [[#setup][Setup]]
-  - [[#agenda][Agenda]]
-  - [[#headings][Headings]]
-  - [[#kill-pretty-symbols][KILL Pretty Symbols]]
-  - [[#archiving][Archiving]]
-  - [[#refiling][Refiling]]
-  - [[#source-blocks][Source Blocks]]
-  - [[#kill-babel][KILL Babel]]
-  - [[#export][Export]]
-  - [[#publish][Publish]]
-  - [[#auto-tangle][Auto Tangle]]
-  - [[#presentations][Presentations]]
-- [[#office][Office]]
+  - [[#dired][Dired]]
+  - [[#evil-mode][Evil Mode]]
+  - [[#which-key][Which Key]]
+- [[#org-mode][Org Mode]]
+  - [[#org][Org]]
+  - [[#org-agenda][Org Agenda]]
+  - [[#org-bullets][Org Bullets]]
+  - [[#org-auto-tangle][Org Auto Tangle]]
+  - [[#ox][Ox]]
+- [[#office-tools][Office Tools]]
   - [[#authinfo][AuthInfo]]
+  - [[#presentations][Presentations]]
   - [[#calendar][Calendar]]
   - [[#email][Email]]
   - [[#ledger][Ledger]]
-- [[#editing][Editing]]
-  - [[#spell-checking][Spell Checking]]
-  - [[#completion][Completion]]
-  - [[#rotate-text][Rotate Text]]
-- [[#development][Development]]
+- [[#development-tools][Development Tools]]
   - [[#magit][Magit]]
   - [[#projectile][Projectile]]
+  - [[#treemacs][Treemacs]]
+  - [[#completion][Completion]]
+  - [[#ivy][Ivy]]
+  - [[#rotate-text][Rotate Text]]
+  - [[#indent-guides][Indent Guides]]
+  - [[#rainbow-mode][Rainbow Mode]]
 - [[#lsp][LSP]]
   - [[#lsp-mode][LSP Mode]]
-  - [[#lsp-ui][LSP UI]]
-  - [[#indent-guides][Indent Guides]]
-  - [[#ivy][Ivy]]
-  - [[#treemacs][Treemacs]]
-  - [[#rainbow-mode][Rainbow Mode]]
   - [[#javascript][JavaScript]]
+  - [[#python][Python]]
   - [[#groovy][Groovy]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
-- [[#navigation][Navigation]]
-  - [[#dired][Dired]]
-  - [[#evil-mode][Evil Mode]]
-  - [[#mouse-support][Mouse Support]]
-- [[#pass][Pass]]
 - [[#global-keybindings][Global Keybindings]]
 - [[#local-overwrite][Local Overwrite]]
 - [[#additional-notes][Additional Notes]]
@@ -75,8 +61,78 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
   )
 #+end_src
 
-* Dashboard
-** Emacs Dashboard
+* Global Options
+#+begin_src emacs-lisp
+(setq
+ doom-theme 'doom-gruvbox
+ display-line-numbers-type 'relative
+ scroll-margin 2
+ window-divider-default-right-width 6 ;; set width of window dividers
+ split-height-threshold nil ;; HACK diable to allow peep-dired to work (prefered 0)
+ confirm-kill-emacs nil)
+
+(xterm-mouse-mode 1)
+#+end_src
+
+* Spell Checking
++ macOS: ~$ brew install aspell~
++ Arch Linux: ~$ pacman -S aspell aspell-en aspell-ru~
+#+begin_src emacs-lisp
+(use-package! spell-fu
+  :hook
+  (spell-fu-mode . (lambda ()
+                     (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "ru"))
+                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "ru"      (expand-file-name "dict/ru.pws" (xdg-data-home))))
+                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "finance" (expand-file-name "dict/finance.en.pws" (xdg-data-home))))
+                     ))
+
+  :config
+  (setq
+   ispell-dictionary "english"
+   ispell-personal-dictionary (expand-file-name "dict/en.pws" (xdg-data-home))))
+#+end_src
+
+* Fonts
+Doom exposes five (optional) variables for controlling fonts in Doom. Here
+are the three important ones:
+
++ 'doom-font' -- standard monospace font that is used for most things in Emacs.
++ 'doom-variable-pitch-font' -- variable font which is useful in some Emacs plugins.
++ 'doom-big-font' -- used in doom-big-font-mode; useful for presentations.
++ 'font-lock-comment-face' -- for comments.
++ 'font-lock-keyword-face' -- for keywords with special significance like 'setq' in elisp.
++ 'global-prettify-symbols-mode' -- change certain keywords to symbols, such as lambda!
+
+They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
+font string. You generally only need these two:
+#+begin_src emacs-lisp
+(setq
+ doom-font                (font-spec :family "Hack Nerd Font Mono" :size 16)
+ doom-variable-pitch-font (font-spec :family "Hack Nerd Font Mono" :size 18)
+ global-prettify-symbols-mode t)
+
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic)
+  '(font-lock-keyword-face :slant italic))
+
+(use-package! doom-themes
+  :config
+  (setq
+   doom-themes-enable-bold t
+   doom-themes-enable-italic t))
+
+(use-package! emojify
+  :hook (after-init . global-emojify-mode))
+#+end_src
+
+* Core
+** Dashboard
+*** Doom Dashboard
+#+begin_src emacs-lisp
+(setq fancy-splash-image (expand-file-name "doom-logo.png" doom-user-dir))
+#+end_src
+
+*** Emacs Dashboard
 # Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
 
 # #+begin_src emacs-lisp
@@ -116,133 +172,91 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
 #  doom-fallback-buffer-name "*dashboard*"
 #  )
 # #+end_src
-** Doom Dashboard
-#+begin_src emacs-lisp
-(setq fancy-splash-image (expand-file-name "doom-logo.png" doom-user-dir))
-#+end_src
-
-* UI
-** Theme
-There are two ways to load a theme. Both assume the theme is installed and
-available. You can either set `doom-theme' or manually load a theme with the
-`load-theme' function. This is the default:
-#+begin_src emacs-lisp
-(setq doom-theme 'doom-gruvbox)
-#+end_src
-
-** Fonts
-Doom exposes five (optional) variables for controlling fonts in Doom. Here
-are the three important ones:
-
-+ 'doom-font' -- standard monospace font that is used for most things in Emacs.
-+ 'doom-variable-pitch-font' -- variable font which is useful in some Emacs plugins.
-+ 'doom-big-font' -- used in doom-big-font-mode; useful for presentations.
-+ 'font-lock-comment-face' -- for comments.
-+ 'font-lock-keyword-face' -- for keywords with special significance like 'setq' in elisp.
-+ 'global-prettify-symbols-mode' -- change certain keywords to symbols, such as lambda!
-
-They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-font string. You generally only need these two:
-#+begin_src emacs-lisp
-(setq
- doom-font                (font-spec :family "Hack Nerd Font Mono" :size 16)
- doom-variable-pitch-font (font-spec :family "Hack Nerd Font Mono" :size 18)
- )
-
-(use-package! doom-themes
-  :config
-  (setq
-   doom-themes-enable-bold t
-   doom-themes-enable-italic t
-   ))
-
-(custom-set-faces!
-  '(font-lock-comment-face :slant italic)
-  '(font-lock-keyword-face :slant italic)
-  )
-
-(setq global-prettify-symbols-mode t)
-#+end_src
-
-*** Emojis
-Emojify is an Emacs extension to display emojis. It can display GitHub style emojis like :smile: or plain ASCII ones like :).
-#+begin_src emacs-lisp
-(use-package! emojify
-  :hook (after-init . global-emojify-mode)
-  )
-#+end_src
-
-** Interface
-This determines the style of line numbers in effect.
-If set to `nil', line numbers are disabled. For relative line numbers, set this to `relative'.
-#+begin_src emacs-lisp
-(setq display-line-numbers-type 'relative)
-#+end_src
-
-Set width of window dividers
-#+begin_src emacs-lisp
-(setq window-divider-default-right-width 6)
-#+end_src
-
 ** Modeline
 #+begin_src emacs-lisp
 (use-package! doom-modeline
   :config
   (remove-hook 'doom-modeline-mode-hook #'size-indication-mode) ; filesize in modeline
-  (setq doom-modeline-major-mode-icon t)
-  )
+  (setq doom-modeline-major-mode-icon t))
 #+end_src
 
-* Behavior
-Which-key
+** Dired
 #+begin_src emacs-lisp
-(setq which-key-idle-delay 0.4)
-#+end_src
-
-Exit Confirmation
-#+begin_src emacs-lisp
-(setq confirm-kill-emacs nil)
-#+end_src
-
-Windows
-#+begin_src emacs-lisp
-(setq
- ;; HACK diable to allow peep-dired to work
- ;; split-width-threshold 0
- split-height-threshold nil
- )
-#+end_src
-
-Scrolling
-#+begin_src emacs-lisp
-(setq scroll-margin 2)
-#+end_src
-
-* ORG Mode
-** Paths
-#+begin_src emacs-lisp
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(use-package! org
-  :init
-  ;; (setq org-directory (expand-file-name "org" (xdg-user-dir "DOCUMENTS")))
-  (setq org-directory (if IS-MAC "~/Documents/org"
-                        (expand-file-name "org" (xdg-user-dir "DOCUMENTS"))))
+(use-package! dired
+  :commands (dired dired-jump)
   :config
-  (setq
-   org-agenda-files (list org-directory)
-   org-default-notes-file (expand-file-name "notes.org" org-directory)
-  +org-capture-journal-file (expand-file-name "journal.org" org-directory)
-   ))
+  (map! :map dired-mode-map
+        :n "h" #'dired-up-directory
+        :n "l" #'dired-find-file
+        :n "S" #'dired-do-symlink
+        :n "-" #'dired-create-empty-file))
 #+end_src
 
-** Setup
+Toggle hidden files in Dired
+#+begin_src emacs-lisp
+(use-package! dired-hide-dotfiles
+  :after dired
+  :hook (dired-mode . dired-hide-dotfiles-mode)
+
+  :config
+  (map! :map dired-mode-map
+        :desc "Hide dot files"   :n "zo" (lambda () (interactive) (dired-hide-dotfiles-mode 0))
+        :desc "Show dot files"   :n "zm" (lambda () (interactive) (dired-hide-dotfiles-mode 1))
+        :desc "Toggle dot files" :n "za" #'dired-hide-dotfiles-mode
+        :desc "Toggle dot files" :n "z." #'dired-hide-dotfiles-mode))
+#+end_src
+
+Peep
+#+begin_src emacs-lisp
+(use-package! peep-dired
+  :after dired
+  :config
+  (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+  (map! :map dired-mode-map
+        :n "p" #'peep-dired)
+  (map! :map peep-dired-mode-map
+        :n "k" #'peep-dired-prev-file
+        :n "j" #'peep-dired-next-file
+        :n "C-k" #'peep-dired-scroll-page-up
+        :n "C-j" #'peep-dired-scroll-page-down)
+
+  (setq
+   peep-dired-cleanup-eagerly nil
+   peep-dired-cleanup-on-disable t))
+#+end_src
+
+** Evil Mode
+#+begin_src emacs-lisp
+(use-package! evil
+  :config
+  (map! :map evil-insert-state-map
+        :i "<C-h>" #'evil-delete-backward-char-and-join)
+
+  (setq evil-cross-lines t))
+#+end_src
+
+** Which Key
+#+begin_src emacs-lisp
+(use-package! which-key
+  :init (setq which-key-idle-delay 0.4))
+#+end_src
+
+* Org Mode
+** Org
 #+begin_src emacs-lisp
 (use-package! org
+  :init (setq
+         org-directory (if IS-MAC "~/Documents/org"
+                         (expand-file-name "org" (xdg-user-dir "DOCUMENTS")))
+         org-agenda-files          (list org-directory)
+         org-default-notes-file    (expand-file-name "notes.org" org-directory)
+         +org-capture-journal-file (expand-file-name "journal.org" org-directory)
+         org-archive-location      (expand-file-name "archive.org::datetree/" org-directory)) ;; can also use "archive.org::datetrea/* %s"
+
   :hook (org-mode . (lambda ()
                       (make-local-variable 'display-line-numbers)
-                      (setq display-line-numbers 'visual)
-                      ))
+                      (setq display-line-numbers 'visual)))
+
   :config
   (map! :map org-mode-map
         :nv "<M-up>"    #'drag-stuff-up
@@ -250,165 +264,34 @@ Scrolling
         :nv "<M-left>"  #'drag-stuff-left
         :nv "<M-right>" #'drag-stuff-right
         :n  "<up>"      #'evil-previous-visual-line
-        :n  "<down>"    #'evil-next-visual-line
+        :n  "<down>"    #'evil-next-visual-line)
+
+  (map! :map org-mode-map
         :leader
         :prefix "m"
         :n "B" #'org-babel-tangle)
+
+  ;; headings
   (setq org-ellipsis " ▼ "
         org-log-into-drawer t
         org-log-done 'time
-        org-hide-emphasis-markers t
-        ;; e.g. [[arch-wiki:emacs][Emacs Page]]
-        org-link-abbrev-alist '(
-            ("arch-wiki" . "https://wiki.archlinux.org/title/")
-            ("pacman"    . "https://archlinux.org/packages/?name=")
-            ("aur"       . "https://aur.archlinux.org/packages/")
-            ("github"    . "https://github.com/")
-            ("google"    . "http://www.google.com/search?q=")
-            ("brave"     . "https://search.brave.com/search?q=")
-            ("wiki"      . "https://en.wikipedia.org/wiki/")
-          )))
-#+end_src
+        org-hide-emphasis-markers t)
 
-** Agenda
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (setq
-   org-agenda-start-with-log-mode t
-   org-agenda-start-day nil
-   org-agenda-span 'week
-   org-agenda-start-on-weekday 1
-   org-deadline-warning-days 14
-   ))
-#+end_src
-
-** Headings
-Setting the font sizes for each header level in Org mode.
-#+begin_src emacs-lisp
-(use-package! org
-  :config
+  ;; font sizes for each header level in Org mode.
   (custom-set-faces
    '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
    '(org-level-2 ((t (:inherit outline-2 :height 1.1))))
    '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
    '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
-   '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
-   ))
-#+end_src
+   '(org-level-5 ((t (:inherit outline-5 :height 1.0)))))
 
-UTF-8 bullets
-#+begin_src emacs-lisp
-(use-package! org-superstar
-  :after org
-  :hook (org-mode . org-superstar-mode))
-#+end_src
-
-** KILL Pretty Symbols
-#+begin_src emacs-lisp :tangle no
-(use-package! org
-  :config
-  (defun my/org-mode/load-prettify-symbols () "Prettify org mode keywords"
-         (interactive)
-         (setq
-          prettify-symbols-mode 1
-          prettify-symbols-alist
-          (mapcan (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
-                  '(("#+begin_src"     . ?)
-                    ("#+end_src"       . ?)
-                    ("#+begin_example" . ?)
-                    ("#+end_example"   . ?)
-                    ("#+DATE:"         . ?⏱)
-                    ("#+AUTHOR:"       . ?✏)
-                    ("[ ]"             .  ?☐)
-                    ("[X]"             . ?☑ )
-                    ("[-]"             . ?❍ )
-                    ("lambda"          . ?λ)
-                    ("#+header:"       . ?)
-                    ("#+name:"         . ?﮸)
-                    ("#+results:"      . ?)
-                    ("#+call:"         . ?)
-                    (":properties:"    . ?)
-                    (":logbook:"       . ?)
-                    )))))
-#+end_src
-
-** Archiving
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (setq
-   ;; org-blank-before-new-entry ((heading . auto)
-   ;;                             (plain-list-item . auto))
-   ;; org-archive-location (expand-file-name "archive.org::datetree/* %s" org-directory)
-   org-archive-location (expand-file-name "archive.org::datetree/" org-directory)
-   ))
-#+end_src
-
-** Refiling
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (setq
-   org-refile-targets '((org-agenda-files :maxlevel . 1))
-   ))
-#+end_src
-
-Save all org buffers after a refile
-#+begin_src emacs-lisp
-(use-package! org
-  :config
+  ;; refiling
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 1)))
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
-  )
-#+end_src
 
-** Source Blocks
-#+begin_src emacs-lisp
-(use-package! org
-  :config
-  (require 'org-tempo)
-  (pushnew! org-structure-template-alist
-            '("el" . "src emacs-lisp")
-            '("js" . "src javascript")
-            '("lu" . "src lua")
-            '("py" . "src python")
-            '("sh" . "src shell")
-            '("ym" . "src yaml")
-            )
-  (pushnew! org-src-lang-modes
-            '("conf-unix" . conf-unix)
-            '("toml"      . conf-toml)
-            ))
-#+end_src
-
-** KILL Babel
-Auto-tangle on save
-#+begin_example emacs-lisp
-(defun efs/org-babel-tagle-config ()
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "some org file location"))
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
-
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
-#+end_example
-
-** Export
-We need ox-man for "Org eXporting" to manpage format.
-#+begin_src emacs-lisp
-(after! org
-  (use-package ox-man)
-  (use-package ox-gemini)
-  )
-#+end_src
-
-** Publish
-#+begin_src emacs-lisp
-(use-package! org
-  :config
+  ;; publishing
   (setq org-publish-project-alist
-        '(
-          ("github.io"
+        '(("github.io"
            :base-directory "~/projects/artemsmaznov.github.io/org"
            :base-extension "org"
            :publishing-directory "~/projects/artemsmaznov.github.io"
@@ -416,12 +299,54 @@ We need ox-man for "Org eXporting" to manpage format.
            :publishing-function org-html-publish-to-html
            :headline-levels 4
            :auto-preamble t
-           :exclude "header.org"
-           )
-          )))
+           :exclude "header.org")))
+
+  ;; e.g. [[arch-wiki:emacs][Emacs Page]]
+  (setq org-link-abbrev-alist
+        '(("arch-wiki" . "https://wiki.archlinux.org/title/")
+          ("pacman"    . "https://archlinux.org/packages/?name=")
+          ("aur"       . "https://aur.archlinux.org/packages/")
+          ("github"    . "https://github.com/")
+          ("google"    . "http://www.google.com/search?q=")
+          ("brave"     . "https://search.brave.com/search?q=")
+          ("wiki"      . "https://en.wikipedia.org/wiki/")
+          ))
+
+  (require 'org-tempo)
+  ;; extra languages for src blocks
+  (pushnew! org-structure-template-alist
+            '("el" . "src emacs-lisp")
+            '("js" . "src javascript")
+            '("lu" . "src lua")
+            '("py" . "src python")
+            '("sh" . "src shell")
+            '("ym" . "src yaml"))
+  ;; extra org structure templates
+  (pushnew! org-src-lang-modes
+            '("conf-unix" . conf-unix)
+            '("toml"      . conf-toml)))
 #+end_src
 
-** Auto Tangle
+** Org Agenda
+#+begin_src emacs-lisp
+(use-package! org-agenda
+  :after org
+  :config
+  (setq org-agenda-start-with-log-mode t
+        org-agenda-start-day nil
+        org-agenda-span 'week
+        org-agenda-start-on-weekday 1
+        org-deadline-warning-days 14))
+#+end_src
+
+** Org Bullets
+#+begin_src emacs-lisp
+(use-package! org-superstar
+  :after org
+  :hook (org-mode . org-superstar-mode))
+#+end_src
+
+** Org Auto Tangle
 Put at the header of the =Org= document to enable auto tangle on save for it
 #+begin_example emacs-lisp
 #+auto_tangle: t
@@ -433,10 +358,26 @@ Put at the header of the =Org= document to enable auto tangle on save for it
   :defer t
   :hook (org-mode . org-auto-tangle-mode)
   :config
-  (setq org-auto-tangle-babel-safelist '("README.org"
-                                         "SHELLS.org"
-                                         "local.org")))
+  (setq org-auto-tangle-babel-safelist
+        '("README.org"
+          "SHELLS.org"
+          "local.org")))
 #+end_src
+
+** Ox
+We need ox-man for "Org eXporting" to manpage format.
+#+begin_src emacs-lisp
+(after! org
+  (use-package ox-man)
+  (use-package ox-gemini))
+#+end_src
+
+* Office Tools
+** AuthInfo
+Setting up =~/.authinfo.gpg= with credentials
+#+begin_example authinfo
+machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
+#+end_example
 
 ** Presentations
 #+begin_src emacs-lisp
@@ -447,13 +388,16 @@ Put at the header of the =Org= document to enable auto tangle on save for it
         :leader
         :prefix "t"
         :desc "Presentation" :e "p" #'org-tree-slide-mode)
+
   :hook ((org-tree-slide-play . my/presentation-start)
          (org-tree-slide-stop . my/presentation-end))
+
   :config
   (map! :map org-tree-slide-mode-map
         "C-h"   #'org-tree-slide-move-previous-tree
         "C-l"   #'org-tree-slide-move-next-tree
         "C-SPC" #'org-tree-slide-content)
+
   (setq
    org-tree-slide-activate-message "Presentation started!"
    org-tree-slide-deactivate-message "Presentation finished!"
@@ -469,21 +413,12 @@ Put at the header of the =Org= document to enable auto tangle on save for it
   (display-line-numbers-mode 0)
   (org-display-inline-images) ;; Can also use org-startup-with-inline-images
   )
-#+end_src
 
-#+begin_src emacs-lisp
 (defun my/presentation-end ()
   (writeroom-mode 0)
   (display-line-numbers-mode 1)
   )
 #+end_src
-
-* Office
-** AuthInfo
-Setting up =~/.authinfo.gpg= with credentials
-#+begin_example authinfo
-machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
-#+end_example
 
 ** Calendar
 *** CalFW
@@ -493,21 +428,23 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
   (map! :leader
         :prefix "o"
         :desc "Calendar" :e "c" #'cfw:open-org-calendar)
+
   :config
   (map! :map cfw:calendar-mode-map
-        ;; not active due to evil-snipe and evil-find-char
-        :n "F" #'cfw:change-view-two-weeks)
+        :n "F" #'cfw:change-view-two-weeks) ;; not active due to evil-snipe and evil-find-char
+
   (setq
    calendar-week-start-day 1
-   calendar-date-style 'european
-))
+   calendar-date-style 'european))
 #+end_src
 
 *** iCalendar
 #+begin_src emacs-lisp
-(setq
- org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
- org-icalendar-use-deadline '(event-if-todo-not-done))
+(use-package! icalendar
+  :config
+  (setq
+   org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
+   org-icalendar-use-deadline '(event-if-todo-not-done)))
 #+end_src
 
 *** CalDAV sync
@@ -518,6 +455,7 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
         :leader
         :prefix "m"
         :n "S" #'org-caldav-sync)
+
   (setq
    org-caldav-delete-calendar-entries 'ask
    org-caldav-delete-org-entries 'always
@@ -548,15 +486,112 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 #+end_src
 
 ** Email
-*** Dependencies
-- =mbsync=
-- =mu=
-- =mu4e=
+*** mu4e
++ Arch Linux: ~$ pacman -S isync~
+              ~$ paru -S mu~
 
 A custom variable containing an email address string needs to be defined for each context
 #+begin_example elisp
 (defvar my/email/main "example@gmail.com" "My primary email address")
 #+end_example
+
+#+begin_src emacs-lisp
+(use-package! mu4e
+  :ensure nil
+  :defer 20
+  :config
+  (map! :map mu4e-view-mode-map
+        :n "m" #'mu4e-view-mark-for-something
+        :n "M" #'mu4e-view-mark-for-move
+        :n "t" #'mu4e-view-mark-subthread
+        :n "T" #'mu4e-view-mark-thread)
+  (map! :map mu4e-headers-mode-map
+        :n "m" #'mu4e-headers-mark-for-something
+        :n "M" #'mu4e-headers-mark-for-move
+        :n "t" #'mu4e-headers-mark-subthread
+        :n "T" #'mu4e-headers-mark-thread)
+
+  (setq
+   mu4e-update-interval (* 15 60) ;; auto-sync interval in seconds
+   mu4e-maildir (expand-file-name "mail" (xdg-data-home))
+   mu4e-maildir-shortcuts
+   '(("/Inbox"             . ?i)
+     ("/Work"              . ?w)
+     ("/[Gmail]/Important" . ?I)
+     ("/[Gmail]/Sent Mail" . ?s)
+     ("/[Gmail]/Drafts"    . ?d)
+     ("/[Gmail]/All Mail"  . ?a)
+     ("/[Gmail]/Trash"     . ?t))
+   +mu4e-header--maildir-colors
+   '(("/Inbox"      . all-the-icons-yellow)
+     ("/Work"       . all-the-icons-red)
+     ("[Gmail]"     . all-the-icons-dgreen)))
+
+  ;; headers - view listing the emails
+  (setq
+   mu4e-split-view 'vertical
+   mu4e-headers-visible-columns 80
+   mu4e-headers-time-format "%l:%M:%S %p"
+   mu4e-headers-date-format "%e %b %Y"
+   mu4e-headers-long-date-format "%a, %e %B %Y, %l:%M:%S %p"
+   ;; colum layout for mail list
+   mu4e-headers-fields
+   '((:account-stripe . 1)
+     (:flags          . 7)
+     (:human-date     . 12)
+     (:from-or-to     . 25)
+     (:thread-subject . nil)))
+
+  ;; message
+  (setq
+   message-kill-buffer-on-exit t ;; don't keep message buffers
+   ;; mu4e-view-date-format "%c"
+   ;; mu4e-date-format-long "%c"
+   mu4e-view-prefer-html t)
+
+  ;; composing
+  (setq
+   mu4e-compose-format-flowed t ;; use html formatting for outgoing emails
+   mu4e-compose-dont-reply-to-self t)
+
+  ;; contexts
+  (setq
+   user-full-name "Artem Smaznov"
+   mu4e-context-policy 'pick-first
+   mu4e-compose-context-policy 'ask-if-none
+   ;; mu4e-index-cleanup nil ;; don't need to run cleanup after indexing for gmail
+   ;; mu4e-index-lazy-check t ;; because gmail uses labels as folders we can use lazy check since messages don't really "move"
+   mu4e-contexts
+   `(
+     ;; ,(make-mu4e-context
+     ;;   :name "Artem"
+     ;;   :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/artem)))
+     ;;   :vars `((smtpmail-smtp-server  . "smtp.gmail.com")
+     ;;           (smtpmail-smtp-service . 465)
+     ;;           (smtpmail-stream-type  . ssl)
+     ;;           (user-mail-address     . ,my/email/artem)
+     ;;           (mu4e-drafts-folder    . "/[Gmail]/Drafts")
+     ;;           (mu4e-sent-folder      . "/[Gmail]/Sent Mail")
+     ;;           (mu4e-refile-folder    . "/[Gmail]/All Mail")
+     ;;           (mu4e-trash-folder     . "/[Gmail]/Trash")))
+     ,(make-mu4e-context
+       :name "Main"
+       :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/main)))
+       ;; :match-func (lambda (msg) (when msg (string-prefix-p "/Main" (mu4e-message-field msg :maildir))))
+       :vars `((user-mail-address  . ,my/email/main)
+               (mu4e-drafts-folder . "/[Gmail]/Drafts")
+               (mu4e-sent-folder   . "/[Gmail]/Sent Mail")
+               (mu4e-refile-folder . "/[Gmail]/All Mail")
+               (mu4e-trash-folder  . "/[Gmail]/Trash")))))
+
+     ;; start mu4e in the background so it auto-syncs emails
+     ;; (mu4e t)
+
+     ;; modeline
+     (setq
+      mu4e-alert-interesting-mail-query "flag:unread AND NOT flag:trashed AND NOT maildir:\"/[Gmail]/All Mail\""
+      mu4e-display-update-status-in-modeline t))
+#+end_src
 
 *** Authentication
 Function used by =mbsync= for authentication with the email server
@@ -568,293 +603,29 @@ Function used by =mbsync= for authentication with the email server
         nil)))
 #+end_src
 
-*** Home
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   ;; Set auto-sync interval 10 min
-   mu4e-update-interval (* 15 60)
-   mu4e-maildir (expand-file-name "mail" (xdg-data-home))
-   mu4e-maildir-shortcuts
-   '(
-     ("/Inbox"             . ?i)
-     ("/Work"              . ?w)
-     ("/[Gmail]/Important" . ?I)
-     ("/[Gmail]/Sent Mail" . ?s)
-     ("/[Gmail]/Drafts"    . ?d)
-     ("/[Gmail]/All Mail"  . ?a)
-     ("/[Gmail]/Trash"     . ?t)
-     )
-
-   +mu4e-header--maildir-colors '(
-                                  ("/Inbox"      . all-the-icons-yellow)
-                                  ("/Work"       . all-the-icons-red)
-                                  ("[Gmail]"     . all-the-icons-dgreen)
-                                  )))
-#+end_src
-
-*** Headers
-=Headers= is the view listing the emails (i.e. Inbox, Trash, Search Results, etc.)
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   mu4e-split-view 'vertical
-   mu4e-headers-visible-columns 80
-
-   mu4e-headers-time-format "%l:%M:%S %p"
-   mu4e-headers-date-format "%e %b %Y"
-   mu4e-headers-long-date-format "%a, %e %B %Y, %l:%M:%S %p"
-
-   ;; Colum layout for mail list
-   mu4e-headers-fields '(
-                         (:account-stripe . 1)
-                         (:flags          . 7)
-                         (:human-date     . 12)
-                         (:from-or-to     . 25)
-                         (:thread-subject . nil)
-                         )))
-#+end_src
-
-*** Message
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   ;; Don't keep message buffers
-   message-kill-buffer-on-exit t
-
-   mu4e-view-prefer-html t
-   ;; mu4e-view-date-format "%c"
-   ;; mu4e-date-format-long "%c"
-   ))
-#+end_src
-
-*** Keybindings
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (map! :map mu4e-view-mode-map
-        :n "m" #'mu4e-view-mark-for-something
-        :n "M" #'mu4e-view-mark-for-move
-        :n "t" #'mu4e-view-mark-subthread
-        :n "T" #'mu4e-view-mark-thread)
-
-  (map! :map mu4e-headers-mode-map
-        :n "m" #'mu4e-headers-mark-for-something
-        :n "M" #'mu4e-headers-mark-for-move
-        :n "t" #'mu4e-headers-mark-subthread
-        :n "T" #'mu4e-headers-mark-thread))
-#+end_src
-
-*** Composing
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   ;; Use HTML formatting for outgoing emails
-   mu4e-compose-format-flowed t
-
-   mu4e-compose-dont-reply-to-self t
-   )
-  )
-#+end_src
-
-**** Org-msg
-To toggle org-msg for a single message, just apply the universal argument to the
-compose or reply command (=SPC u= with ~evil~, =C-u= otherwise).
-
-#+begin_src emacs-lisp
-(use-package! org-msg
-  :ensure nil
-  :config
-  (setq
-   org-msg-startup "hidestars indent inlineimages"
-   org-msg-greeting-fmt "Hello %s,\n\n"
-   org-msg-greeting-name-limit 3
-   org-msg-signature "\n\nCheers,\n
-#+begin_signature
--- *Artem Smaznov*
-#+end_signature\n")
-  )
-#+end_src
-
-Color for bold text after conversion
-#+begin_src emacs-lisp
-;; (use-package! org-msg
-;;   :ensure nil
-;;   :config
-;;   (setq +org-msg-accent-color "#282828")
-;;   )
-#+end_src
-
-Disable Org-msg for composing by default
-#+begin_src emacs-lisp
-;; (use-package! mu4e
-;;   :ensure nil
-;;   :defer 20
-;;   :config
-;;   (setq
-;;    mu4e-compose--org-msg-toggle-next nil
-;;    )
-;;   )
-#+end_src
-
-*** Contexts
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   mu4e-context-policy 'pick-first
-   mu4e-compose-context-policy 'ask-if-none
-
-   ;; don't need to run cleanup after indexing for gmail
-   ;; mu4e-index-cleanup nil
-
-   ;; because gmail uses labels as folders we can use lazy check since
-   ;; messages don't really "move"
-   ;; mu4e-index-lazy-check t
-
-   user-full-name "Artem Smaznov"
-
-   mu4e-contexts
-   `(
-     ;; ,(make-mu4e-context
-     ;;   :name "Artem"
-     ;;   :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/artem)))
-     ;;   :vars `(
-     ;;           (smtpmail-smtp-server  . "smtp.gmail.com")
-     ;;           (smtpmail-smtp-service . 465)
-     ;;           (smtpmail-stream-type  . ssl)
-     ;;           (user-mail-address     . ,my/email/artem)
-     ;;           (mu4e-drafts-folder    . "/[Gmail]/Drafts")
-     ;;           (mu4e-sent-folder      . "/[Gmail]/Sent Mail")
-     ;;           (mu4e-refile-folder    . "/[Gmail]/All Mail")
-     ;;           (mu4e-trash-folder     . "/[Gmail]/Trash")
-     ;;           ))
-     ,(make-mu4e-context
-       :name "Main"
-       :match-func (lambda (msg) (when msg (mu4e-message-contact-field-matches msg :to my/email/main)))
-       ;; :match-func (lambda (msg) (when msg (string-prefix-p "/Main" (mu4e-message-field msg :maildir))))
-       :vars `(
-               (user-mail-address  . ,my/email/main)
-               (mu4e-drafts-folder . "/[Gmail]/Drafts")
-               (mu4e-sent-folder   . "/[Gmail]/Sent Mail")
-               (mu4e-refile-folder . "/[Gmail]/All Mail")
-               (mu4e-trash-folder  . "/[Gmail]/Trash")
-               ))
-     )))
-#+end_src
-
-*** Modeline
-#+begin_src emacs-lisp
-(use-package! mu4e
-  :ensure nil
-  :defer 20
-  :config
-  (setq
-   mu4e-alert-interesting-mail-query "flag:unread AND NOT flag:trashed AND NOT maildir:\"/[Gmail]/All Mail\""
-   mu4e-display-update-status-in-modeline t
-   )
-  )
-#+end_src
-
-*** Auto-start
-Start mu4e in the background so it auto-syncs emails
-#+begin_src emacs-lisp
-;; (use-package! mu4e
-;;   :ensure nil
-;;   :defer 20
-;;   :config
-;;   (mu4e t)
-;;   )
-#+end_src
-
 ** Ledger
 #+begin_src emacs-lisp
 (use-package! ledger-mode
   :config
-  ;; :map and :after don't work
-  ;; test here before updating other locations
   (map! :map ledger-mode-map
         :leader
         :prefix "m"
         :e "c" #'ledger-mode-clean-buffer)
-  (setq
-   ledger-default-date-format "%Y-%m-%d"))
+
+  (setq ledger-default-date-format "%Y-%m-%d"))
 #+end_src
 
-* Editing
-** Spell Checking
-- macOS: ~$ brew install aspell~
-- Arch Linux: ~$ pacman -S aspell aspell-en aspell-ru~
-#+begin_src emacs-lisp
-(use-package! spell-fu
-  :hook
-  (spell-fu-mode . (lambda ()
-                     (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "ru"))
-                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "ru"      (expand-file-name "dict/ru.pws" (xdg-data-home))))
-                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "finance" (expand-file-name "dict/finance.en.pws" (xdg-data-home))))
-                     ))
-  :config
-  (setq ispell-dictionary "english"
-        ispell-personal-dictionary (expand-file-name "dict/en.pws" (xdg-data-home))))
-#+end_src
-
-** Completion
-*** Company Mode
-#+begin_src emacs-lisp
-(use-package! company
-  ;; :bind
-  ;; (:map company-active-map ("<tab>" . company-complete-selection))
-  :config
-  (map! :after lsp-mode
-        :map lsp-mode-map
-        :i "<tab>" #'company-indent-or-complete-common)
-  (setq
-   company-minimum-prefix-length 1
-   company-tooltip-idle-delay 2
-   company-idle-delay 0.5))
-#+end_src
-
-** Rotate Text
-To enable a set of items to cycle through globally, add the following to your configuration
-#+begin_src emacs-lisp
-(use-package! rotate-text
-  :config
-  (pushnew! rotate-text-words
-            '("on" "off")
-            '("yes" "no")
-))
-#+end_src
-
-* Development
+* Development Tools
 ** Magit
 #+begin_src emacs-lisp
 (use-package! magit
   :config
   (setq
-   ;; Enable Gravatars
-   magit-revision-show-gravatars 't
+   magit-revision-show-gravatars t ;; enable gravatars
+   ;; magit-display-buffer-function 'magit-display-buffer-traditional ;; open magit in a side window
 
-   ;; Open magit in a side window
-   ;; magit-display-buffer-function 'magit-display-buffer-traditional
-
-   ;; Enable granular diff-highlights for all hunks
-   ;; change to 't if performance is bad
+   ;; enable granular diff-highlights for all hunks
+   ;; change to t if performance is bad
    magit-diff-refine-hunk 'all))
 #+end_src
 
@@ -870,10 +641,63 @@ Show list of to-do items in Magit status buffer
 #+begin_src emacs-lisp
 (use-package! projectile
   :init
-  (when (file-directory-p "~/projects")
-    (setq projectile-project-search-path '("~/projects")))
   (setq projectile-switch-project-action #'projectile-dired)
-  )
+  (when (file-directory-p "~/projects")
+    (setq projectile-project-search-path '("~/projects"))))
+#+end_src
+
+** Treemacs
+#+begin_src emacs-lisp
+(use-package! lsp-treemacs
+  :commands lsp-treemacs-errors-list)
+#+end_src
+
+** Completion
+#+begin_src emacs-lisp
+(use-package! company
+  :config
+  (map! :after lsp-mode
+        :map lsp-mode-map
+        :i "<tab>" #'company-indent-or-complete-common)
+
+  (setq
+   company-idle-delay 0.5
+   company-tooltip-idle-delay 2
+   company-minimum-prefix-length 1))
+#+end_src
+
+** Ivy
+#+begin_src emacs-lisp
+(use-package! lsp-ivy
+  :commands lsp-ivy-workspace-symbol)
+#+end_src
+
+** Rotate Text
+To enable a set of items to cycle through globally, add the following to your configuration
+#+begin_src emacs-lisp
+(use-package! rotate-text
+  :config
+  (pushnew! rotate-text-words
+            '("on" "off")
+            '("yes" "no")))
+#+end_src
+
+** Indent Guides
+#+begin_src emacs-lisp
+(use-package! highlight-indent-guides
+  :defer t
+  :config
+  (setq highlight-indent-guides-method 'fill))
+#+end_src
+
+** Rainbow Mode
+Highlight colors in file
+#+begin_src emacs-lisp
+(use-package! rainbow-mode
+  :init
+  (map! :leader
+        :prefix "t"
+        :desc "Colors" :e "c" #'rainbow-mode))
 #+end_src
 
 * LSP
@@ -889,47 +713,15 @@ Show list of to-do items in Magit status buffer
   (groovy-mode  . lsp-deferred))
 #+end_src
 
-** LSP UI
 See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] for LSP UI elements and their respective variables
 #+begin_src emacs-lisp
 (use-package! lsp-ui
   :commands lsp-ui-mode
-  :hook
-  (lsp-mode . lsp-ui-mode)
+  :hook (lsp-mode . lsp-ui-mode)
   :config
   (setq
    lsp-ui-doc-position 'bottom
    lsp-headerline-breadcrumb-enable t))
-#+end_src
-
-** Indent Guides
-#+begin_src emacs-lisp
-(use-package! highlight-indent-guides
-  :defer t
-  :config
-    (setq highlight-indent-guides-method 'fill))
-#+end_src
-
-** Ivy
-#+begin_src emacs-lisp
-(use-package! lsp-ivy
-  :commands lsp-ivy-workspace-symbol)
-#+end_src
-
-** Treemacs
-#+begin_src emacs-lisp
-(use-package! lsp-treemacs
-  :commands lsp-treemacs-errors-list)
-#+end_src
-
-** Rainbow Mode
-Highlight colors in file
-#+begin_src emacs-lisp
-(use-package! rainbow-mode
-  :init
-  (map! :leader
-        :prefix "t"
-        :desc "Colors" :e "c" #'rainbow-mode))
 #+end_src
 
 ** JavaScript
@@ -941,26 +733,30 @@ Highlight colors in file
 ;; )
 #+end_src
 
+** Python
++ macOS: ~$ brew install pyright~
++ Arch Linux: ~$ pacman -S pyright~
+
 ** Groovy
 #+begin_src emacs-lisp
 (use-package! groovy-mode
   :defer t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.PIPE$" . groovy-mode))
-  (setq groovy-indent-offset 2)
-  :hook
-  (groovy-mode . (lambda ()
-                   (rainbow-delimiters-mode 1)
-                   ))
-  )
+  :mode
+  "\\.pipe\\'"
+  "\\.PIPE\\'"
+
+  :hook (groovy-mode . (lambda () (rainbow-delimiters-mode 1)))
+
+  :config
+  (setq groovy-indent-offset 2))
 #+end_src
 
 ** Cucumber
 #+begin_src emacs-lisp
 (use-package! feature-mode
   :defer t
-  :mode
-  "\\.feature\\'"
+  :mode "\\.feature\\'"
+
   :config
   (setq
    feature-default-language "en"
@@ -973,8 +769,8 @@ Enable syntax highlighting for .vim files
 #+begin_src emacs-lisp
 (use-package! vimrc-mode
   :defer t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+  :mode "\\.vim\\(rc\\)?\\'"
+
   :config
   (setq evil-shift-width 2))
 #+end_src
@@ -986,75 +782,13 @@ Enable syntax highlighting for .vim files
   :mode
   "\\.log"
   "\\.[0-9]+\\'"
+
   :hook
   (syslog-mode . (lambda ()
                    (make-local-variable 'display-line-numbers-type)
                    (setq display-line-numbers-type t)
                    (display-line-numbers-mode 1)
                    )))
-#+end_src
-
-* Navigation
-** Dired
-#+begin_src emacs-lisp
-(use-package! dired
-  :commands (dired dired-jump)
-  :config
-  (map! :map dired-mode-map
-        :n "h" #'dired-up-directory
-        :n "l" #'dired-find-file
-        :n "S" #'dired-do-symlink
-        :n "-" #'dired-create-empty-file))
-#+end_src
-
-Toggle hidden files in Dired
-#+begin_src emacs-lisp
-(use-package! dired-hide-dotfiles
-  :hook (dired-mode . dired-hide-dotfiles-mode)
-  :config
-  (map! :map dired-mode-map
-        :desc "Hide dot files"   :n "zo" (lambda () (interactive) (dired-hide-dotfiles-mode 0))
-        :desc "Show dot files"   :n "zm" (lambda () (interactive) (dired-hide-dotfiles-mode 1))
-        :desc "Toggle dot files" :n "za" #'dired-hide-dotfiles-mode
-        :desc "Toggle dot files" :n "z." #'dired-hide-dotfiles-mode))
-#+end_src
-
-Peep
-#+begin_src emacs-lisp
-(use-package! peep-dired
-  :after dired
-  :config
-  (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
-  (map! :map dired-mode-map
-        :n "p" #'peep-dired)
-  (map! :map peep-dired-mode-map
-        :n "k" #'peep-dired-prev-file
-        :n "j" #'peep-dired-next-file
-        :n "C-k" #'peep-dired-scroll-page-up
-        :n "C-j" #'peep-dired-scroll-page-down)
-  (setq
-   peep-dired-cleanup-eagerly nil
-   peep-dired-cleanup-on-disable 't))
-#+end_src
-
-** Evil Mode
-#+begin_src emacs-lisp
-(use-package! evil
-  :config
-  (map! :map evil-insert-state-map
-        :i "<C-h>" #'evil-delete-backward-char-and-join)
-  (setq evil-cross-lines t))
-#+end_src
-
-** Mouse Support
-#+begin_src emacs-lisp
-(xterm-mouse-mode 1)
-#+end_src
-
-* Pass
-Uses the standard Unix password store "pass".
-#+begin_src emacs-lisp
-;; (use-package! password-store)
 #+end_src
 
 * Global Keybindings

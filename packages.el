@@ -16,7 +16,6 @@
 (package! dired-single)
 (package! dmenu)
 (package! elpher)
-(package! emojify)
 (package! evil-tutor)
 (package! flycheck-aspell)
 (package! hyperbole)
