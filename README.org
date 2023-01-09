@@ -289,6 +289,9 @@ Peep
   (setq org-refile-targets '((org-agenda-files :maxlevel . 1)))
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
+  ;; archiving
+  (setq org-archive-subtree-add-inherited-tags t)
+
   ;; publishing
   (setq org-publish-project-alist
         '(("github.io"
@@ -475,23 +478,26 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
    org-caldav-save-directory (expand-file-name ".caldav/" org-directory)
    org-caldav-backup-file (expand-file-name "backup.org" org-caldav-save-directory)
    org-caldav-location-newline-replacement ","
-   org-caldav-exclude-tags '("calskip")
+   org-caldav-exclude-tags '("nocal")
    org-caldav-calendars `(
      (:calendar-id "personal"
-            :select-tags ("calgeneral")
-            :inbox ,(expand-file-name "inbox-personal.org" org-directory)
+            :select-tags ("calgnr")
+            :inbox (file+headline ,(expand-file-name "todo.org" org-directory) "Inbox")
+            ;; :inbox ,(expand-file-name "inbox-personal.org" org-directory)
             :files (,(expand-file-name "todo.org" org-directory)
                     ,(expand-file-name "agenda.org" org-directory)
                     ,(expand-file-name "archive.org" org-directory)))
      (:calendar-id "housing"
-            :select-tags ("calhousing")
-            :inbox ,(expand-file-name "inbox-housing.org" org-directory)
+            :select-tags ("calhsn")
+            :inbox (file+headline ,(expand-file-name "todo.org" org-directory) "Inbox")
+            ;; :inbox ,(expand-file-name "inbox-housing.org" org-directory)
             :files (,(expand-file-name "todo.org" org-directory)
                     ,(expand-file-name "housing.org" org-directory)
                     ,(expand-file-name "archive.org" org-directory)))
      (:calendar-id "work"
-            :select-tags ("calwork")
-            :inbox ,(expand-file-name "inbox-work.org" org-directory)
+            :select-tags ("calwrk")
+            :inbox (file+headline ,(expand-file-name "todo.org" org-directory) "Inbox")
+            ;; :inbox ,(expand-file-name "inbox-work.org" org-directory)
             :files (,(expand-file-name "todo.org" org-directory)
                     ,(expand-file-name "archive.org" org-directory)))
      )))
