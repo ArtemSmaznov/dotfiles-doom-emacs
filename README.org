@@ -6,7 +6,6 @@
 * Table of Contents :toc:
 - [[#introduction-to-the-config][Introduction to the Config]]
 - [[#global-options][Global Options]]
-- [[#spell-checking][Spell Checking]]
 - [[#fonts][Fonts]]
 - [[#core][Core]]
   - [[#dashboard][Dashboard]]
@@ -43,6 +42,7 @@
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
+- [[#spell-checking][Spell Checking]]
 - [[#global-keybindings][Global Keybindings]]
 - [[#local-overwrite][Local Overwrite]]
 - [[#additional-notes][Additional Notes]]
@@ -72,24 +72,6 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
  confirm-kill-emacs nil)
 
 (xterm-mouse-mode 1)
-#+end_src
-
-* Spell Checking
-+ macOS: ~$ brew install aspell~
-+ Arch Linux: ~$ pacman -S aspell aspell-en aspell-ru~
-#+begin_src emacs-lisp
-(use-package! spell-fu
-  :hook
-  (spell-fu-mode . (lambda ()
-                     (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "ru"))
-                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "ru"      (expand-file-name "dict/ru.pws" (xdg-data-home))))
-                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "finance" (expand-file-name "dict/finance.en.pws" (xdg-data-home))))
-                     ))
-
-  :config
-  (setq
-   ispell-dictionary "english"
-   ispell-personal-dictionary (expand-file-name "dict/en.pws" (xdg-data-home))))
 #+end_src
 
 * Fonts
@@ -807,6 +789,24 @@ Enable syntax highlighting for .vim files
                    (setq display-line-numbers-type t)
                    (display-line-numbers-mode 1)
                    )))
+#+end_src
+
+* Spell Checking
++ macOS: ~$ brew install aspell~
++ Arch Linux: ~$ pacman -S aspell aspell-en aspell-ru~
+#+begin_src emacs-lisp
+(use-package! spell-fu
+  :hook
+  (spell-fu-mode . (lambda ()
+                     (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "ru"))
+                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "ru"      (expand-file-name "dict/ru.pws" (xdg-data-home))))
+                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "finance" (expand-file-name "dict/finance.en.pws" (xdg-data-home))))
+                     ))
+
+  :config
+  (setq
+   ispell-dictionary "english"
+   ispell-personal-dictionary (expand-file-name "dict/en.pws" (xdg-data-home))))
 #+end_src
 
 * Global Keybindings
