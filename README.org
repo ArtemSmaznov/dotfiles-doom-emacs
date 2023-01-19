@@ -424,6 +424,8 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 
   :config
   (map! :map cfw:calendar-mode-map
+        :m "0"  #'cfw:navi-goto-week-begin-command
+        :m "gd" #'cfw:org-goto-date
         :m "zd" #'cfw:change-view-day
         :m "zw" #'cfw:change-view-week
         :m "zm" #'cfw:change-view-month
