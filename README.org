@@ -513,7 +513,6 @@ A custom variable containing an email address string needs to be defined for eac
 
   (setq
    mu4e-update-interval (* 15 60) ;; auto-sync interval in seconds
-   mu4e-maildir (expand-file-name "mail" (xdg-data-home))
    mu4e-maildir-shortcuts
    '(("/Inbox"             . ?i)
      ("/Work"              . ?w)
@@ -544,10 +543,9 @@ A custom variable containing an email address string needs to be defined for eac
 
   ;; message
   (setq
-   message-kill-buffer-on-exit t ;; don't keep message buffers
    ;; mu4e-view-date-format "%c"
    ;; mu4e-date-format-long "%c"
-   mu4e-view-prefer-html t)
+   message-kill-buffer-on-exit t) ;; don't keep message buffers
 
   ;; composing
   (setq
@@ -585,7 +583,7 @@ A custom variable containing an email address string needs to be defined for eac
                (mu4e-trash-folder  . "/[Gmail]/Trash")))))
 
      ;; start mu4e in the background so it auto-syncs emails
-     ;; (mu4e t)
+     (mu4e t)
 
      ;; modeline
      (setq
