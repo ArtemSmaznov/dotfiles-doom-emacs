@@ -39,6 +39,7 @@
   - [[#javascript][JavaScript]]
   - [[#python][Python]]
   - [[#groovy][Groovy]]
+  - [[#yaml][Yaml]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
@@ -237,6 +238,7 @@ Peep
 
   :hook (org-mode . (lambda ()
                       (make-local-variable 'display-line-numbers)
+                      (visual-line-mode -1)
                       (setq display-line-numbers 'visual)))
 
   :config
@@ -749,6 +751,16 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 
   :config
   (setq groovy-indent-offset 2))
+#+end_src
+
+** Yaml
+#+begin_src emacs-lisp
+(use-package! yaml-mode
+  :defer t
+  :hook
+  (yaml-mode . (lambda ()
+                   (spell-fu-mode -1)
+                   )))
 #+end_src
 
 ** Cucumber

@@ -28,7 +28,7 @@
 (package! tldr)
 (package! wc-mode)
 
-;; Lsp
+;; lsp
 (package! feature-mode)
 (package! groovy-mode)
 (package! qml-mode)
