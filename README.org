@@ -40,6 +40,7 @@
   - [[#python][Python]]
   - [[#groovy][Groovy]]
   - [[#yaml][Yaml]]
+  - [[#jinja][Jinja]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
@@ -257,6 +258,12 @@ Peep
         :leader
         :prefix "m"
         :n "B" #'org-babel-tangle)
+
+  ;; (map! :map org-mode-map
+  ;;       :n "<M-h>" #'org-table-previous-field
+  ;;       :n "<M-j>" #'org-table-next-row
+  ;;       :n "<M-k>" #'org-table-previous-row
+  ;;       :n "<M-l>" #'org-table-next-field)
 
   ;; headings
   (setq org-ellipsis " ▼ "
@@ -762,6 +769,16 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   :defer t
   :hook
   (yaml-mode . (lambda ()
+                   (spell-fu-mode -1)
+                   )))
+#+end_src
+
+** Jinja
+#+begin_src emacs-lisp
+(use-package! jinja2-mode
+  :defer t
+  :hook
+  (jinja2-mode . (lambda ()
                    (spell-fu-mode -1)
                    )))
 #+end_src
