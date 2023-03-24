@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: toc
+# uuid: toc
+# key: toc
+# --
+* Table of Contents :toc:
