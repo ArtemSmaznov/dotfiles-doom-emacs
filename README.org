@@ -511,7 +511,6 @@ A custom variable containing an email address string needs to be defined for eac
 
 #+begin_src emacs-lisp
 (use-package! mu4e
-  :ensure nil
   :defer 20
   :config
   (map! :map mu4e-view-mode-map
@@ -597,7 +596,7 @@ A custom variable containing an email address string needs to be defined for eac
                (mu4e-trash-folder  . "/[Gmail]/Trash")))))
 
      ;; start mu4e in the background so it auto-syncs emails
-     (mu4e t)
+     ;; (mu4e t)
 
      ;; modeline
      (setq
