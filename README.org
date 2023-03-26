@@ -645,7 +645,14 @@ Show list of to-do items in Magit status buffer
 (use-package! magit-todos
   :after magit
   :hook
-  (magit-mode . magit-todos-mode))
+  (magit-mode . magit-todos-mode)
+  :config
+  (pushnew! magit-todos-exclude-globs
+            "BraveSoftware/"
+            "chromium/"
+            "google-chrome/"
+            "coc/"
+            ))
 #+end_src
 
 ** Projectile
