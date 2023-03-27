@@ -109,6 +109,7 @@ font string. You generally only need these two:
    doom-themes-enable-italic t))
 
 (use-package! emojify
+  :defer t
   :hook (after-init . global-emojify-mode))
 #+end_src
 
@@ -232,6 +233,7 @@ Peep
 ** Org
 #+begin_src emacs-lisp
 (use-package! org
+  :defer t
   :init (setq
          org-directory (if IS-MAC "~/Documents/org"
                          (expand-file-name "org" (xdg-user-dir "DOCUMENTS")))
@@ -328,6 +330,7 @@ Peep
 #+begin_src emacs-lisp
 (use-package! org-agenda
   :after org
+  :defer t
   :config
   (map! :map org-agenda-mode-map
         :m "D"   #'org-agenda-day-view
@@ -348,6 +351,7 @@ Peep
 #+begin_src emacs-lisp
 (use-package! org-superstar
   :after org
+  :defer t
   :hook (org-mode . org-superstar-mode))
 #+end_src
 
@@ -388,6 +392,7 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 #+begin_src emacs-lisp
 (use-package! org-tree-slide
   :after org
+  :defer t
   :init
   (map! :map org-mode-map
         :leader
@@ -429,6 +434,7 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 *** CalFW
 #+begin_src emacs-lisp
 (use-package! calfw
+  :defer t
   :init
   (map! :leader
         :prefix "o"
@@ -452,6 +458,7 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 *** iCalendar
 #+begin_src emacs-lisp
 (use-package! icalendar
+  :defer t
   :config
   (setq
    org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
@@ -461,6 +468,7 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 *** CalDAV sync
 #+begin_src emacs-lisp
 (use-package! org-caldav
+  :defer t
   :config
   (map! :map cfw:calendar-mode-map
         :leader
@@ -511,7 +519,7 @@ A custom variable containing an email address string needs to be defined for eac
 
 #+begin_src emacs-lisp
 (use-package! mu4e
-  :defer 20
+  :defer t
   :config
   (map! :map mu4e-view-mode-map
         :n "m" #'mu4e-view-mark-for-something
@@ -617,6 +625,7 @@ Function used by =mbsync= for authentication with the email server
 ** Ledger
 #+begin_src emacs-lisp
 (use-package! ledger-mode
+  :defer t
   :config
   (map! :map ledger-mode-map
         :leader
@@ -630,6 +639,7 @@ Function used by =mbsync= for authentication with the email server
 ** Magit
 #+begin_src emacs-lisp
 (use-package! magit
+  :defer t
   :config
   (setq
    magit-revision-show-gravatars t ;; enable gravatars
@@ -644,6 +654,7 @@ Show list of to-do items in Magit status buffer
 #+begin_src emacs-lisp
 (use-package! magit-todos
   :after magit
+  :defer t
   :hook
   (magit-mode . magit-todos-mode)
   :config
@@ -658,6 +669,7 @@ Show list of to-do items in Magit status buffer
 ** Projectile
 #+begin_src emacs-lisp
 (use-package! projectile
+  :defer t
   :init
   (setq projectile-switch-project-action #'projectile-dired)
   (when (file-directory-p "~/projects")
@@ -667,12 +679,14 @@ Show list of to-do items in Magit status buffer
 ** Treemacs
 #+begin_src emacs-lisp
 (use-package! lsp-treemacs
+  :defer t
   :commands lsp-treemacs-errors-list)
 #+end_src
 
 ** Completion
 #+begin_src emacs-lisp
 (use-package! company
+  :defer t
   :config
   (map! :after lsp-mode
         :map lsp-mode-map
@@ -687,6 +701,7 @@ Show list of to-do items in Magit status buffer
 ** Ivy
 #+begin_src emacs-lisp
 (use-package! lsp-ivy
+  :defer t
   :commands lsp-ivy-workspace-symbol)
 #+end_src
 
@@ -694,6 +709,7 @@ Show list of to-do items in Magit status buffer
 To enable a set of items to cycle through globally, add the following to your configuration
 #+begin_src emacs-lisp
 (use-package! rotate-text
+  :defer t
   :config
   (pushnew! rotate-text-words
             '("on" "off")
@@ -712,6 +728,7 @@ To enable a set of items to cycle through globally, add the following to your co
 Highlight colors in file
 #+begin_src emacs-lisp
 (use-package! rainbow-mode
+  :defer t
   :init
   (map! :leader
         :prefix "t"
@@ -722,6 +739,7 @@ Highlight colors in file
 ** LSP Mode
 #+begin_src emacs-lisp
 (use-package! lsp-mode
+  :defer t
   :commands (lsp lsp-deferred)
   :hook
   (rjsx-mode    . lsp-deferred)
@@ -734,6 +752,7 @@ Highlight colors in file
 See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] for LSP UI elements and their respective variables
 #+begin_src emacs-lisp
 (use-package! lsp-ui
+  :defer t
   :commands lsp-ui-mode
   :hook (lsp-mode . lsp-ui-mode)
   :config
@@ -834,6 +853,7 @@ Enable syntax highlighting for .vim files
 + Arch Linux: ~$ pacman -S aspell aspell-en aspell-ru~
 #+begin_src emacs-lisp
 (use-package! spell-fu
+  :defer t
   :hook
   (spell-fu-mode . (lambda ()
                      (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "ru"))
