@@ -234,13 +234,18 @@ Peep
 #+begin_src emacs-lisp
 (use-package! org
   :defer t
-  :init (setq
-         org-directory (if IS-MAC "~/Documents/org"
-                         (expand-file-name "org" (xdg-user-dir "DOCUMENTS")))
-         org-agenda-files          (list org-directory)
-         org-default-notes-file    (expand-file-name "notes.org" org-directory)
-         +org-capture-journal-file (expand-file-name "journal.org" org-directory)
-         org-archive-location      (expand-file-name "archive.org::datetree/" org-directory)) ;; can also use "archive.org::datetrea/* %s"
+  :init
+  (setq
+   org-directory (if IS-MAC "~/Documents/org"
+                   (expand-file-name "org" (xdg-user-dir "DOCUMENTS")))
+   org-agenda-files          (list org-directory)
+   org-default-notes-file    (expand-file-name "notes.org" org-directory)
+   +org-capture-journal-file (expand-file-name "journal.org" org-directory)
+   org-archive-location      (expand-file-name "archive.org::datetree/" org-directory)) ;; can also use "archive.org::datetrea/* %s"
+
+  (pushnew! org-capture-templates
+            '("w" "Work todo" entry    (file+headline "work.org"    "Inbox") "* TODO %?\n%i\n%a" :prepend t)
+            '("h" "Housing todo" entry (file+headline "housing.org" "Inbox") "* TODO %?\n%i\n%a" :prepend t))
 
   :hook (org-mode . (lambda ()
                       (make-local-variable 'display-line-numbers)
@@ -476,8 +481,8 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
         :n "S" #'org-caldav-sync)
 
   (setq
-   org-caldav-delete-calendar-entries 'ask
-   org-caldav-delete-org-entries 'always
+   org-caldav-delete-calendar-entries 'always
+   org-caldav-delete-org-entries 'ask
    org-caldav-show-sync-results nil
    org-caldav-save-directory (expand-file-name ".caldav/" org-directory)
    org-caldav-backup-file (expand-file-name "backup.org" org-caldav-save-directory)
@@ -493,16 +498,15 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
                     ,(expand-file-name "archive.org" org-directory)))
      (:calendar-id "housing"
             :select-tags ("calhsn")
-            :inbox (file+headline ,(expand-file-name "todo.org" org-directory) "Inbox")
+            :inbox (file+headline ,(expand-file-name "housing.org" org-directory) "Inbox")
             ;; :inbox ,(expand-file-name "inbox-housing.org" org-directory)
-            :files (,(expand-file-name "todo.org" org-directory)
-                    ,(expand-file-name "housing.org" org-directory)
+            :files (,(expand-file-name "housing.org" org-directory)
                     ,(expand-file-name "archive.org" org-directory)))
      (:calendar-id "work"
             :select-tags ("calwrk")
-            :inbox (file+headline ,(expand-file-name "todo.org" org-directory) "Inbox")
+            :inbox (file+headline ,(expand-file-name "work.org" org-directory) "Inbox")
             ;; :inbox ,(expand-file-name "inbox-work.org" org-directory)
-            :files (,(expand-file-name "todo.org" org-directory)
+            :files (,(expand-file-name "work.org" org-directory)
                     ,(expand-file-name "archive.org" org-directory)))
      )))
 #+end_src
