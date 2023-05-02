@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: header-args-properties
+# uuid: header-args-properties
+# key: header-args-properties
+# --
+:PROPERTIES:
+:header-args: :tangle ${1:target file}
+:END:
