@@ -44,6 +44,7 @@
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
+- [[#rss][RSS]]
 - [[#spell-checking][Spell Checking]]
 - [[#global-keybindings][Global Keybindings]]
 - [[#local-overwrite][Local Overwrite]]
@@ -830,7 +831,9 @@ Enable syntax highlighting for .vim files
 #+begin_src emacs-lisp
 (use-package! vimrc-mode
   :defer t
-  :mode "\\.vim\\(rc\\)?\\'"
+  :mode
+  "\\.vim\\(rc\\)?\\'"
+  "\\.vifm\\'"
 
   :config
   (setq evil-shift-width 2))
@@ -850,6 +853,23 @@ Enable syntax highlighting for .vim files
                    (setq display-line-numbers-type t)
                    (display-line-numbers-mode 1)
                    )))
+#+end_src
+
+* RSS
+#+begin_src emacs-lisp
+(use-package! elfeed
+  :defer t
+  :hook
+  (elfeed-search-mode . elfeed-update)
+  :init
+  (map! :leader
+        :prefix "o"
+        :desc "RSS News" :e "n" #'elfeed)
+  :config
+  (setq
+   elfeed-search-date-format '("%d-%m-%Y" 10 :left)
+   elfeed-search-filter "@1-month-ago +unread")
+  )
 #+end_src
 
 * Spell Checking
