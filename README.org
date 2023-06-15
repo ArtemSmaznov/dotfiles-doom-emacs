@@ -40,6 +40,7 @@
   - [[#python][Python]]
   - [[#groovy][Groovy]]
   - [[#yaml][Yaml]]
+  - [[#json][Json]]
   - [[#jinja][Jinja]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
@@ -759,7 +760,9 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 (use-package! lsp-ui
   :defer t
   :commands lsp-ui-mode
-  :hook (lsp-mode . lsp-ui-mode)
+  :hook
+  (lsp-mode . lsp-ui-mode)
+
   :config
   (setq
    lsp-ui-doc-position 'bottom
@@ -787,7 +790,8 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   "\\.pipe\\'"
   "\\.PIPE\\'"
 
-  :hook (groovy-mode . (lambda () (rainbow-delimiters-mode 1)))
+  :hook
+  (groovy-mode . (lambda () (rainbow-delimiters-mode 1)))
 
   :config
   (setq groovy-indent-offset 2))
@@ -801,6 +805,15 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   (yaml-mode . (lambda ()
                    (spell-fu-mode -1)
                    )))
+#+end_src
+
+** Json
+#+begin_src emacs-lisp
+(use-package! jsonc-mode
+  :defer t
+  :mode
+  "\\.jsonc\\'"
+)
 #+end_src
 
 ** Jinja
@@ -817,7 +830,8 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 #+begin_src emacs-lisp
 (use-package! feature-mode
   :defer t
-  :mode "\\.feature\\'"
+  :mode
+  "\\.feature\\'"
 
   :config
   (setq
