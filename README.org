@@ -318,6 +318,8 @@ Peep
           ("wiki"      . "https://en.wikipedia.org/wiki/")
           ))
 
+  (setq org-src-window-setup 'other-frame)
+
   (require 'org-tempo)
   ;; extra languages for src blocks
   (pushnew! org-structure-template-alist
