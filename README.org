@@ -298,9 +298,9 @@ Peep
   ;; publishing
   (setq org-publish-project-alist
         '(("github.io"
-           :base-directory "~/projects/artemsmaznov.github.io/org"
+           :base-directory "~/projects/git/artemsmaznov.github.io/org"
            :base-extension "org"
-           :publishing-directory "~/projects/artemsmaznov.github.io"
+           :publishing-directory "~/projects/git/artemsmaznov.github.io"
            :recursive t
            :publishing-function org-html-publish-to-html
            :headline-levels 4
