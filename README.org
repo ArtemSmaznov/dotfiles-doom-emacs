@@ -873,6 +873,15 @@ Enable syntax highlighting for .vim files
 
 * RSS
 #+begin_src emacs-lisp
+(use-package! elfeed-org
+  :defer t
+  :config
+  (setq
+   rmh-elfeed-org-files (list "~/documents/org/elfeed.org")
+   rmh-elfeed-org-ignore-tag "ignore"))
+#+end_src
+
+#+begin_src emacs-lisp
 (use-package! elfeed
   :defer t
   :hook
@@ -884,7 +893,29 @@ Enable syntax highlighting for .vim files
   :config
   (setq
    elfeed-search-date-format '("%d-%m-%Y" 10 :left)
-   elfeed-search-filter "@1-month-ago +unread")
+   elfeed-search-filter "+unread @1-month-ago"))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! elfeed-protocol
+  :after elfeed
+  :init
+  (setq elfeed-use-curl t)
+  (elfeed-set-timeout 36000)
+  :config
+  (defadvice elfeed (after configure-elfeed-feeds activate)
+    ;; "Make elfeed-org autotags rules works with elfeed-protocol."
+    (setq elfeed-protocol-tags elfeed-feeds)
+    (setq elfeed-feeds (list
+                        (list (password-store-get-field "tools/elfeed-protocol" "url")
+                              :password (password-store-get "tools/elfeed-protocol")
+                              :autotags elfeed-protocol-tags))))
+
+  (setq
+   elfeed-protocol-enabled-protocols '(owncloud)
+   elfeed-protocol-owncloud-star-tag "star")
+
+  (elfeed-protocol-enable)
   )
 #+end_src
 

@@ -15,6 +15,7 @@
 (package! dired-open)
 (package! dired-single)
 (package! dmenu)
+(package! elfeed-protocol)
 (package! elpher)
 (package! evil-tutor)
 (package! flycheck-aspell)
