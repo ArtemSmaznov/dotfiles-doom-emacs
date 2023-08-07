@@ -263,9 +263,8 @@ Peep
         :n  "<up>"      #'evil-previous-visual-line
         :n  "<down>"    #'evil-next-visual-line)
 
-  (map! :map org-mode-map
-        :leader
-        :prefix "m"
+  (map! :mode org-mode
+        :localleader
         :n "B" #'org-babel-tangle)
 
   ;; (map! :map org-mode-map
@@ -448,7 +447,6 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
   (map! :leader
         :prefix "o"
         :desc "Calendar" :e "c" #'cfw:open-org-calendar)
-
   :config
   (map! :map cfw:calendar-mode-map
         :m "0"  #'cfw:navi-goto-week-begin-command
@@ -477,12 +475,11 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 *** CalDAV sync
 #+begin_src emacs-lisp
 (use-package! org-caldav
-  :defer t
+  :after calfw
   :config
   (map! :map cfw:calendar-mode-map
-        :leader
-        :prefix "m"
-        :n "S" #'org-caldav-sync)
+        :localleader
+        :desc "Sync with server" :n "S" #'org-caldav-sync)
 
   (setq
    org-caldav-delete-calendar-entries 'always
@@ -636,8 +633,7 @@ Function used by =mbsync= for authentication with the email server
   :defer t
   :config
   (map! :map ledger-mode-map
-        :leader
-        :prefix "m"
+        :localleader
         :e "c" #'ledger-mode-clean-buffer)
 
   (setq ledger-default-date-format "%Y-%m-%d"))
@@ -880,9 +876,13 @@ Enable syntax highlighting for .vim files
         :prefix "o"
         :desc "RSS News" :e "n" #'elfeed)
   :hook
-  (elfeed-search-mode . elfeed-update)
   (elfeed-search-mode . elfeed-protocol-enable)
+  (elfeed-search-mode . elfeed-update)
   :config
+  (map! :mode elfeed-search-mode
+        :localleader
+        :desc "Toggle logs" :n "l" #'elfeed-goodies/toggle-logs
+        :desc "Update"      :n "u" #'elfeed-update)
   (elfeed-set-timeout 36000)
   (setq
    elfeed-use-curl t
