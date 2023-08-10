@@ -876,8 +876,8 @@ Enable syntax highlighting for .vim files
         :prefix "o"
         :desc "RSS News" :e "n" #'elfeed)
   :hook
-  (elfeed-search-mode . elfeed-protocol-enable)
-  (elfeed-search-mode . elfeed-update)
+  ((elfeed-search-mode . elfeed-protocol-enable)
+   (elfeed-search-mode . elfeed-update))
   :config
   (map! :mode elfeed-search-mode
         :localleader
@@ -916,7 +916,6 @@ Enable syntax highlighting for .vim files
   (setq
    elfeed-protocol-enabled-protocols '(owncloud)
    elfeed-protocol-owncloud-star-tag 'star)
-  (elfeed-protocol-enable)
   )
 #+end_src
 
