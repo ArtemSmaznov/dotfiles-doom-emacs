@@ -46,6 +46,9 @@
   - [[#vim][Vim]]
   - [[#logs][Logs]]
 - [[#rss][RSS]]
+  - [[#elfeed][Elfeed]]
+  - [[#elfeed-org][Elfeed Org]]
+  - [[#elfeed-protocol][Elfeed Protocol]]
 - [[#spell-checking][Spell Checking]]
 - [[#global-keybindings][Global Keybindings]]
 - [[#local-overwrite][Local Overwrite]]
@@ -176,10 +179,10 @@ font string. You generally only need these two:
   :commands (dired dired-jump)
   :config
   (map! :map dired-mode-map
-        :n "h" #'dired-up-directory
-        :n "l" #'dired-find-file
-        :n "S" #'dired-do-symlink
-        :n "-" #'dired-create-empty-file))
+        :desc "Go to parent directory"      :n "h" #'dired-up-directory
+        :desc "Go to directory / Open file" :n "l" #'dired-find-file
+        :desc "Create symlink"              :n "S" #'dired-do-symlink
+        :desc "Create new file"             :n "-" #'dired-create-empty-file))
 #+end_src
 
 Toggle hidden files in Dired
@@ -203,12 +206,13 @@ Peep
   :config
   (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
   (map! :map dired-mode-map
-        :n "p" #'peep-dired)
-  (map! :map peep-dired-mode-map
-        :n "k" #'peep-dired-prev-file
-        :n "j" #'peep-dired-next-file
-        :n "C-k" #'peep-dired-scroll-page-up
-        :n "C-j" #'peep-dired-scroll-page-down)
+        :desc "Preview a file" :n "p" #'peep-dired
+
+        :map peep-dired-mode-map
+        :desc "Preview next file"        :n "k" #'peep-dired-prev-file
+        :desc "Preview prev file"        :n "j" #'peep-dired-next-file
+        :desc "Scroll preview pane up"   :n "C-k" #'peep-dired-scroll-page-up
+        :desc "Scroll preview pane down" :n "C-j" #'peep-dired-scroll-page-down)
 
   (setq
    peep-dired-cleanup-eagerly nil
@@ -255,17 +259,17 @@ Peep
                       (setq display-line-numbers 'visual)))
 
   :config
-  (map! :map org-mode-map
-        :nv "<M-up>"    #'drag-stuff-up
-        :nv "<M-down>"  #'drag-stuff-down
-        :nv "<M-left>"  #'drag-stuff-left
-        :nv "<M-right>" #'drag-stuff-right
-        :n  "<up>"      #'evil-previous-visual-line
-        :n  "<down>"    #'evil-next-visual-line)
-
   (map! :mode org-mode
         :localleader
         :n "B" #'org-babel-tangle)
+
+  (map! :map org-mode-map
+        :desc "Move line(s) up"        :nv "<M-up>"    #'drag-stuff-up
+        :desc "Move line(s) down"      :nv "<M-down>"  #'drag-stuff-down
+        :desc "Move line(s) left"      :nv "<M-left>"  #'drag-stuff-left
+        :desc "Move line(s) right"     :nv "<M-right>" #'drag-stuff-right
+        :desc "Go to prev visual line" :n  "<up>"      #'evil-previous-visual-line
+        :desc "Go to next visual line" :n  "<down>"    #'evil-next-visual-line)
 
   ;; (map! :map org-mode-map
   ;;       :n "<M-h>" #'org-table-previous-field
@@ -530,8 +534,9 @@ A custom variable containing an email address string needs to be defined for eac
         :n "m" #'mu4e-view-mark-for-something
         :n "M" #'mu4e-view-mark-for-move
         :n "t" #'mu4e-view-mark-subthread
-        :n "T" #'mu4e-view-mark-thread)
-  (map! :map mu4e-headers-mode-map
+        :n "T" #'mu4e-view-mark-thread
+
+        :map mu4e-headers-mode-map
         :n "m" #'mu4e-headers-mark-for-something
         :n "M" #'mu4e-headers-mark-for-move
         :n "t" #'mu4e-headers-mark-subthread
@@ -868,6 +873,7 @@ Enable syntax highlighting for .vim files
 #+end_src
 
 * RSS
+** Elfeed
 #+begin_src emacs-lisp
 (use-package! elfeed
   :defer t
@@ -912,6 +918,7 @@ Enable syntax highlighting for .vim files
     (elfeed-search-update--force)))
 #+end_src
 
+** Elfeed Org
 #+begin_src emacs-lisp
 (use-package! elfeed-org
   :after elfeed
@@ -922,6 +929,7 @@ Enable syntax highlighting for .vim files
    rmh-elfeed-org-ignore-tag "ignore"))
 #+end_src
 
+** Elfeed Protocol
 #+begin_src emacs-lisp
 (use-package! elfeed-protocol
   :after elfeed
@@ -964,33 +972,24 @@ Enable syntax highlighting for .vim files
 #+end_src
 
 * Global Keybindings
-Buffers and Bookmarks
 #+begin_src emacs-lisp
 (map! :leader
+      ;; buffer/bookmark
       :prefix "b"
-      ;; :desc "Clone indirect buffer other window" "c" #'clone-indirect-buffer-other-window
       :desc "List bookmarks"                          :e "L" #'list-bookmarks
-      :desc "Save current bookmarks to bookmark file" :e "w" #'bookmark-save)
-#+end_src
+      :desc "Save current bookmarks to bookmark file" :e "w" #'bookmark-save
+      ;; :desc "Clone indirect buffer other window" "c" #'clone-indirect-buffer-other-window
 
-Inserts
-#+begin_src emacs-lisp
-(map! :leader
+      ;; insert
       :prefix "i"
-      :desc "Toilet pagga" :e "t" (cmd! (evil-ex "R!toilet -f pagga ")))
-#+end_src
+      :desc "Toilet pagga" :e "t" (cmd! (evil-ex "R!toilet -f pagga "))
 
-Toggles
-#+begin_src emacs-lisp
-(map! :leader
+      ;; toggle
       :prefix "t"
       :desc "Fill column indicator" :e "|" #'global-display-fill-column-indicator-mode
-      :desc "Toggle scroll bars"    :e "S" #'scroll-bar-mode)
-#+end_src
+      :desc "Toggle scroll bars"    :e "S" #'scroll-bar-mode
 
-Workspaces
-#+begin_src emacs-lisp
-(map! :leader
+      ;; workspace
       :prefix "TAB"
       :desc "Move workspace left"  :e "<" #'+workspace/swap-left
       :desc "Move workspace right" :e ">" #'+workspace/swap-right)
