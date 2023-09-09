@@ -327,7 +327,7 @@ Peep
             '("lu" . "src lua")
             '("py" . "src python")
             '("sh" . "src shell")
-            '("ym" . "src yaml"))
+            '("ya" . "src yaml"))
   ;; extra org structure templates
   (pushnew! org-src-lang-modes
             '("conf-unix" . conf-unix)
