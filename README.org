@@ -875,19 +875,41 @@ Enable syntax highlighting for .vim files
   (map! :leader
         :prefix "o"
         :desc "RSS News" :e "n" #'elfeed)
-  :hook
-  ((elfeed-search-mode . elfeed-protocol-enable)
-   (elfeed-search-mode . elfeed-update))
   :config
   (map! :mode elfeed-search-mode
+        :desc "Remove Selected" :n "D" #'my/elfeed-search-remove-selected
+
+        :mode (elfeed-search-mode elfeed-show-mode)
         :localleader
         :desc "Toggle logs" :n "l" #'elfeed-goodies/toggle-logs
         :desc "Update"      :n "u" #'elfeed-update)
+
   (elfeed-set-timeout 36000)
   (setq
+   elfeed-log-level 'info
+   elfeed-goodies/log-window-position 'left
+   elfeed-goodies/wide-threshold 0.3
+   elfeed-goodies/show-mode-padding 1
+   elfeed-goodies/entry-pane-size 0.5
+   elfeed-goodies/feed-source-column-width 20
    elfeed-use-curl t
    elfeed-search-date-format '("%d-%m-%Y" 10 :left)
-   elfeed-search-filter "@1-month-ago +unread"))
+   elfeed-search-filter "@1-month-ago +unread")
+
+  (defun my/elfeed-db-remove-entry (id)
+    "Removes elfeed entry for given ID"
+    (avl-tree-delete elfeed-db-index id)
+    (remhash id elfeed-db-entries))
+
+  (defun my/elfeed-search-remove-selected ()
+    "Remove selected entries from elfeed database"
+    (interactive)
+    (let* ((entries (elfeed-search-selected))
+           (count (length entries)))
+      (when (y-or-n-p (format "Delete %d entires?" count))
+        (cl-loop for entry in entries
+                 do (my/elfeed-db-remove-entry (elfeed-entry-id entry)))))
+    (elfeed-search-update--force)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -904,19 +926,21 @@ Enable syntax highlighting for .vim files
 (use-package! elfeed-protocol
   :after elfeed
   :config
-  (setq elfeed-protocol-tags nil)
+  (defvar elfeed-protocol-orig-feeds nil
+    "Store original content of `elfeed-feeds'.")
   (defadvice elfeed (after configure-elfeed-feeds activate)
-    ;; "Make elfeed-org autotags rules works with elfeed-protocol."
+    "Make elfeed-org autotags rules works with elfeed-protocol."
     (setq
-     elfeed-protocol-tags elfeed-feeds
+     elfeed-protocol-orig-feeds elfeed-feeds
      elfeed-feeds (list
-                        (list (password-store-get-field "tools/elfeed-protocol" "url")
-                              :password (password-store-get "tools/elfeed-protocol")
-                              :autotags elfeed-protocol-tags))))
+                   (list (password-store-get-field "tools/elfeed-protocol" "url")
+                         :password (password-store-get "tools/elfeed-protocol")
+                         :autotags  elfeed-protocol-orig-feeds)))
+    (elfeed-update))
   (setq
    elfeed-protocol-enabled-protocols '(owncloud)
    elfeed-protocol-owncloud-star-tag 'star)
-  )
+  (elfeed-protocol-enable))
 #+end_src
 
 * Spell Checking
