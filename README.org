@@ -486,6 +486,7 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
         :desc "Sync with server" :n "S" #'org-caldav-sync)
 
   (setq
+   org-caldav-url (password-store-get-field "tools/org-caldav" "url")
    org-caldav-delete-calendar-entries 'always
    org-caldav-delete-org-entries 'ask
    org-caldav-show-sync-results nil
