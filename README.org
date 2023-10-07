@@ -938,12 +938,12 @@ Enable syntax highlighting for .vim files
   :after elfeed
   :config
   (defvar elfeed-protocol-orig-feeds nil
-    "Store original content of `elfeed-feeds'.")
-  (defadvice elfeed (after configure-elfeed-feeds activate)
+    "Store original content of `elfeed-protocol-feeds'.")
+  (defadvice elfeed (after configure-elfeed-protocol-feeds activate)
     "Make elfeed-org autotags rules works with elfeed-protocol."
     (setq
-     elfeed-protocol-orig-feeds elfeed-feeds
-     elfeed-feeds (list
+     elfeed-protocol-orig-feeds elfeed-protocol-feeds
+     elfeed-protocol-feeds (list
                    (list (password-store-get-field "tools/elfeed-protocol" "url")
                          :password (password-store-get "tools/elfeed-protocol")
                          :autotags  elfeed-protocol-orig-feeds)))
