@@ -659,7 +659,8 @@ Function used by =mbsync= for authentication with the email server
 
    ;; enable granular diff-highlights for all hunks
    ;; change to t if performance is bad
-   magit-diff-refine-hunk 'all))
+   magit-diff-refine-hunk 'all
+   forge-pull-notifications t))
 #+end_src
 
 Show list of to-do items in Magit status buffer
