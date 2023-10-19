@@ -15,18 +15,16 @@
 ;;      directory (for easy access to its source code).
 
 (setq +literate-config-file
-  (concat doom-user-dir "README.org"))
+      (concat doom-user-dir "README.org"))
 
-(setq
-   ;; holiday-local-holidays nil
-   ;; holiday-general-holidays nil
-   ;; holiday-christian-holidays nil
-   ;; holiday-solar-holidays nil
-   holiday-oriental-holidays nil
-   holiday-hebrew-holidays nil
-   holiday-islamic-holidays nil
-   holiday-bahai-holidays nil
-   )
+(setq holiday-oriental-holidays nil
+      holiday-hebrew-holidays nil
+      holiday-islamic-holidays nil
+      holiday-bahai-holidays nil)
+;; holiday-local-holidays nil
+;; holiday-general-holidays nil
+;; holiday-christian-holidays nil
+;; holiday-solar-holidays nil
 
 (doom! :input
        ;;bidi                    ; (tfel ot) thgir etirw uoy gnipleh
@@ -172,7 +170,7 @@
        (org                      ; organize your plain life in plain text
         +dragandrop              ; drag-and-drop support for images and files
         +journal                 ; enable org journal
-        ;; +present
+        +present
         +pretty                  ; replace asterisks with pretty org bullets
         +publish)                ; create static websites with org
        (php +lsp)                ; perl's insecure younger brother
