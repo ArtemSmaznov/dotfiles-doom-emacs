@@ -172,6 +172,7 @@
         +journal                 ; enable org journal
         +present
         +pretty                  ; replace asterisks with pretty org bullets
+        +roam2
         +publish)                ; create static websites with org
        (php +lsp)                ; perl's insecure younger brother
        ;;plantuml                ; diagrams for confusing people more

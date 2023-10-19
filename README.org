@@ -15,6 +15,7 @@
   - [[#which-key][Which Key]]
 - [[#org-mode][Org Mode]]
   - [[#org][Org]]
+  - [[#roam][Roam]]
   - [[#org-agenda][Org Agenda]]
   - [[#org-bullets][Org Bullets]]
   - [[#org-auto-tangle][Org Auto Tangle]]
@@ -243,12 +244,13 @@ Peep
   :defer t
   :init
   (setq
-   org-directory (if IS-MAC "~/Documents/org"
-                   (expand-file-name "org" (xdg-user-dir "DOCUMENTS")))
+   org-directory (if IS-MAC "~/Documents/notes/"
+                   (expand-file-name "notes/" (xdg-user-dir "DOCUMENTS")))
    org-agenda-files          (list org-directory)
    org-default-notes-file    (expand-file-name "notes.org" org-directory)
    +org-capture-journal-file (expand-file-name "journal.org" org-directory)
-   org-archive-location      (expand-file-name "archive.org::datetree/" org-directory)) ;; can also use "archive.org::datetrea/* %s"
+   org-archive-location      (expand-file-name "archive.org::datetree/" org-directory) ;; can also use "archive.org::datetrea/* %s"
+   org-id-locations-file     (expand-file-name ".orgids" org-directory))
 
   :hook (org-mode . (lambda ()
                       (make-local-variable 'display-line-numbers)
@@ -338,6 +340,14 @@ Peep
   (pushnew! org-src-lang-modes
             '("conf-unix" . conf-unix)
             '("toml"      . conf-toml)))
+#+end_src
+
+** Roam
+#+begin_src emacs-lisp
+(use-package! org-roam
+  :after org
+  :config
+  (setq org-roam-directory org-directory))
 #+end_src
 
 ** Org Agenda
@@ -502,7 +512,6 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
             :inbox (file+headline ,(expand-file-name "todo.org" org-directory) "Inbox")
             ;; :inbox ,(expand-file-name "inbox-personal.org" org-directory)
             :files (,(expand-file-name "todo.org" org-directory)
-                    ,(expand-file-name "agenda.org" org-directory)
                     ,(expand-file-name "archive.org" org-directory)))
      (:calendar-id "housing"
             :select-tags ("calhsn")
@@ -928,7 +937,7 @@ Enable syntax highlighting for .vim files
   :after elfeed
   :config
   (setq
-   rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory))
+   rmh-elfeed-org-files (list (expand-file-name "rss.org" org-directory))
    rmh-elfeed-org-tree-id "elfeed"
    rmh-elfeed-org-ignore-tag "ignore"))
 #+end_src
