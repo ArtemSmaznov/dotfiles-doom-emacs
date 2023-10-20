@@ -688,6 +688,19 @@ Show list of to-do items in Magit status buffer
             ))
 #+end_src
 
+Code review
+#+begin_src emacs-lisp
+(use-package! code-review
+  :after magit
+  :defer t
+  :config
+  (map! :map magit-mode-map
+        "R" #'code-review-forge-pr-at-point
+
+        :map forge-topic-mode-map
+        "R" #'code-review-forge-pr-at-point))
+#+end_src
+
 ** Projectile
 #+begin_src emacs-lisp
 (use-package! projectile
