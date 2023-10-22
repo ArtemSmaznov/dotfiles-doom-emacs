@@ -31,6 +31,7 @@
   - [[#ledger][Ledger]]
 - [[#development-tools][Development Tools]]
   - [[#magit][Magit]]
+  - [[#ansible][Ansible]]
   - [[#projectile][Projectile]]
   - [[#treemacs][Treemacs]]
   - [[#completion][Completion]]
@@ -704,6 +705,16 @@ Code review
         "R" #'code-review-forge-pr-at-point))
 #+end_src
 
+** Ansible
+#+begin_src emacs-lisp
+(use-package! ansible
+  :defer t
+  :hook
+  (yaml-mode . (lambda ()
+                 (if (s-contains? "ansible" (file-name-directory buffer-file-name) t)
+                     (ansible 1)))))
+#+end_src
+
 ** Projectile
 #+begin_src emacs-lisp
 (use-package! projectile
@@ -835,8 +846,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   :defer t
   :hook
   (yaml-mode . (lambda ()
-                   (spell-fu-mode -1)
-                   )))
+                   (spell-fu-mode -1))))
 #+end_src
 
 ** Json
@@ -854,8 +864,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   :defer t
   :hook
   (jinja2-mode . (lambda ()
-                   (spell-fu-mode -1)
-                   )))
+                   (spell-fu-mode -1))))
 #+end_src
 
 ** Cucumber
@@ -897,8 +906,7 @@ Enable syntax highlighting for .vim files
   (syslog-mode . (lambda ()
                    (make-local-variable 'display-line-numbers-type)
                    (setq display-line-numbers-type t)
-                   (display-line-numbers-mode 1)
-                   )))
+                   (display-line-numbers-mode 1))))
 #+end_src
 
 * RSS
