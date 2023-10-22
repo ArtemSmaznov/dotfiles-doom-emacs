@@ -498,7 +498,7 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
         :desc "Sync with server" :n "S" #'org-caldav-sync)
 
   (setq
-   org-caldav-url (password-store-get-field "tools/org-caldav" "url")
+   org-caldav-url (concat "https://" my/nextcloud/url "/remote.php/dav/calendars/" my/username)
    org-caldav-delete-calendar-entries 'always
    org-caldav-delete-org-entries 'ask
    org-caldav-show-sync-results nil
@@ -964,9 +964,9 @@ Enable syntax highlighting for .vim files
     "Make elfeed-org autotags rules works with elfeed-protocol."
     (setq
      elfeed-protocol-feeds (list
-                   (list (password-store-get-field "tools/elfeed-protocol" "url")
-                         :password (password-store-get "tools/elfeed-protocol")
-                         :autotags  elfeed-feeds)))
+                            (list (concat "owncloud+https://" my/username "@" my/nextcloud/url)
+                                  :use-authinfo t
+                                  :autotags  elfeed-feeds)))
     (elfeed-update))
 
   (setq
