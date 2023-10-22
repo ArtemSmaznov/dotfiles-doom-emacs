@@ -1,3 +1,6 @@
+:PROPERTIES:
+:ID:       f8753b37-4a40-43d8-af24-1542cdfea063
+:END:
 #+title:       Doom Emacs
 #+author:      Artem Smaznov
 #+description: Emacs is to Vim as Vim is to Notepad
