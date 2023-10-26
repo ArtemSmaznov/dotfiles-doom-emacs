@@ -16,6 +16,7 @@
   - [[#dired][Dired]]
   - [[#evil-mode][Evil Mode]]
   - [[#which-key][Which Key]]
+  - [[#xdg][XDG]]
 - [[#org-mode][Org Mode]]
   - [[#org][Org]]
   - [[#roam][Roam]]
@@ -237,7 +238,14 @@ Peep
 ** Which Key
 #+begin_src emacs-lisp
 (use-package! which-key
-  :init (setq which-key-idle-delay 0.4))
+  :init
+  (setq which-key-idle-delay 0.4))
+#+end_src
+
+** XDG
+#+begin_src emacs-lisp
+(use-package! xdg
+  :demand t)
 #+end_src
 
 * Org Mode
@@ -246,6 +254,7 @@ Peep
 (use-package! org
   :after xdg
   :defer t
+  :commands org-capture-goto-target
   :init
   (setq
    org-directory (if IS-MAC "~/Documents/notes/"
