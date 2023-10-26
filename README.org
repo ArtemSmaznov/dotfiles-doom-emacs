@@ -673,9 +673,14 @@ Function used by =mbsync= for authentication with the email server
 ** Magit
 #+begin_src emacs-lisp
 (use-package! magit
+  :after xdg
   :defer t
   :config
   (setq
+   magit-repository-directories `((,(xdg-config-home) . 1)
+                                  ("~/.local/bin" . 0)
+                                  ("~/projects" . 5))
+
    magit-revision-show-gravatars t ;; enable gravatars
    ;; magit-display-buffer-function 'magit-display-buffer-traditional ;; open magit in a side window
 
