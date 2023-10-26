@@ -106,7 +106,7 @@ font string. You generally only need these two:
  global-prettify-symbols-mode t)
 
 (if IS-MAC (setq
- doom-unicode-font        (font-spec :family "DejaVuSansM Nerd Font Mono" :size 22)))
+ doom-symbol-font         (font-spec :family "STIX Two Math")))
 
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
