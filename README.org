@@ -844,6 +844,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 (use-package! groovy-mode
   :defer t
   :mode
+  "/Jenkinsfile.*\\'"
   "\\.pipe\\'"
   "\\.PIPE\\'"
 
