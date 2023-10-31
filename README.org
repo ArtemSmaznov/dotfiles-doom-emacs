@@ -31,7 +31,7 @@
   - [[#email][Email]]
   - [[#ledger][Ledger]]
 - [[#development-tools][Development Tools]]
-  - [[#magit][Magit]]
+  - [[#git][Git]]
   - [[#ansible][Ansible]]
   - [[#projectile][Projectile]]
   - [[#treemacs][Treemacs]]
@@ -670,7 +670,8 @@ Function used by =mbsync= for authentication with the email server
 #+end_src
 
 * Development Tools
-** Magit
+** Git
+*** Magit
 #+begin_src emacs-lisp
 (use-package! magit
   :after xdg
@@ -687,10 +688,69 @@ Function used by =mbsync= for authentication with the email server
    ;; enable granular diff-highlights for all hunks
    ;; change to t if performance is bad
    magit-diff-refine-hunk 'all
-   forge-pull-notifications t))
+   forge-pull-notifications t
+   magit-repolist-column-flag-alist ' ((magit-untracked-files . "?")
+                                       (magit-unstaged-files . "!")
+                                       (magit-staged-files . "+"))
+   magit-repolist-columns ' (("" 10 magit-repolist-column-branch ((:right-align t)))
+                             ("B<U" 3 magit-repolist-column-unpulled-from-upstream ((:right-align t) (:sort <)))
+                             ("B>U" 3 magit-repolist-column-unpushed-to-upstream ((:right-align t) (:sort <)))
+                             ("F" 3 magit-repolist-column-flags nil)
+                             ("Name" 25 magit-repolist-column-ident nil)
+                             ("Version" 25 magit-repolist-column-version ((:sort magit-repolist-version<)))
+                             ("Path" 99 magit-repolist-column-path nil))
+
+   magit-submodule-list-columns ' (("Path" 40 magit-modulelist-column-path nil)
+                                   ("Version" 25 magit-repolist-column-version
+                                    ((:sort magit-repolist-version<)))
+                                   ("Branch" 20 magit-repolist-column-branch nil)
+                                   ("B<U" 3 magit-repolist-column-unpulled-from-upstream
+                                    ((:right-align t)
+                                     (:sort <)))
+                                   ("B>U" 3 magit-repolist-column-unpushed-to-upstream
+                                    ((:right-align t)
+                                     (:sort <)))
+                                   ("B<P" 3 magit-repolist-column-unpulled-from-pushremote
+                                    ((:right-align t)
+                                     (:sort <)))
+                                   ("B>P" 3 magit-repolist-column-unpushed-to-pushremote
+                                    ((:right-align t)
+                                     (:sort <)))
+                                   ("B" 3 magit-repolist-column-branches
+                                    ((:right-align t)
+                                     (:sort <)))
+                                   ("S" 3 magit-repolist-column-stashes
+                                    ((:right-align t)
+                                     (:sort <))))))
 #+end_src
 
-Show list of to-do items in Magit status buffer
+*** Forge
+#+begin_src emacs-lisp
+(use-package! forge
+  :after magit
+  :defer t
+  :config
+  (setq forge-repository-list-columns '(("Owner" 20 t nil owner nil)
+                                        ("N" 1 t nil sparse-p nil)
+                                        ("S" 1 t nil selective-p nil)
+                                        ("Name" 50 t nil name nil)
+                                        ("Worktree" 99 t nil worktree nil))))
+#+end_src
+
+*** Code Review
+#+begin_src emacs-lisp
+(use-package! code-review
+  :after magit
+  :defer t
+  :config
+  (map! :map magit-mode-map
+        "R" #'code-review-forge-pr-at-point
+
+        :map forge-topic-mode-map
+        "R" #'code-review-forge-pr-at-point))
+#+end_src
+
+*** Todos
 #+begin_src emacs-lisp
 (use-package! magit-todos
   :after magit
@@ -704,19 +764,6 @@ Show list of to-do items in Magit status buffer
             "google-chrome/"
             "coc/"
             ))
-#+end_src
-
-Code review
-#+begin_src emacs-lisp
-(use-package! code-review
-  :after magit
-  :defer t
-  :config
-  (map! :map magit-mode-map
-        "R" #'code-review-forge-pr-at-point
-
-        :map forge-topic-mode-map
-        "R" #'code-review-forge-pr-at-point))
 #+end_src
 
 ** Ansible
