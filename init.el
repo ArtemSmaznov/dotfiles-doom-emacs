@@ -14,6 +14,9 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
+(if IS-MAC
+    (add-to-list 'default-frame-alist '(undecorated-round . t)))
+
 (setq +literate-config-file
       (concat doom-user-dir "README.org"))
 
