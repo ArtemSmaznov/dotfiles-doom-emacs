@@ -176,7 +176,11 @@ font string. You generally only need these two:
 (use-package! doom-modeline
   :config
   (remove-hook 'doom-modeline-mode-hook #'size-indication-mode) ; filesize in modeline
-  (setq doom-modeline-major-mode-icon t))
+  (setq
+   doom-modeline-height 32
+   doom-modeline-column-zero-based nil
+   doom-modeline-indent-info t
+   doom-modeline-major-mode-icon t))
 #+end_src
 
 ** Dired
@@ -554,6 +558,9 @@ A custom variable containing an email address string needs to be defined for eac
 #+begin_src emacs-lisp
 (use-package! mu4e
   :defer t
+  :init
+  (setq
+   doom-modeline-mu4e t)
   :config
   (map! :map mu4e-view-mode-map
         :n "m" #'mu4e-view-mark-for-something
@@ -729,12 +736,16 @@ Function used by =mbsync= for authentication with the email server
 (use-package! forge
   :after magit
   :defer t
+  :init
+  (setq
+   doom-modeline-github t)
   :config
-  (setq forge-repository-list-columns '(("Owner" 20 t nil owner nil)
-                                        ("N" 1 t nil sparse-p nil)
-                                        ("S" 1 t nil selective-p nil)
-                                        ("Name" 50 t nil name nil)
-                                        ("Worktree" 99 t nil worktree nil))))
+  (setq
+   forge-repository-list-columns '(("Owner" 20 t nil owner nil)
+                                   ("N" 1 t nil sparse-p nil)
+                                   ("S" 1 t nil selective-p nil)
+                                   ("Name" 50 t nil name nil)
+                                   ("Worktree" 99 t nil worktree nil))))
 #+end_src
 
 *** Code Review
