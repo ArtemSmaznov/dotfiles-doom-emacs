@@ -249,7 +249,7 @@ Peep
 ** XDG
 #+begin_src emacs-lisp
 (use-package! xdg
-  :demand t)
+  :defer nil)
 #+end_src
 
 * Org Mode
