@@ -557,6 +557,7 @@ A custom variable containing an email address string needs to be defined for eac
 
 #+begin_src emacs-lisp
 (use-package! mu4e
+  :after xdg
   :defer t
   :init
   (setq
@@ -575,6 +576,7 @@ A custom variable containing an email address string needs to be defined for eac
         :n "T" #'mu4e-headers-mark-thread)
 
   (setq
+   mu4e-get-mail-command (concat "mbsync -a -c " (xdg-config-home) "/isync/mbsyncrc" )
    mu4e-update-interval (* 15 60) ;; auto-sync interval in seconds
    mu4e-maildir-shortcuts
    '(("/Inbox"             . ?i)
@@ -646,7 +648,7 @@ A custom variable containing an email address string needs to be defined for eac
                (mu4e-trash-folder  . "/[Gmail]/Trash")))))
 
      ;; start mu4e in the background so it auto-syncs emails
-     ;; (mu4e t)
+     (mu4e t)
 
      ;; modeline
      (setq
