@@ -25,11 +25,10 @@
   - [[#org-auto-tangle][Org Auto Tangle]]
   - [[#ox][Ox]]
 - [[#office-tools][Office Tools]]
-  - [[#authinfo][AuthInfo]]
-  - [[#presentations][Presentations]]
-  - [[#calendar][Calendar]]
   - [[#email][Email]]
+  - [[#calendar][Calendar]]
   - [[#ledger][Ledger]]
+  - [[#presentations][Presentations]]
 - [[#development-tools][Development Tools]]
   - [[#git][Git]]
   - [[#ansible][Ansible]]
@@ -423,129 +422,13 @@ We need ox-man for "Org eXporting" to manpage format.
 #+end_src
 
 * Office Tools
-** AuthInfo
+** Email
+*** AuthInfo
 Setting up =~/.authinfo.gpg= with credentials
 #+begin_example authinfo
 machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 #+end_example
 
-** Presentations
-#+begin_src emacs-lisp
-(use-package! org-tree-slide
-  :after org
-  :defer t
-  :init
-  (map! :map org-mode-map
-        :leader
-        :prefix "t"
-        :desc "Presentation" :e "p" #'org-tree-slide-mode)
-
-  :hook ((org-tree-slide-play . my/presentation-start)
-         (org-tree-slide-stop . my/presentation-end))
-
-  :config
-  (map! :map org-tree-slide-mode-map
-        "C-h"   #'org-tree-slide-move-previous-tree
-        "C-l"   #'org-tree-slide-move-next-tree
-        "C-SPC" #'org-tree-slide-content)
-
-  (setq
-   org-tree-slide-activate-message "Presentation started!"
-   org-tree-slide-deactivate-message "Presentation finished!"
-   org-tree-slide-slide-in-effect t
-   org-tree-slide-header t
-   org-tree-slide-breadcrumbs " > "
-   org-image-actual-width nil))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun my/presentation-start ()
-  (writeroom-mode 1)
-  (display-line-numbers-mode 0)
-  (org-display-inline-images) ;; Can also use org-startup-with-inline-images
-  )
-
-(defun my/presentation-end ()
-  (writeroom-mode 0)
-  (display-line-numbers-mode 1)
-  )
-#+end_src
-
-** Calendar
-*** CalFW
-#+begin_src emacs-lisp
-(use-package! calfw
-  :defer t
-  :init
-  (map! :leader
-        :prefix "o"
-        :desc "Calendar" :e "c" #'cfw:open-org-calendar)
-  :config
-  (map! :map cfw:calendar-mode-map
-        :m "0"  #'cfw:navi-goto-week-begin-command
-        :m "gd" #'cfw:org-goto-date
-        :m "zd" #'cfw:change-view-day
-        :m "zw" #'cfw:change-view-week
-        :m "zm" #'cfw:change-view-month
-        :m "zt" #'cfw:change-view-two-weeks
-        :m "T"  #'cfw:change-view-two-weeks) ;; not active due to evil-snipe and evil-find-char
-
-  (setq
-   calendar-week-start-day 1
-   calendar-date-style 'european))
-#+end_src
-
-*** iCalendar
-#+begin_src emacs-lisp
-(use-package! icalendar
-  :defer t
-  :config
-  (setq
-   org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
-   org-icalendar-use-deadline '(event-if-todo-not-done)))
-#+end_src
-
-*** CalDAV sync
-#+begin_src emacs-lisp
-(use-package! org-caldav
-  :after calfw
-  :config
-  (map! :map cfw:calendar-mode-map
-        :localleader
-        :desc "Sync with server" :n "S" #'org-caldav-sync)
-
-  (setq
-   org-caldav-url (concat "https://" my/nextcloud/url "/remote.php/dav/calendars/" my/username)
-   org-caldav-delete-calendar-entries 'always
-   org-caldav-delete-org-entries 'ask
-   org-caldav-show-sync-results nil
-   org-caldav-save-directory (expand-file-name ".caldav/" org-directory)
-   org-caldav-backup-file (expand-file-name "backup.org" org-caldav-save-directory)
-   org-caldav-location-newline-replacement ","
-   org-caldav-exclude-tags '("nocal")
-   org-caldav-calendars `(
-     (:calendar-id "personal"
-            :select-tags ("calgnr")
-            :inbox (file+headline ,(expand-file-name "todo.org" org-directory) "Inbox")
-            ;; :inbox ,(expand-file-name "inbox-personal.org" org-directory)
-            :files (,(expand-file-name "todo.org" org-directory)
-                    ,(expand-file-name "archive.org" org-directory)))
-     (:calendar-id "housing"
-            :select-tags ("calhsn")
-            :inbox (file+headline ,(expand-file-name "housing.org" org-directory) "Inbox")
-            ;; :inbox ,(expand-file-name "inbox-housing.org" org-directory)
-            :files (,(expand-file-name "housing.org" org-directory)
-                    ,(expand-file-name "archive.org" org-directory)))
-     (:calendar-id "work"
-            :select-tags ("calwrk")
-            :inbox (file+headline ,(expand-file-name "work.org" org-directory) "Inbox")
-            ;; :inbox ,(expand-file-name "inbox-work.org" org-directory)
-            :files (,(expand-file-name "work.org" org-directory)
-                    ,(expand-file-name "archive.org" org-directory)))
-     )))
-#+end_src
-
-** Email
 *** mu4e
 + Arch Linux: ~$ pacman -S isync~
               ~$ paru -S mu~
@@ -666,6 +549,80 @@ Function used by =mbsync= for authentication with the email server
         nil)))
 #+end_src
 
+** Calendar
+*** CalFW
+#+begin_src emacs-lisp
+(use-package! calfw
+  :defer t
+  :init
+  (map! :leader
+        :prefix "o"
+        :desc "Calendar" :e "c" #'cfw:open-org-calendar)
+  :config
+  (map! :map cfw:calendar-mode-map
+        :m "0"  #'cfw:navi-goto-week-begin-command
+        :m "gd" #'cfw:org-goto-date
+        :m "zd" #'cfw:change-view-day
+        :m "zw" #'cfw:change-view-week
+        :m "zm" #'cfw:change-view-month
+        :m "zt" #'cfw:change-view-two-weeks
+        :m "T"  #'cfw:change-view-two-weeks) ;; not active due to evil-snipe and evil-find-char
+
+  (setq
+   calendar-week-start-day 1
+   calendar-date-style 'european))
+#+end_src
+
+*** iCalendar
+#+begin_src emacs-lisp
+(use-package! icalendar
+  :defer t
+  :config
+  (setq
+   org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
+   org-icalendar-use-deadline '(event-if-todo-not-done)))
+#+end_src
+
+*** CalDAV sync
+#+begin_src emacs-lisp
+(use-package! org-caldav
+  :after calfw
+  :config
+  (map! :map cfw:calendar-mode-map
+        :localleader
+        :desc "Sync with server" :n "S" #'org-caldav-sync)
+
+  (setq
+   org-caldav-url (concat "https://" my/nextcloud/url "/remote.php/dav/calendars/" my/username)
+   org-caldav-delete-calendar-entries 'always
+   org-caldav-delete-org-entries 'ask
+   org-caldav-show-sync-results nil
+   org-caldav-save-directory (expand-file-name ".caldav/" org-directory)
+   org-caldav-backup-file (expand-file-name "backup.org" org-caldav-save-directory)
+   org-caldav-location-newline-replacement ","
+   org-caldav-exclude-tags '("nocal")
+   org-caldav-calendars `(
+     (:calendar-id "personal"
+            :select-tags ("calgnr")
+            :inbox (file+headline ,(expand-file-name "todo.org" org-directory) "Inbox")
+            ;; :inbox ,(expand-file-name "inbox-personal.org" org-directory)
+            :files (,(expand-file-name "todo.org" org-directory)
+                    ,(expand-file-name "archive.org" org-directory)))
+     (:calendar-id "housing"
+            :select-tags ("calhsn")
+            :inbox (file+headline ,(expand-file-name "housing.org" org-directory) "Inbox")
+            ;; :inbox ,(expand-file-name "inbox-housing.org" org-directory)
+            :files (,(expand-file-name "housing.org" org-directory)
+                    ,(expand-file-name "archive.org" org-directory)))
+     (:calendar-id "work"
+            :select-tags ("calwrk")
+            :inbox (file+headline ,(expand-file-name "work.org" org-directory) "Inbox")
+            ;; :inbox ,(expand-file-name "inbox-work.org" org-directory)
+            :files (,(expand-file-name "work.org" org-directory)
+                    ,(expand-file-name "archive.org" org-directory)))
+     )))
+#+end_src
+
 ** Ledger
 #+begin_src emacs-lisp
 (use-package! ledger-mode
@@ -676,6 +633,48 @@ Function used by =mbsync= for authentication with the email server
         :e "c" #'ledger-mode-clean-buffer)
 
   (setq ledger-default-date-format "%Y-%m-%d"))
+#+end_src
+
+** Presentations
+#+begin_src emacs-lisp
+(use-package! org-tree-slide
+  :after org
+  :defer t
+  :init
+  (map! :map org-mode-map
+        :leader
+        :prefix "t"
+        :desc "Presentation" :e "p" #'org-tree-slide-mode)
+
+  :hook ((org-tree-slide-play . my/presentation-start)
+         (org-tree-slide-stop . my/presentation-end))
+
+  :config
+  (map! :map org-tree-slide-mode-map
+        "C-h"   #'org-tree-slide-move-previous-tree
+        "C-l"   #'org-tree-slide-move-next-tree
+        "C-SPC" #'org-tree-slide-content)
+
+  (setq
+   org-tree-slide-activate-message "Presentation started!"
+   org-tree-slide-deactivate-message "Presentation finished!"
+   org-tree-slide-slide-in-effect t
+   org-tree-slide-header t
+   org-tree-slide-breadcrumbs " > "
+   org-image-actual-width nil))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my/presentation-start ()
+  (writeroom-mode 1)
+  (display-line-numbers-mode 0)
+  (org-display-inline-images) ;; Can also use org-startup-with-inline-images
+  )
+
+(defun my/presentation-end ()
+  (writeroom-mode 0)
+  (display-line-numbers-mode 1)
+  )
 #+end_src
 
 * Development Tools
