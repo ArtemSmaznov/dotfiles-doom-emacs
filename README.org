@@ -17,6 +17,7 @@
   - [[#evil-mode][Evil Mode]]
   - [[#which-key][Which Key]]
   - [[#xdg][XDG]]
+  - [[#smart-parens][Smart Parens]]
 - [[#org-mode][Org Mode]]
   - [[#org][Org]]
   - [[#roam][Roam]]
@@ -249,6 +250,13 @@ Peep
 #+begin_src emacs-lisp
 (use-package! xdg
   :defer nil)
+#+end_src
+
+** Smart Parens
+#+begin_src emacs-lisp
+(use-package! smartparens
+  :config
+  (smartparens-global-strict-mode 1))
 #+end_src
 
 * Org Mode
