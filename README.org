@@ -289,9 +289,13 @@ Peep
 
 ** Smart Parens
 #+begin_src emacs-lisp
-(use-package! smartparens
+(use-package! smartparens-mode
+  :ensure smartparens
+  ;; :defer t
+  :hook (js-mode . smartparens-strict-mode)
+
   :config
-  (smartparens-global-strict-mode 1))
+  (require 'smartparens-config))
 #+end_src
 
 * Org Mode
