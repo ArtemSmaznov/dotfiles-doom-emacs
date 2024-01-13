@@ -1119,8 +1119,8 @@ Enable syntax highlighting for .vim files
   (spell-fu-mode . (lambda ()
                      (spell-fu-dictionary-add (spell-fu-get-ispell-dictionary "ru"))
                      (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "ru"      (expand-file-name "dict/ru.pws" (xdg-data-home))))
-                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "finance" (expand-file-name "dict/finance.en.pws" (xdg-data-home))))
-                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "work"    (expand-file-name "dict/work.en.pws" (xdg-data-home))))
+                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "finance" (expand-file-name "dict/en.finance.pws" (xdg-data-home))))
+                     (spell-fu-dictionary-add (spell-fu-get-personal-dictionary "work"    (expand-file-name "dict/en.work.pws" (xdg-data-home))))
                      ))
 
   :config
