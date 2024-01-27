@@ -464,8 +464,7 @@ Put at the header of the =Org= document to enable auto tangle on save for it
 We need ox-man for "Org eXporting" to manpage format.
 #+begin_src emacs-lisp
 (after! org
-  (use-package ox-man)
-  (use-package ox-gemini))
+  (use-package ox-man))
 #+end_src
 
 * Office Tools

@@ -22,7 +22,6 @@
 (package! hyperbole)
 (package! ivy-posframe)
 (package! org-auto-tangle)
-(package! ox-gemini)
 (package! peep-dired)
 (package! resize-window)
 (package! tldr)
