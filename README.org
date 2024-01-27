@@ -1142,10 +1142,15 @@ Enable syntax highlighting for .vim files
       :prefix "i"
       :desc "Toilet pagga" :e "t" (cmd! (evil-ex "R!toilet -f pagga "))
 
+      ;; <localleader>
+      :prefix "m"
+      :desc "Justify text"    :e "j" #'set-justification
+
       ;; toggle
       :prefix "t"
-      :desc "Fill column indicator" :e "|" #'global-display-fill-column-indicator-mode
+      :desc "Toggle auto fill mode" :e "a" #'auto-fill-mode
       :desc "Toggle scroll bars"    :e "S" #'scroll-bar-mode
+      :desc "Fill column indicator" :e "|" #'global-display-fill-column-indicator-mode
 
       ;; workspace
       :prefix "TAB"

@@ -27,6 +27,7 @@
 (package! resize-window)
 (package! tldr)
 (package! wc-mode)
+(package! lorem-ipsum)
 
 ;; lsp
 (package! feature-mode)
