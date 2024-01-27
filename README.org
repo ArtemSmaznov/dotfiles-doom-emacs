@@ -283,8 +283,7 @@ Peep
 
 ** XDG
 #+begin_src emacs-lisp
-(use-package! xdg
-  :defer nil)
+(use-package! xdg)
 #+end_src
 
 ** Smart Parens
@@ -302,8 +301,6 @@ Peep
 ** Org
 #+begin_src emacs-lisp
 (use-package! org
-  :after xdg
-  :defer t
   :commands org-capture-goto-target
   :init
   (setq
@@ -487,7 +484,6 @@ A custom variable containing an email address string needs to be defined for eac
 
 #+begin_src emacs-lisp
 (use-package! mu4e
-  :after xdg
   :defer t
   :init
   (setq
@@ -729,7 +725,6 @@ Function used by =mbsync= for authentication with the email server
 *** Magit
 #+begin_src emacs-lisp
 (use-package! magit
-  :after xdg
   :defer t
   :config
   (setq
