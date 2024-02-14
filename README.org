@@ -837,7 +837,12 @@ Function used by =mbsync= for authentication with the email server
   :init
   (setq projectile-switch-project-action #'projectile-dired)
   (when (file-directory-p "~/projects")
-    (setq projectile-project-search-path '("~/projects"))))
+    (setq projectile-project-search-path '("~/projects")))
+  :config
+  (map! :leader
+        :prefix "p"
+        :desc "Run project"        :e "A" #'projectile-run-project
+        :desc "Project substitute" :e "R" #'projectile-replace-regexp))
 #+end_src
 
 ** Treemacs
