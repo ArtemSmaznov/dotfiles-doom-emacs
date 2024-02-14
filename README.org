@@ -311,7 +311,6 @@ Peep
    +org-capture-journal-file (expand-file-name "journal.org" org-directory)
    org-archive-location      (expand-file-name "archive.org::datetree/" org-directory) ;; can also use "archive.org::datetrea/* %s"
    org-id-locations-file     (expand-file-name ".orgids" org-directory))
-   (org-eldoc-load)
 
   :hook (org-mode . (lambda ()
                       (make-local-variable 'display-line-numbers)
