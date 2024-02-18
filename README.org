@@ -47,6 +47,7 @@
   - [[#groovy][Groovy]]
   - [[#yaml][Yaml]]
   - [[#json][Json]]
+  - [[#conf][Conf]]
   - [[#jinja][Jinja]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
@@ -976,6 +977,22 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   :mode
   "\\.jsonc\\'"
 )
+#+end_src
+
+** Conf
+#+begin_src emacs-lisp
+(use-package! conf-mode
+  :defer t
+  :mode
+  "\\.automount\\'"
+  "\\.mount\\'"
+  "\\.path\\'"
+  "\\.service\\'"
+  "\\.slice\\'"
+  "\\.socket\\'"
+  "\\.target\\'"
+  "\\.timer\\'"
+  )
 #+end_src
 
 ** Jinja
