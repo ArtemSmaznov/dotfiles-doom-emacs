@@ -813,11 +813,24 @@ Function used by =mbsync= for authentication with the email server
   (magit-mode . magit-todos-mode)
   :config
   (pushnew! magit-todos-exclude-globs
-            "BraveSoftware/"
+            "Basemark*/"
+            "Brave*/"
+            "Code*/"
+            "Cypress/"
+            "GIMP/"
+            "KDE/"
+            "Nextcloud/"
             "chromium/"
-            "google-chrome/"
             "coc/"
-            ))
+            "discord/"
+            "glib*/"
+            "google*/"
+            "google-chrome/"
+            "kde*/"
+            "torbrowser*/"
+            "unity*/"
+            "vivaldi*/"
+            "{emacs,doom}/"))
 #+end_src
 
 ** Ansible
