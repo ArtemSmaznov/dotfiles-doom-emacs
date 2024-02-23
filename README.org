@@ -738,7 +738,6 @@ Function used by =mbsync= for authentication with the email server
    ;; enable granular diff-highlights for all hunks
    ;; change to t if performance is bad
    magit-diff-refine-hunk 'all
-   forge-pull-notifications t
    magit-repolist-column-flag-alist ' ((magit-untracked-files . "?")
                                        (magit-unstaged-files . "!")
                                        (magit-staged-files . "+"))
@@ -784,6 +783,7 @@ Function used by =mbsync= for authentication with the email server
    doom-modeline-github t)
   :config
   (setq
+   forge-pull-notifications nil
    forge-repository-list-columns '(("Owner" 20 t nil owner nil)
                                    ("N" 1 t nil sparse-p nil)
                                    ("S" 1 t nil selective-p nil)
