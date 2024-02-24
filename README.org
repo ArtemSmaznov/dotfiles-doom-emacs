@@ -48,6 +48,7 @@
   - [[#yaml][Yaml]]
   - [[#json][Json]]
   - [[#conf][Conf]]
+  - [[#crontab][Crontab]]
   - [[#jinja][Jinja]]
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
@@ -1005,6 +1006,15 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   "\\.socket\\'"
   "\\.target\\'"
   "\\.timer\\'"
+  )
+#+end_src
+
+** Crontab
+#+begin_src emacs-lisp
+(use-package! crontab-mode
+  :defer t
+  :mode
+  "\\cron\\(.d\\)?/.*\\'"
   )
 #+end_src
 

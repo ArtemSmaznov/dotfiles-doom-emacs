@@ -29,6 +29,7 @@
 (package! lorem-ipsum)
 
 ;; lsp
+(package! crontab-mode)
 (package! feature-mode)
 (package! groovy-mode)
 (package! qml-mode)
