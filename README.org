@@ -20,6 +20,7 @@
   - [[#smart-parens][Smart Parens]]
 - [[#org-mode][Org Mode]]
   - [[#org][Org]]
+  - [[#org-journal][Org Journal]]
   - [[#roam][Roam]]
   - [[#org-agenda][Org Agenda]]
   - [[#org-bullets][Org Bullets]]
@@ -402,6 +403,17 @@ Peep
   (pushnew! org-src-lang-modes
             '("conf-unix" . conf-unix)
             '("toml"      . conf-toml)))
+#+end_src
+
+** Org Journal
+#+begin_src emacs-lisp
+(use-package! org-journal
+  :after org
+  :config
+  (setq org-journal-hide-entries-p nil
+        org-journal-search-results-order-by :desc
+        org-journal-enable-encryption nil
+        org-journal-encrypt-journal nil))
 #+end_src
 
 ** Roam
