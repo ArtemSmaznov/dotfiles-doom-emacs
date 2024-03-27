@@ -1019,8 +1019,8 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 #+begin_src emacs-lisp
 (use-package! crontab-mode
   :defer t
-  :mode
-  "cron\\(.d\\)?"
+  ;; :mode
+  ;; "cron\\(.d\\)?"
   )
 #+end_src
 
