@@ -657,26 +657,20 @@ Function used by =mbsync= for authentication with the email server
    org-caldav-backup-file (expand-file-name "backup.org" org-caldav-save-directory)
    org-caldav-location-newline-replacement ","
    org-caldav-exclude-tags '("nocal")
-   org-caldav-calendars `(
-     (:calendar-id "personal"
-            :select-tags ("calgnr")
-            :inbox (file+headline ,(expand-file-name "todo.org" org-directory) "Inbox")
-            ;; :inbox ,(expand-file-name "inbox-personal.org" org-directory)
-            :files (,(expand-file-name "todo.org" org-directory)
-                    ,(expand-file-name "archive.org" org-directory)))
-     (:calendar-id "housing"
-            :select-tags ("calhsn")
-            :inbox (file+headline ,(expand-file-name "housing.org" org-directory) "Inbox")
-            ;; :inbox ,(expand-file-name "inbox-housing.org" org-directory)
-            :files (,(expand-file-name "housing.org" org-directory)
-                    ,(expand-file-name "archive.org" org-directory)))
-     (:calendar-id "work"
-            :select-tags ("calwrk")
-            :inbox (file+headline ,(expand-file-name "work.org" org-directory) "Inbox")
-            ;; :inbox ,(expand-file-name "inbox-work.org" org-directory)
-            :files (,(expand-file-name "work.org" org-directory)
-                    ,(expand-file-name "archive.org" org-directory)))
-     )))
+   org-caldav-calendars `((:calendar-id "personal" :select-tags ("calgnr")
+                           :inbox ,(expand-file-name "todo.org" org-directory)
+                           :files (,(expand-file-name "todo.org" org-directory)
+                                   ,(expand-file-name "archive.org" org-directory)))
+
+                          (:calendar-id "housing" :select-tags ("calhsn")
+                           :inbox ,(expand-file-name "housing.org" org-directory)
+                           :files (,(expand-file-name "housing.org" org-directory)
+                                   ,(expand-file-name "archive.org" org-directory)))
+
+                          (:calendar-id "work" :select-tags ("calwrk")
+                           :inbox ,(expand-file-name "work.org" org-directory)
+                           :files (,(expand-file-name "work.org" org-directory)
+                                   ,(expand-file-name "archive.org" org-directory))))))
 #+end_src
 
 ** Ledger
