@@ -948,8 +948,62 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 
   :config
   (setq
-   lsp-ui-doc-position 'bottom
-   lsp-headerline-breadcrumb-enable t))
+   ;; 1. Symbol highlighting
+   lsp-enable-symbol-highlighting t
+
+   ;; 2. `lsp-ui-doc` hover dialogs
+   lsp-ui-doc-enable t
+   lsp-ui-doc-delay 0.75
+   lsp-ui-doc-show-with-cursor t
+   lsp-ui-doc-show-with-mouse nil
+
+   lsp-ui-doc-position 'top
+   lsp-ui-doc-alignment 'frame
+   lsp-ui-doc-header t
+   lsp-ui-doc-border "gray"
+
+   ;; 3. Lenses
+   lsp-lens-enable t
+
+   ;; 4. Headerline
+   lsp-headerline-breadcrumb-enable t
+
+   ;; 5. Sideline code actions
+   lsp-ui-sideline-enable t
+   lsp-ui-sideline-show-code-actions t
+
+   ;; 6. Sideline hover symbols
+   lsp-ui-sideline-show-hover nil
+
+   ;; 7. Modeline code actions
+   lsp-modeline-code-actions-enable t
+
+   ;; 8. Flycheck / flymake
+   ;; lsp-diagnostics-provider :auto
+
+   ;; 9. Sideline diagnostics
+   lsp-ui-sideline-show-diagnostics t
+
+   ;; 10. Eldoc
+   lsp-eldoc-enable-hover t
+
+   ;; 11. Modeline diagnostics statistics
+   lsp-modeline-diagnostics-enable t
+
+   ;; 12. Signarure help
+   ;; lsp-signature-auto-activate '(:on-trigger-char :on-server-request)
+
+   ;; 13.
+   lsp-signature-render-documentation t
+
+   ;; 14. Completion
+   ;; lsp-completion-provider :capf
+
+   ;; 15. Completion item detail
+   lsp-completion-show-detail t
+
+   ;; 16. Completion item kind
+   lsp-completion-show-kind t))
 #+end_src
 
 ** JavaScript
