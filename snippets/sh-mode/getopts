@@ -1,0 +1,15 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: getopts
+# key: getopts
+# uuid: getopts
+# --
+while getopts "${1:s:h:}" opt; do
+      case "$opt" in
+           ${2:x}) $0
+              ;;
+           *) usage
+              exit 1
+              ;;
+      esac
+done
+shift $((OPTIND-1))
