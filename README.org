@@ -480,6 +480,10 @@ We need ox-man for "Org eXporting" to manpage format.
 
 * Office Tools
 ** Email
+#+begin_src emacs-lisp
+(setq rmail-spool-directory "/var/spool/mail/artem")
+#+end_src
+
 *** AuthInfo
 Setting up =~/.authinfo.gpg= with credentials
 #+begin_example authinfo
