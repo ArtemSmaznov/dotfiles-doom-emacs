@@ -521,9 +521,11 @@ A custom variable containing an email address string needs to be defined for eac
   (setq
    mu4e-get-mail-command "true"
    mu4e-maildir-shortcuts
-   '(("/sent"   . ?s)
-     ("/drafts" . ?d)
-     ("/trash"  . ?t))
+   '(("/"        . ?i)
+     ("/drafts"  . ?d)
+     ("/sent"    . ?s)
+     ("/archive" . ?a)
+     ("/trash"   . ?t))
 
    +mu4e-header--maildir-colors
    '(("/sent"   . all-the-icons-dgreen)
