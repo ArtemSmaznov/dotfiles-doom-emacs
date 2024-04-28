@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Revealer Widget
+# key: revealer
+# --
+(revealer :transition "slidedown"
+          :duration revealer-duration
+          :reveal ${1:true}
+          $0)
