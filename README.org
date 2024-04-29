@@ -1041,7 +1041,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
    lsp-ui-doc-show-with-mouse nil
 
    lsp-ui-doc-position 'top
-   lsp-ui-doc-alignment 'frame
+   lsp-ui-doc-alignment 'window
    lsp-ui-doc-header t
    lsp-ui-doc-border "gray"
 
