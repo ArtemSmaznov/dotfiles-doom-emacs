@@ -1221,14 +1221,16 @@ Enable syntax highlighting for .vim files
   (map! :leader
         :prefix "o"
         :desc "RSS News" :e "n" #'elfeed)
+
   :config
   (map! :mode elfeed-search-mode
         :desc "Remove Selected" :n "D" #'my/elfeed-search-remove-selected
 
         :mode (elfeed-search-mode elfeed-show-mode)
         :localleader
-        :desc "Toggle logs" :n "l" #'elfeed-goodies/toggle-logs
-        :desc "Update"      :n "u" #'elfeed-update)
+        :desc "Show starred" :n "s" #'my/elfeed-show-starred
+        :desc "Toggle logs"  :n "l" #'elfeed-goodies/toggle-logs
+        :desc "Update"       :n "u" #'elfeed-update)
 
   (elfeed-set-timeout 36000)
   (setq
@@ -1241,6 +1243,11 @@ Enable syntax highlighting for .vim files
    elfeed-use-curl t
    elfeed-search-date-format '("%d-%m-%Y" 10 :left)
    elfeed-search-filter "@1-month-ago +unread")
+
+  (defun my/elfeed-show-starred ()
+    "Show all starred feeds"
+    (interactive)
+    (elfeed-search-set-filter "+star"))
 
   (defun my/elfeed-db-remove-entry (id)
     "Removes elfeed entry for given ID"
