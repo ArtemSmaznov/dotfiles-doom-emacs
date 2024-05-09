@@ -521,7 +521,7 @@ A custom variable containing an email address string needs to be defined for eac
   (setq
    mu4e-get-mail-command "true"
    mu4e-maildir-shortcuts
-   '(("/"        . ?i)
+   '(("/inbox"   . ?i)
      ("/drafts"  . ?d)
      ("/sent"    . ?s)
      ("/archive" . ?a)
