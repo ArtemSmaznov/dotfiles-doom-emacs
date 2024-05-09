@@ -505,6 +505,10 @@ A custom variable containing an email address string needs to be defined for eac
   :init
   (setq
    doom-modeline-mu4e t)
+
+  ;; start mu4e in the background so it auto-syncs emails
+  (mu4e t)
+
   :config
   (map! :map mu4e-view-mode-map
         :n "m" #'mu4e-view-mark-for-something
@@ -519,6 +523,9 @@ A custom variable containing an email address string needs to be defined for eac
         :n "T" #'mu4e-headers-mark-thread)
 
   (setq
+   mu4e-update-interval (* 5 60) ;; auto-sync interval in seconds
+   mu4e-confirm-quit t
+
    mu4e-get-mail-command "true"
    mu4e-maildir-shortcuts
    '(("/inbox"   . ?i)
@@ -547,16 +554,16 @@ A custom variable containing an email address string needs to be defined for eac
      (:from-or-to     . 25)
      (:thread-subject . nil))
 
-  ;; message
+   ;; message
    ;; mu4e-view-date-format "%c"
    ;; mu4e-date-format-long "%c"
    message-kill-buffer-on-exit t ;; don't keep message buffers
 
-  ;; composing
+   ;; composing
    mu4e-compose-format-flowed t ;; use html formatting for outgoing emails
    mu4e-compose-dont-reply-to-self t
 
-  ;; contexts
+   ;; contexts
    user-full-name "Artem Smaznov"
    mu4e-context-policy 'pick-first
    mu4e-compose-context-policy 'ask-if-none
@@ -569,13 +576,10 @@ A custom variable containing an email address string needs to be defined for eac
        ;; :vars `((user-mail-address  . ,my/email/artem))
        )))
 
-     ;; start mu4e in the background so it auto-syncs emails
-     ;; (mu4e t)
-
-     ;; modeline
-     (setq
-      ;; mu4e-alert-interesting-mail-query "flag:unread AND NOT flag:trashed AND NOT maildir:\"/[Gmail]/All Mail\""
-      mu4e-display-update-status-in-modeline t))
+  ;; modeline
+  (setq
+   ;; mu4e-alert-interesting-mail-query "flag:unread AND NOT flag:trashed AND NOT maildir:\"/[Gmail]/All Mail\""
+   mu4e-display-update-status-in-modeline t))
 #+end_src
 
 #+begin_src emacs-lisp
