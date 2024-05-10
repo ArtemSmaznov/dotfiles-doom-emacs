@@ -109,7 +109,7 @@ font string. You generally only need these two:
  doom-variable-pitch-font (font-spec :family "Hack Nerd Font")
  global-prettify-symbols-mode t)
 
-(if IS-MAC (setq
+(if (featurep :system 'macos) (setq
  doom-symbol-font         (font-spec :family "STIX Two Math")))
 
 (custom-set-faces!
@@ -307,7 +307,7 @@ Peep
   :commands org-capture-goto-target
   :init
   (setq
-   org-directory (if IS-MAC "~/Documents/notes/"
+   org-directory (if (featurep :system 'macos) "~/Documents/notes/"
                    (expand-file-name "notes/" (xdg-user-dir "DOCUMENTS")))
    org-agenda-files          (list org-directory)
    org-default-notes-file    (expand-file-name "notes.org" org-directory)

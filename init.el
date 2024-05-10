@@ -14,7 +14,7 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
-(if IS-MAC
+(if (featurep :system 'macos)
     (add-to-list 'default-frame-alist '(undecorated-round . t)))
 
 (setq +literate-config-file
@@ -128,7 +128,8 @@
        ;;upload                  ; map local to remote projects via ssh/ftp
 
        :os
-       (:if IS-MAC macos)        ; improve compatibility with macOS
+       (:if (featurep :system 'macos)
+           macos)                ; improve compatibility with macOS
        tty                       ; improve the terminal Emacs experience
 
        :lang
@@ -202,9 +203,10 @@
        ;;zig                     ; C, but simpler
 
        :email
-       (mu4e
-        +org
-        +gmail)
+       (:if (featurep :system 'macos)
+           (mu4e
+            +org
+            +gmail))
        ;;notmuch
        ;;(wanderlust +gmail)
 
