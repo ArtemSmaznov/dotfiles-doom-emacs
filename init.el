@@ -203,10 +203,9 @@
        ;;zig                     ; C, but simpler
 
        :email
-       (:if (featurep :system 'macos)
-           (mu4e
-            +org
-            +gmail))
+       (:if (executable-find "mu")
+           (mu4e +org
+                 +gmail))
        ;;notmuch
        ;;(wanderlust +gmail)
 
