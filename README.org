@@ -507,7 +507,8 @@ A custom variable containing an email address string needs to be defined for eac
    doom-modeline-mu4e t)
 
   ;; start mu4e in the background so it auto-syncs emails
-  (mu4e t)
+  (if (executable-find "mu")
+      (mu4e t))
 
   :config
   (map! :map mu4e-view-mode-map
