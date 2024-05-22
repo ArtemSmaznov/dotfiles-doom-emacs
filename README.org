@@ -873,9 +873,12 @@ Function used by =mbsync= for authentication with the email server
 (use-package! forge
   :after magit
   :defer t
+
   :init
-  (setq
-   doom-modeline-github t)
+  (if (featurep :system 'macos)
+      (setq doom-modeline-github nil)
+      (setq doom-modeline-github t))
+
   :config
   (setq
    forge-pull-notifications nil
