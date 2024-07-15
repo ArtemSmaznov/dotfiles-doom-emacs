@@ -452,6 +452,7 @@ Peep
         :m "W"   #'org-agenda-week-view
         :m "M"   #'org-agenda-month-view ;; doesn't work
         :m "T"   #'org-agenda-fortnight-view
+        :m "C-." #'org-agenda-goto-today
         :m "C-h" #'org-agenda-earlier
         :m "C-l" #'org-agenda-later)
 
@@ -721,13 +722,14 @@ Function used by =mbsync= for authentication with the email server
         :desc "Calendar" :e "c" #'cfw:open-org-calendar)
   :config
   (map! :map cfw:calendar-mode-map
-        :m "0"  #'cfw:navi-goto-week-begin-command
-        :m "gd" #'cfw:org-goto-date
-        :m "zd" #'cfw:change-view-day
-        :m "zw" #'cfw:change-view-week
-        :m "zm" #'cfw:change-view-month
-        :m "zt" #'cfw:change-view-two-weeks
-        :m "T"  #'cfw:change-view-two-weeks) ;; not active due to evil-snipe and evil-find-char
+        :m "C-." #'cfw:navi-goto-today-command
+        :m "0"   #'cfw:navi-goto-week-begin-command
+        :m "gd"  #'cfw:org-goto-date
+        :m "zd"  #'cfw:change-view-day
+        :m "zw"  #'cfw:change-view-week
+        :m "zm"  #'cfw:change-view-month
+        :m "zt"  #'cfw:change-view-two-weeks
+        :m "T"   #'cfw:change-view-two-weeks) ;; not active due to evil-snipe and evil-find-char
 
   (setq
    calendar-week-start-day 1
