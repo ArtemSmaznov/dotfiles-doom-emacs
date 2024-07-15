@@ -339,17 +339,18 @@ Peep
   ;;       :n "<M-k>" #'org-table-previous-row
   ;;       :n "<M-l>" #'org-table-next-field)
 
-  ;; org capture
+  ;; ----- org-capture -----------------------------------------------------
   (pushnew! org-capture-templates
             '("w" "Work todo" entry    (file+headline "work.org"    "Inbox") "* TODO %?\n%i\n%a" :prepend t)
             '("h" "Housing todo" entry (file+headline "housing.org" "Inbox") "* TODO %?\n%i\n%a" :prepend t))
 
-  ;; headings
+  ;; ----- headings --------------------------------------------------------
   (setq org-ellipsis " ▼ "
         org-log-into-drawer t
         org-log-done 'time
         org-hide-emphasis-markers t)
 
+  ;; ----- fonts -----------------------------------------------------------
   ;; font sizes for each header level in Org mode.
   (custom-set-faces
    '(org-level-1 ((t (:inherit outline-1 :height 1.2))))
@@ -358,14 +359,17 @@ Peep
    '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
    '(org-level-5 ((t (:inherit outline-5 :height 1.0)))))
 
-  ;; refiling
+  ;; ----- org-special -----------------------------------------------------
+  (setq org-src-window-setup 'other-frame)
+
+  ;; ----- org-refile ------------------------------------------------------
   (setq org-refile-targets '((org-agenda-files :maxlevel . 1)))
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
-  ;; archiving
+  ;; ----- org-archive -----------------------------------------------------
   (setq org-archive-subtree-add-inherited-tags t)
 
-  ;; publishing
+  ;; ----- org-publish -----------------------------------------------------
   (setq org-publish-project-alist
         '(("github.io"
            :base-directory "~/projects/git/artemsmaznov.github.io/org"
@@ -377,6 +381,7 @@ Peep
            :auto-preamble t
            :exclude "header.org")))
 
+  ;; ----- Search Engines --------------------------------------------------
   ;; e.g. [[arch-wiki:emacs][Emacs Page]]
   (setq org-link-abbrev-alist
         '(("arch-wiki" . "https://wiki.archlinux.org/title/")
@@ -388,9 +393,20 @@ Peep
           ("wiki"      . "https://en.wikipedia.org/wiki/")
           ))
 
-  (setq org-src-window-setup 'other-frame)
+  ;; ----- org-clock -------------------------------------------------------
+  (map! :mode org-mode
+        :localleader
+        :prefix "c"
+        :n "p" #'org-clock-display)
 
+  (setq org-clock-persist 'history
+        org-clock-idle-time nil)
+
+  (org-clock-persistence-insinuate)
+
+  ;; ----- Org templates ---------------------------------------------------
   (require 'org-tempo)
+
   ;; extra languages for src blocks
   (pushnew! org-structure-template-alist
             '("el" . "src emacs-lisp")
@@ -399,6 +415,7 @@ Peep
             '("py" . "src python")
             '("sh" . "src shell")
             '("ya" . "src yaml"))
+
   ;; extra org structure templates
   (pushnew! org-src-lang-modes
             '("conf-unix" . conf-unix)
