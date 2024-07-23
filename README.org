@@ -722,6 +722,8 @@ Function used by =mbsync= for authentication with the email server
         :desc "Calendar" :e "c" #'cfw:open-org-calendar)
   :config
   (map! :map cfw:calendar-mode-map
+        :m "C-j" #'cfw:navi-next-month-command
+        :m "C-k" #'cfw:navi-previous-month-command
         :m "C-." #'cfw:navi-goto-today-command
         :m "0"   #'cfw:navi-goto-week-begin-command
         :m "gd"  #'cfw:org-goto-date
