@@ -752,9 +752,6 @@ Function used by =mbsync= for authentication with the email server
 #+begin_src emacs-lisp
 (use-package! org-caldav
   :after calfw
-  :init
-  (run-with-timer 10 (* 30 60) 'org-caldav-sync)
-
   :config
   (map! :map cfw:calendar-mode-map
         :localleader
