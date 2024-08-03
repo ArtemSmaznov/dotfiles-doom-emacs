@@ -311,7 +311,7 @@ Peep
                    (expand-file-name "notes/" (xdg-user-dir "DOCUMENTS")))
    org-agenda-files          (list org-directory)
    org-default-notes-file    (expand-file-name "notes.org" org-directory)
-   +org-capture-journal-file (expand-file-name "journal.org" org-directory)
+   +org-capture-journal-file (expand-file-name "writing/journal.org" org-directory)
    org-archive-location      (expand-file-name "archive.org::datetree/" org-directory) ;; can also use "archive.org::datetrea/* %s"
    org-id-locations-file     (expand-file-name ".orgids" org-directory))
 
@@ -341,8 +341,9 @@ Peep
 
   ;; ----- org-capture -----------------------------------------------------
   (pushnew! org-capture-templates
-            '("w" "Work todo" entry    (file+headline "work.org"    "Inbox") "* TODO %?\n%i\n%a" :prepend t)
-            '("h" "Housing todo" entry (file+headline "housing.org" "Inbox") "* TODO %?\n%i\n%a" :prepend t))
+            ;; '("j" "Journal"      entry (file+olp+datetree +org-capture-journal-file) "* %U %?\n%i\n%a"   :prepend t)
+            '("w" "Work todo"    entry (file+headline "work.org"    "Inbox")         "* TODO %?\n%i\n%a" :prepend t)
+            '("h" "Housing todo" entry (file+headline "housing.org" "Inbox")         "* TODO %?\n%i\n%a" :prepend t))
 
   ;; ----- headings --------------------------------------------------------
   (setq org-ellipsis " ▼ "
@@ -426,11 +427,16 @@ Peep
 #+begin_src emacs-lisp
 (use-package! org-journal
   :after org
+  :init
+  (setq
+   org-journal-dir (expand-file-name "writing/" org-directory))
+
   :config
-  (setq org-journal-hide-entries-p nil
-        org-journal-search-results-order-by :desc
-        org-journal-enable-encryption nil
-        org-journal-encrypt-journal nil))
+  (setq
+   org-journal-hide-entries-p nil
+   org-journal-search-results-order-by :desc
+   org-journal-enable-encryption nil
+   org-journal-encrypt-journal nil))
 #+end_src
 
 ** Roam
