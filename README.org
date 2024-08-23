@@ -125,6 +125,8 @@ font string. You generally only need these two:
 (use-package! emojify
   :defer t
   :hook (after-init . global-emojify-mode))
+
+(doom-big-font-mode)
 #+end_src
 
 * Core
