@@ -8,25 +8,30 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 (package! async)
-(package! calfw-ical)
-(package! org-caldav)
 ;; (package! dashboard)
-(package! dired-hide-dotfiles)
-(package! dired-open)
-(package! dired-single)
 (package! dmenu)
-(package! elfeed-protocol)
 (package! elpher)
 (package! evil-tutor)
 (package! flycheck-aspell)
 (package! hyperbole)
 (package! ivy-posframe)
-(package! org-auto-tangle)
-(package! peep-dired)
 (package! resize-window)
 (package! tldr)
 (package! wc-mode)
 (package! lorem-ipsum)
+
+;; dired
+(package! dired-hide-dotfiles)
+(package! dired-open)
+(package! dired-single)
+(package! peep-dired)
+
+;; org mode
+(package! org-auto-tangle)
+(package! magit-todos)
+(package! org-caldav)
+(package! calfw-ical)
+(package! elfeed-protocol)
 
 ;; lsp
 (package! crontab-mode)
