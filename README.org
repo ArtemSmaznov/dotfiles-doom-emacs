@@ -342,10 +342,10 @@ Peep
   ;;       :n "<M-l>" #'org-table-next-field)
 
   ;; ----- org-capture -----------------------------------------------------
-  (pushnew! org-capture-templates
-            ;; '("j" "Journal"      entry (file+olp+datetree +org-capture-journal-file) "* %U %?\n%i\n%a"   :prepend t)
-            '("w" "Work todo"    entry (file+headline "work.org"    "Inbox")         "* TODO %?\n%i\n%a" :prepend t)
-            '("h" "Housing todo" entry (file+headline "housing.org" "Inbox")         "* TODO %?\n%i\n%a" :prepend t))
+  ;; (pushnew! org-capture-templates
+  ;;           ;; '("j" "Journal"      entry (file+olp+datetree +org-capture-journal-file) "* %U %?\n%i\n%a"   :prepend t)
+  ;;           '("w" "Work todo"    entry (file+headline "work.org"    "Inbox")         "* TODO %?\n%i\n%a" :prepend t)
+  ;;           '("h" "Housing todo" entry (file+headline "housing.org" "Inbox")         "* TODO %?\n%i\n%a" :prepend t))
 
   ;; ----- headings --------------------------------------------------------
   (setq org-ellipsis " ▼ "
@@ -780,13 +780,13 @@ Function used by =mbsync= for authentication with the email server
                                    ,(expand-file-name "archive.org" org-directory)))
 
                           (:calendar-id "housing" :select-tags ("calhsn")
-                           :inbox ,(expand-file-name "housing.org" org-directory)
-                           :files (,(expand-file-name "housing.org" org-directory)
+                           :inbox ,(expand-file-name "todo.org" org-directory)
+                           :files (,(expand-file-name "todo.org" org-directory)
                                    ,(expand-file-name "archive.org" org-directory)))
 
                           (:calendar-id "work" :select-tags ("calwrk")
-                           :inbox ,(expand-file-name "work.org" org-directory)
-                           :files (,(expand-file-name "work.org" org-directory)
+                           :inbox ,(expand-file-name "todo.org" org-directory)
+                           :files (,(expand-file-name "todo.org" org-directory)
                                    ,(expand-file-name "archive.org" org-directory))))))
 #+end_src
 
