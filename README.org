@@ -1021,8 +1021,9 @@ To enable a set of items to cycle through globally, add the following to your co
   :defer t
   :config
   (pushnew! rotate-text-words
+            '("yes" "no")
             '("on" "off")
-            '("yes" "no")))
+            '("start" "end")))
 #+end_src
 
 ** Indent Guides
