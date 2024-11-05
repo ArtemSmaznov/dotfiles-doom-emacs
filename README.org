@@ -1273,7 +1273,7 @@ Enable syntax highlighting for .vim files
   (elfeed-set-timeout 36000)
   (setq
    elfeed-log-level 'info
-   elfeed-goodies/log-window-position 'left
+   elfeed-goodies/log-window-position 'bottom
    elfeed-goodies/wide-threshold 0.3
    elfeed-goodies/show-mode-padding 1
    elfeed-goodies/entry-pane-size 0.5
