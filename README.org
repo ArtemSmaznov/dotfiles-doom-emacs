@@ -364,6 +364,7 @@ Peep
 
   ;; ----- org-special -----------------------------------------------------
   (setq org-src-window-setup 'other-frame)
+  (set-popup-rule! "^\\*Org Src" :ignore t)
 
   ;; ----- org-refile ------------------------------------------------------
   (setq org-refile-targets '((org-agenda-files :maxlevel . 1)))
