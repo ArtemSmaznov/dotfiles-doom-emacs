@@ -731,6 +731,7 @@ Function used by =mbsync= for authentication with the email server
   (map! :leader
         :prefix "o"
         :desc "Calendar" :e "c" #'cfw:open-org-calendar)
+
   :config
   (map! :map cfw:calendar-mode-map
         :m "C-j" #'cfw:navi-next-month-command
@@ -763,11 +764,12 @@ Function used by =mbsync= for authentication with the email server
 #+begin_src emacs-lisp
 (use-package! org-caldav
   :after calfw
-  :config
-  (map! :map cfw:calendar-mode-map
-        :localleader
-        :desc "Sync with server" :n "S" #'org-caldav-sync)
+  :init
+  (map! :leader
+        :prefix "n"
+        :desc "Sync with server" :e "C-s" #'org-caldav-sync)
 
+  :config
   (setq
    org-caldav-url (concat "https://" my/nextcloud/url "/remote.php/dav/calendars/" my/username)
    org-caldav-delete-calendar-entries 'always
