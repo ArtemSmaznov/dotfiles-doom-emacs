@@ -54,6 +54,8 @@
   - [[#cucumber][Cucumber]]
   - [[#vim][Vim]]
   - [[#logs][Logs]]
+- [[#ai][AI]]
+  - [[#copilot][Copilot]]
 - [[#rss][RSS]]
   - [[#elfeed][Elfeed]]
   - [[#elfeed-org][Elfeed Org]]
@@ -1253,6 +1255,19 @@ Enable syntax highlighting for .vim files
                    (make-local-variable 'display-line-numbers-type)
                    (setq display-line-numbers-type t)
                    (display-line-numbers-mode 1))))
+#+end_src
+
+* AI
+** Copilot
+accept completion from copilot and fallback to company
+#+begin_src emacs-lisp
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
 #+end_src
 
 * RSS
