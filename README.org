@@ -27,8 +27,8 @@
   - [[#org-auto-tangle][Org Auto Tangle]]
   - [[#ox][Ox]]
 - [[#office-tools][Office Tools]]
-  - [[#email][Email]]
   - [[#calendar][Calendar]]
+  - [[#email][Email]]
   - [[#ledger][Ledger]]
   - [[#presentations][Presentations]]
 - [[#development-tools][Development Tools]]
@@ -508,6 +508,83 @@ We need ox-man for "Org eXporting" to manpage format.
 #+end_src
 
 * Office Tools
+** Calendar
+#+begin_src emacs-lisp
+(use-package! calendar
+  :defer t
+  :init
+  (setq calendar-week-start-day 1
+        calendar-date-style 'european))
+#+end_src
+
+CalFW
+#+begin_src emacs-lisp
+(use-package! calfw
+  :defer t
+  :init
+  (map! :leader
+        :prefix "o"
+        :desc "Calendar" :e "c" #'cfw:open-org-calendar)
+
+  :config
+  (map! :map cfw:calendar-mode-map
+        :m "C-j" #'cfw:navi-next-month-command
+        :m "C-k" #'cfw:navi-previous-month-command
+        :m "C-." #'cfw:navi-goto-today-command
+        :m "0"   #'cfw:navi-goto-week-begin-command
+        :m "gd"  #'cfw:org-goto-date
+        :m "zd"  #'cfw:change-view-day
+        :m "zw"  #'cfw:change-view-week
+        :m "zm"  #'cfw:change-view-month
+        :m "zt"  #'cfw:change-view-two-weeks
+        :m "T"   #'cfw:change-view-two-weeks)) ;; not active due to evil-snipe and evil-find-char
+#+end_src
+
+iCalendar
+#+begin_src emacs-lisp
+(use-package! icalendar
+  :defer t
+  :config
+  (setq
+   org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
+   org-icalendar-use-deadline '(event-if-todo-not-done)))
+#+end_src
+
+CalDAV sync
+#+begin_src emacs-lisp
+(use-package! org-caldav
+  :after calfw
+  :init
+  (map! :leader
+        :prefix "n"
+        :desc "Sync with server" :e "C-s" #'org-caldav-sync)
+
+  :config
+  (setq
+   org-caldav-url (concat "https://" my/nextcloud/url "/remote.php/dav/calendars/" my/username)
+   org-caldav-delete-calendar-entries 'always
+   org-caldav-delete-org-entries 'ask
+   org-caldav-show-sync-results nil
+   org-caldav-save-directory (expand-file-name ".caldav/" org-directory)
+   org-caldav-backup-file (expand-file-name "backup.org" org-caldav-save-directory)
+   org-caldav-location-newline-replacement ","
+   org-caldav-exclude-tags '("nocal")
+   org-caldav-calendars `((:calendar-id "personal" :select-tags ("calgnr")
+                           :inbox ,(expand-file-name "todo.org" org-directory)
+                           :files (,(expand-file-name "todo.org" org-directory)
+                                   ,(expand-file-name "archive.org" org-directory)))
+
+                          (:calendar-id "housing" :select-tags ("calhsn")
+                           :inbox ,(expand-file-name "todo.org" org-directory)
+                           :files (,(expand-file-name "todo.org" org-directory)
+                                   ,(expand-file-name "archive.org" org-directory)))
+
+                          (:calendar-id "work" :select-tags ("calwrk")
+                           :inbox ,(expand-file-name "todo.org" org-directory)
+                           :files (,(expand-file-name "todo.org" org-directory)
+                                   ,(expand-file-name "archive.org" org-directory))))))
+#+end_src
+
 ** Email
 #+begin_src emacs-lisp
 (setq rmail-spool-directory "/var/spool/mail/artem")
@@ -596,7 +673,6 @@ A custom variable containing an email address string needs to be defined for eac
    mu4e-compose-dont-reply-to-self t
 
    ;; contexts
-   user-full-name "Artem Smaznov"
    mu4e-context-policy 'pick-first
    mu4e-compose-context-policy 'ask-if-none
    ;; mu4e-index-cleanup nil ;; don't need to run cleanup after indexing for gmail
@@ -677,7 +753,6 @@ A custom variable containing an email address string needs to be defined for eac
 
 ;;   ;; contexts
 ;;   (setq
-;;    user-full-name "Artem Smaznov"
 ;;    mu4e-context-policy 'pick-first
 ;;    mu4e-compose-context-policy 'ask-if-none
 ;;    ;; mu4e-index-cleanup nil ;; don't need to run cleanup after indexing for gmail
@@ -722,79 +797,6 @@ Function used by =mbsync= for authentication with the email server
     (if result
         (funcall (plist-get (car result) :secret))
         nil)))
-#+end_src
-
-** Calendar
-*** CalFW
-#+begin_src emacs-lisp
-(use-package! calfw
-  :defer t
-  :init
-  (map! :leader
-        :prefix "o"
-        :desc "Calendar" :e "c" #'cfw:open-org-calendar)
-
-  :config
-  (map! :map cfw:calendar-mode-map
-        :m "C-j" #'cfw:navi-next-month-command
-        :m "C-k" #'cfw:navi-previous-month-command
-        :m "C-." #'cfw:navi-goto-today-command
-        :m "0"   #'cfw:navi-goto-week-begin-command
-        :m "gd"  #'cfw:org-goto-date
-        :m "zd"  #'cfw:change-view-day
-        :m "zw"  #'cfw:change-view-week
-        :m "zm"  #'cfw:change-view-month
-        :m "zt"  #'cfw:change-view-two-weeks
-        :m "T"   #'cfw:change-view-two-weeks) ;; not active due to evil-snipe and evil-find-char
-
-  (setq
-   calendar-week-start-day 1
-   calendar-date-style 'european))
-#+end_src
-
-*** iCalendar
-#+begin_src emacs-lisp
-(use-package! icalendar
-  :defer t
-  :config
-  (setq
-   org-icalendar-use-scheduled '(event-if-todo event-if-not-todo todo-start)
-   org-icalendar-use-deadline '(event-if-todo-not-done)))
-#+end_src
-
-*** CalDAV sync
-#+begin_src emacs-lisp
-(use-package! org-caldav
-  :after calfw
-  :init
-  (map! :leader
-        :prefix "n"
-        :desc "Sync with server" :e "C-s" #'org-caldav-sync)
-
-  :config
-  (setq
-   org-caldav-url (concat "https://" my/nextcloud/url "/remote.php/dav/calendars/" my/username)
-   org-caldav-delete-calendar-entries 'always
-   org-caldav-delete-org-entries 'ask
-   org-caldav-show-sync-results nil
-   org-caldav-save-directory (expand-file-name ".caldav/" org-directory)
-   org-caldav-backup-file (expand-file-name "backup.org" org-caldav-save-directory)
-   org-caldav-location-newline-replacement ","
-   org-caldav-exclude-tags '("nocal")
-   org-caldav-calendars `((:calendar-id "personal" :select-tags ("calgnr")
-                           :inbox ,(expand-file-name "todo.org" org-directory)
-                           :files (,(expand-file-name "todo.org" org-directory)
-                                   ,(expand-file-name "archive.org" org-directory)))
-
-                          (:calendar-id "housing" :select-tags ("calhsn")
-                           :inbox ,(expand-file-name "todo.org" org-directory)
-                           :files (,(expand-file-name "todo.org" org-directory)
-                                   ,(expand-file-name "archive.org" org-directory)))
-
-                          (:calendar-id "work" :select-tags ("calwrk")
-                           :inbox ,(expand-file-name "todo.org" org-directory)
-                           :files (,(expand-file-name "todo.org" org-directory)
-                                   ,(expand-file-name "archive.org" org-directory))))))
 #+end_src
 
 ** Ledger
