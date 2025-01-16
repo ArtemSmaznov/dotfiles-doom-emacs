@@ -865,6 +865,8 @@ Function used by =mbsync= for authentication with the email server
                                   ("~/.local/bin" . 0)
                                   ("~/projects" . 5))
 
+   git-commit-summary-max-length 68
+
    magit-revision-show-gravatars t ;; enable gravatars
    ;; magit-display-buffer-function 'magit-display-buffer-traditional ;; open magit in a side window
 
