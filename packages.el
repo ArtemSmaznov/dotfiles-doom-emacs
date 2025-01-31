@@ -43,11 +43,11 @@
 (package! vimrc-mode)
 (package! yuck-mode)
 
-;; ai
-(package! copilot
-  :recipe (:host github
-           :repo "copilot-emacs/copilot.el"
-           :files ("*.el")))
+;; ;; ai
+;; (package! copilot
+;;   :recipe (:host github
+;;            :repo "copilot-emacs/copilot.el"
+;;            :files ("*.el")))
 
 
 ;; To install a package directly from a remote git repo, you must specify a
