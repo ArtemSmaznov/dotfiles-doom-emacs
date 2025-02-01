@@ -650,7 +650,7 @@ A custom variable containing an email address string needs to be defined for eac
 
    ;; headers - view listing the emails
    mu4e-split-view 'vertical
-   mu4e-headers-visible-columns 170
+   mu4e-headers-visible-columns 80
    mu4e-headers-time-format "%l:%M:%S %p"
    mu4e-headers-date-format "%e %b %Y"
    mu4e-headers-long-date-format "%a, %e %B %Y, %l:%M:%S %p"
