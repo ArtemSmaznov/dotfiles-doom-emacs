@@ -82,7 +82,7 @@ Some functionality uses this to identify you, e.g. GPG configuration, email clie
 * Global Options
 #+begin_src emacs-lisp
 (setq
- doom-theme 'doom-gruvbox
+ doom-theme 'catppuccin
  display-line-numbers-type 'relative
  scroll-margin 2
  window-divider-default-right-width 6 ;; set width of window dividers
