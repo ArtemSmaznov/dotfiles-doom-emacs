@@ -859,6 +859,16 @@ Function used by =mbsync= for authentication with the email server
 #+begin_src emacs-lisp
 (use-package! magit
   :defer t
+  :init
+  (defun my/magit-yank-current-branch-name ()
+    "Show the current branch in the echo-area and add it to the `kill-ring'."
+    (interactive)
+    (let ((branch (magit-get-current-branch)))
+      (if branch
+          (progn (kill-new branch)
+                 (message "%s" branch))
+        (user-error "There is no current branch"))))
+
   :config
   (setq
    magit-repository-directories `((,(xdg-config-home) . 1)
@@ -876,6 +886,7 @@ Function used by =mbsync= for authentication with the email server
    magit-repolist-column-flag-alist ' ((magit-untracked-files . "?")
                                        (magit-unstaged-files . "!")
                                        (magit-staged-files . "+"))
+
    magit-repolist-columns ' (("" 10 magit-repolist-column-branch ((:right-align t)))
                              ("B<U" 3 magit-repolist-column-unpulled-from-upstream ((:right-align t) (:sort <)))
                              ("B>U" 3 magit-repolist-column-unpushed-to-upstream ((:right-align t) (:sort <)))
