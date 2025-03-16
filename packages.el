@@ -5,7 +5,6 @@
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.
 
-(package! package-lint :pin "21edc6d0d0eadd2d0a537f422fb9b7b8a3ae6991")
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 (package! async)
