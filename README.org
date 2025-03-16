@@ -602,7 +602,7 @@ machine smtp.gmail.com login example@gmail.com password eXaMpLePaSsWoRd port 465
 
 A custom variable containing an email address string needs to be defined for each context
 #+begin_example elisp
-(defvar my/email/main "example@gmail.com" "My primary email address")
+(defvar my/email/main "example@mail.com" "My primary email address")
 #+end_example
 
 #+begin_src emacs-lisp
@@ -610,12 +610,12 @@ A custom variable containing an email address string needs to be defined for eac
   :defer t
   :init
   (setq
-   doom-modeline-mu4e t)
+   doom-modeline-mu4e t
+   +mu4e-lock-file "/tmp/mu4e-lock")
 
   ;; start mu4e in the background so it auto-syncs emails
-  (if (and
-       (executable-find "mu")
-       (not (get-process " *mu4e-server*")))
+  (if (and (executable-find "mu")
+           (not (file-exists-p +mu4e-lock-file)))
       (mu4e t))
 
   :config
