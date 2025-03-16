@@ -1355,14 +1355,15 @@ accept completion from copilot and fallback to company
 (use-package! elfeed-protocol
   :after elfeed elfeed-org
   :config
-  (defadvice elfeed (after configure-elfeed-protocol-feeds activate)
+  (defun my/elfeed-protocol-configure (&rest args)
     "Make elfeed-org autotags rules works with elfeed-protocol."
-    (setq
-     elfeed-protocol-feeds (list
-                            (list (concat "owncloud+https://" my/username "@" my/nextcloud/url)
-                                  :use-authinfo t
-                                  :autotags  elfeed-feeds)))
+    (setq elfeed-protocol-feeds
+          (list (list (concat "owncloud+https://" my/username "@" my/nextcloud/url)
+                      :use-authinfo t
+                      :autotags  elfeed-feeds)))
     (elfeed-update))
+
+  (advice-add 'elfeed :after #'my/elfeed-protocol-configure)
 
   (setq
    elfeed-protocol-enabled-protocols '(owncloud)
