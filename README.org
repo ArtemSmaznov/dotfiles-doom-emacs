@@ -1095,7 +1095,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
    lsp-enable-symbol-highlighting t
 
    ;; 2. `lsp-ui-doc` hover dialogs
-   lsp-ui-doc-enable t
+   lsp-ui-doc-enable nil
    lsp-ui-doc-delay 0.75
    lsp-ui-doc-show-with-cursor t
    lsp-ui-doc-show-with-mouse nil
