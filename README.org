@@ -231,13 +231,23 @@ font string. You generally only need these two:
   :commands (dired dired-jump)
   :config
   (map! :map dired-mode-map
-        :desc "Go to parent directory"      :n "h" #'dired-up-directory
-        :desc "Go to directory / Open file" :n "l" #'dired-find-file
-        :desc "Create symlink"              :n "S" #'dired-do-symlink
-        :desc "Create new file"             :n "-" #'dired-create-empty-file))
+        :desc "Create new file" :n "." #'dired-create-empty-file))
 #+end_src
 
-Toggle hidden files in Dired
+dirvish
+#+begin_src emacs-lisp
+(use-package! dirvish
+  :after dired
+  :hook (dirvish-mode . dired-hide-dotfiles-mode)
+  :config
+  (map! :map dirvish-mode-map
+        :n "z" nil
+
+        :prefix "z"
+        :n "z" #'dirvish-history-jump))
+#+end_src
+
+toggle hidden files in dired
 #+begin_src emacs-lisp
 (use-package! dired-hide-dotfiles
   :after dired
@@ -245,10 +255,11 @@ Toggle hidden files in Dired
 
   :config
   (map! :map dired-mode-map
-        :desc "Hide dot files"   :n "zo" (lambda () (interactive) (dired-hide-dotfiles-mode 0))
-        :desc "Show dot files"   :n "zm" (lambda () (interactive) (dired-hide-dotfiles-mode 1))
-        :desc "Toggle dot files" :n "za" #'dired-hide-dotfiles-mode
-        :desc "Toggle dot files" :n "z." #'dired-hide-dotfiles-mode))
+        :prefix "z"
+        :desc "Hide dot files"   :n "o" (lambda () (interactive) (dired-hide-dotfiles-mode 0))
+        :desc "Show dot files"   :n "m" (lambda () (interactive) (dired-hide-dotfiles-mode 1))
+        :desc "Toggle dot files" :n "a" #'dired-hide-dotfiles-mode
+        :desc "Toggle dot files" :n "." #'dired-hide-dotfiles-mode))
 #+end_src
 
 Peep
