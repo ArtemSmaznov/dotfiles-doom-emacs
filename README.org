@@ -262,26 +262,6 @@ toggle hidden files in dired
         :desc "Toggle dot files" :n "." #'dired-hide-dotfiles-mode))
 #+end_src
 
-Peep
-#+begin_src emacs-lisp
-(use-package! peep-dired
-  :after dired
-  :config
-  (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
-  (map! :map dired-mode-map
-        :desc "Preview a file" :n "p" #'peep-dired
-
-        :map peep-dired-mode-map
-        :desc "Preview next file"        :n "k" #'peep-dired-prev-file
-        :desc "Preview prev file"        :n "j" #'peep-dired-next-file
-        :desc "Scroll preview pane up"   :n "C-k" #'peep-dired-scroll-page-up
-        :desc "Scroll preview pane down" :n "C-j" #'peep-dired-scroll-page-down)
-
-  (setq
-   peep-dired-cleanup-eagerly nil
-   peep-dired-cleanup-on-disable t))
-#+end_src
-
 ** Evil Mode
 #+begin_src emacs-lisp
 (use-package! evil

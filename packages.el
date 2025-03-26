@@ -24,7 +24,6 @@
 (package! dired-hide-dotfiles)
 (package! dired-open)
 (package! dired-single)
-(package! peep-dired)
 
 ;; org mode
 (package! org-auto-tangle)
