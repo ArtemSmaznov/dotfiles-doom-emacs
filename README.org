@@ -239,10 +239,35 @@ dirvish
 (use-package! dirvish
   :after dired
   :hook (dirvish-mode . dired-hide-dotfiles-mode)
+  :custom
+  (dirvish-quick-access-entries
+   '(("a" "/ssh:amadeus.arts.lan:/srv/" "amadeus")
+     ("b" "~/.local/bin/"               ".local/bin")
+     ("c" "~/.config/"                  ".config")
+     ("d" "~/documents/"                "documents")
+     ("D" "~/downloads/"                "downloads")
+     ("E" "/etc/"                       "/etc")
+     ("f" "~/documents/finance"         "documents/finance")
+     ("g" "~/games"                     "games")
+     ("h" "~/"                          "home")
+     ("i" "~/music/import"              "music/import")
+     ("m" "~/music/"                    "music")
+     ("M" "/run/mount"                  "/run/mount")
+     ("n" "~/documents/notes"           "documents/notes")
+     ("p" "~/pictures"                  "~/pictures")
+     ("P" "~/photos"                    "~/photos")
+     ("r" "~/videos/recordings"         "~/videos/recordings")
+     ("s" "~/pictures/screenshots"      "~/pictures/screenshots")
+     ("T" "/tmp"                        "/tmp")
+     ("v" "~/videos"                    "~/videos")
+     ("w" "~/pictures/wallpapers"       "~/pictures/wallpapers")
+     ("z" "~/zmedia"                    "~/zmedia")))
+
   :config
   (map! :map dirvish-mode-map
-        :n "z" nil
+        :desc "marks" :n "'" #'dirvish-quick-access
 
+        :n "z" nil
         :prefix "z"
         :n "z" #'dirvish-history-jump))
 #+end_src
