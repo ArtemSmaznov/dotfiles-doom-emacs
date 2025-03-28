@@ -52,6 +52,7 @@
   - [[#json][Json]]
   - [[#logs][Logs]]
   - [[#python][Python]]
+  - [[#rust][Rust]]
   - [[#vim][Vim]]
   - [[#yaml][Yaml]]
 - [[#ai][AI]]
@@ -1265,6 +1266,16 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 ** Python
 + macOS: ~$ brew install pyright~
 + Arch Linux: ~$ pacman -S pyright~
+** Rust
+#+begin_src emacs-lisp
+(use-package! rustic
+  :defer t
+  :config
+  (map! :map rustic-mode-map
+        :localleader
+        :prefix "t"
+        :desc "with doc-tests" :n "d" #'rustic-cargo-test-run))
+#+end_src
 
 ** Vim
 Enable syntax highlighting for .vim files
