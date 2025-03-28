@@ -43,17 +43,17 @@
   - [[#rainbow-mode][Rainbow Mode]]
 - [[#lsp][LSP]]
   - [[#lsp-mode][LSP Mode]]
-  - [[#javascript][JavaScript]]
-  - [[#python][Python]]
-  - [[#groovy][Groovy]]
-  - [[#yaml][Yaml]]
-  - [[#json][Json]]
   - [[#conf][Conf]]
   - [[#crontab][Crontab]]
-  - [[#jinja][Jinja]]
   - [[#cucumber][Cucumber]]
-  - [[#vim][Vim]]
+  - [[#groovy][Groovy]]
+  - [[#javascript][JavaScript]]
+  - [[#jinja][Jinja]]
+  - [[#json][Json]]
   - [[#logs][Logs]]
+  - [[#python][Python]]
+  - [[#vim][Vim]]
+  - [[#yaml][Yaml]]
 - [[#ai][AI]]
   - [[#kill-copilot][KILL Copilot]]
 - [[#rss][RSS]]
@@ -1165,53 +1165,6 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
    lsp-completion-show-kind t))
 #+end_src
 
-** JavaScript
-#+begin_src emacs-lisp
-;; (use-package! rjsx-mode
-;;   :ensure t
-;;   :mode
-;;   "\\.js\\'"
-;; )
-#+end_src
-
-** Python
-+ macOS: ~$ brew install pyright~
-+ Arch Linux: ~$ pacman -S pyright~
-
-** Groovy
-#+begin_src emacs-lisp
-(use-package! groovy-mode
-  :defer t
-  :mode
-  "/Jenkinsfile.*\\'"
-  "\\.pipe\\'"
-  "\\.PIPE\\'"
-
-  :hook
-  (groovy-mode . (lambda () (rainbow-delimiters-mode 1)))
-
-  :config
-  (setq groovy-indent-offset 2))
-#+end_src
-
-** Yaml
-#+begin_src emacs-lisp
-(use-package! yaml-mode
-  :defer t
-  :hook
-  (yaml-mode . (lambda ()
-                   (spell-fu-mode -1))))
-#+end_src
-
-** Json
-#+begin_src emacs-lisp
-(use-package! jsonc-mode
-  :defer t
-  :mode
-  "\\.jsonc\\'"
-)
-#+end_src
-
 ** Conf
 #+begin_src emacs-lisp
 (use-package! conf-mode
@@ -1237,15 +1190,6 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   )
 #+end_src
 
-** Jinja
-#+begin_src emacs-lisp
-(use-package! jinja2-mode
-  :defer t
-  :hook
-  (jinja2-mode . (lambda ()
-                   (spell-fu-mode -1))))
-#+end_src
-
 ** Cucumber
 #+begin_src emacs-lisp
 (use-package! feature-mode
@@ -1260,17 +1204,47 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
    ))
 #+end_src
 
-** Vim
-Enable syntax highlighting for .vim files
+** Groovy
 #+begin_src emacs-lisp
-(use-package! vimrc-mode
+(use-package! groovy-mode
   :defer t
   :mode
-  "\\.vim\\(rc\\)?\\'"
-  "\\.vifm\\'"
+  "/Jenkinsfile.*\\'"
+  "\\.pipe\\'"
+  "\\.PIPE\\'"
+
+  :hook
+  (groovy-mode . (lambda () (rainbow-delimiters-mode 1)))
 
   :config
-  (setq evil-shift-width 2))
+  (setq groovy-indent-offset 2))
+#+end_src
+
+** JavaScript
+#+begin_src emacs-lisp
+;; (use-package! rjsx-mode
+;;   :ensure t
+;;   :mode
+;;   "\\.js\\'"
+;; )
+#+end_src
+
+** Jinja
+#+begin_src emacs-lisp
+(use-package! jinja2-mode
+  :defer t
+  :hook
+  (jinja2-mode . (lambda ()
+                   (spell-fu-mode -1))))
+#+end_src
+
+** Json
+#+begin_src emacs-lisp
+(use-package! jsonc-mode
+  :defer t
+  :mode
+  "\\.jsonc\\'"
+)
 #+end_src
 
 ** Logs
@@ -1286,6 +1260,32 @@ Enable syntax highlighting for .vim files
                    (make-local-variable 'display-line-numbers-type)
                    (setq display-line-numbers-type t)
                    (display-line-numbers-mode 1))))
+#+end_src
+
+** Python
++ macOS: ~$ brew install pyright~
++ Arch Linux: ~$ pacman -S pyright~
+
+** Vim
+Enable syntax highlighting for .vim files
+#+begin_src emacs-lisp
+(use-package! vimrc-mode
+  :defer t
+  :mode
+  "\\.vim\\(rc\\)?\\'"
+  "\\.vifm\\'"
+
+  :config
+  (setq evil-shift-width 2))
+#+end_src
+
+** Yaml
+#+begin_src emacs-lisp
+(use-package! yaml-mode
+  :defer t
+  :hook
+  (yaml-mode . (lambda ()
+                   (spell-fu-mode -1))))
 #+end_src
 
 * AI
