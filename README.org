@@ -1005,7 +1005,7 @@ Function used by =mbsync= for authentication with the email server
   :hook
   (yaml-mode . (lambda ()
                  (if (s-contains? "ansible" (file-name-directory buffer-file-name) t)
-                     (ansible 1)))))
+                     (ansible-mode 1)))))
 #+end_src
 
 ** Projectile
