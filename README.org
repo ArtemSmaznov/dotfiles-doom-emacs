@@ -604,7 +604,7 @@ CalDAV sync
 
 ** Email
 #+begin_src emacs-lisp
-(setq rmail-spool-directory "/var/spool/mail/artem")
+(setq rmail-spool-directory "/var/spool/mail/")
 #+end_src
 
 *** AuthInfo
@@ -625,6 +625,7 @@ A custom variable containing an email address string needs to be defined for eac
 #+begin_src emacs-lisp
 (use-package! mu4e
   :defer t
+  :commands (mu4e make-mu4e-context)
   :init
   (setq
    doom-modeline-mu4e t
@@ -652,33 +653,12 @@ A custom variable containing an email address string needs to be defined for eac
    mu4e-update-interval (* 5 60) ;; auto-sync interval in seconds
    mu4e-confirm-quit t
 
-   mu4e-get-mail-command "true"
-   mu4e-maildir-shortcuts
-   '(("/inbox"   . ?i)
-     ("/drafts"  . ?d)
-     ("/sent"    . ?s)
-     ("/archive" . ?a)
-     ("/trash"   . ?t))
-
-   +mu4e-header--maildir-colors
-   '(("/sent"   . all-the-icons-dgreen)
-     ("/drafts" . all-the-icons-yellow)
-     ("/trash"  . all-the-icons-red))
-
    ;; headers - view listing the emails
    mu4e-split-view 'vertical
    mu4e-headers-visible-columns 80
    mu4e-headers-time-format "%l:%M:%S %p"
    mu4e-headers-date-format "%e %b %Y"
    mu4e-headers-long-date-format "%a, %e %B %Y, %l:%M:%S %p"
-
-   ;; colum layout for mail list
-   mu4e-headers-fields
-   '((:account-stripe . 1)
-     (:flags          . 7)
-     (:human-date     . 12)
-     (:from-or-to     . 25)
-     (:thread-subject . nil))
 
    ;; message
    ;; mu4e-view-date-format "%c"
@@ -689,17 +669,131 @@ A custom variable containing an email address string needs to be defined for eac
    mu4e-compose-format-flowed t ;; use html formatting for outgoing emails
    mu4e-compose-dont-reply-to-self t
 
-   ;; contexts
+   mu4e-get-mail-command "true"
+
+   ;; colum layout for mail list
+   mu4e-headers-fields
+   '((:account-stripe . 1)
+     (:flags          . 7)
+     (:human-date     . 12)
+     (:from-or-to     . 25)
+     (:thread-subject . nil)))
+
+  (setq
+   ;; NOTE needs to be redefined when mu4e autostarts in the background with no
+   ;; context selected. this causes emacs to ask to create the default
+   ;; directories in the root of maildir
+   mu4e-drafts-folder "/artem/drafts"
+   mu4e-sent-folder "/artem/sent"
+   mu4e-refile-folder "/artem/archive"
+   mu4e-trash-folder "/artem/trash"
+
+   ;; NOTE not required, but gives an additional visual and functional indicator
+   ;; that no context is selected
+   mu4e-maildir-shortcuts
+   '(("/inbox"   . ?i)
+     ("/drafts"  . ?d)
+     ("/sent"    . ?s)
+     ("/archive" . ?a)
+     ("/trash"   . ?t))
+
+   ;; DEPRECATED have not see the effect of this yet
+   +mu4e-header--maildir-colors
+   '(("/artem/sent"   . all-the-icons-dgreen)
+     ("/artem/drafts" . all-the-icons-yellow)
+     ("/artem/trash"  . all-the-icons-red)))
+
+  ;; contexts
+  (setq
    mu4e-context-policy 'pick-first
    mu4e-compose-context-policy 'ask-if-none
    ;; mu4e-index-cleanup nil ;; don't need to run cleanup after indexing for gmail
    ;; mu4e-index-lazy-check t ;; because gmail uses labels as folders we can use lazy check since messages don't really "move"
    mu4e-contexts
-   `(
+   `(,(make-mu4e-context
+       :name "local"
+       :match-func
+       (lambda (msg)
+         (when msg
+           (string-prefix-p "/artem" (mu4e-message-field msg :maildir))))
+
+       :vars
+       `((user-mail-address  . "artem@izumi")
+         (mu4e-drafts-folder . "/artem/drafts")
+         (mu4e-sent-folder   . "/artem/sent")
+         (mu4e-refile-folder . "/artem/archive")
+         (mu4e-trash-folder  . "/artem/trash")
+
+         (mu4e-maildir-shortcuts
+          . (("/artem/inbox"   . ?i)
+             ("/artem/drafts"  . ?d)
+             ("/artem/sent"    . ?s)
+             ("/artem/archive" . ?a)
+             ("/artem/trash"   . ?t)))))
+
      ,(make-mu4e-context
-       :name "spool"
-       ;; :vars `((user-mail-address  . ,my/email/artem))
-       )))
+       :name "amadeus"
+       :match-func
+       (lambda (msg)
+         (when msg
+           (string-prefix-p "/amadeus" (mu4e-message-field msg :maildir))))
+
+       :vars
+       `((user-mail-address  . "artem@amadeus")
+         (mu4e-drafts-folder . "/amadeus/drafts")
+         (mu4e-sent-folder   . "/amadeus/sent")
+         (mu4e-refile-folder . "/amadeus/archive")
+         (mu4e-trash-folder  . "/amadeus/trash")
+
+         (mu4e-maildir-shortcuts
+          . (("/amadeus/inbox"   . ?i)
+             ("/amadeus/drafts"  . ?d)
+             ("/amadeus/sent"    . ?s)
+             ("/amadeus/archive" . ?a)
+             ("/amadeus/trash"   . ?t)))))
+
+     ,(make-mu4e-context
+       :name "ichigo"
+       :match-func
+       (lambda (msg)
+         (when msg
+           (string-prefix-p "/ichigo" (mu4e-message-field msg :maildir))))
+
+       :vars
+       `((user-mail-address  . "artem@ichigo")
+
+         (mu4e-drafts-folder . "/ichigo/drafts")
+         (mu4e-sent-folder   . "/ichigo/sent")
+         (mu4e-refile-folder . "/ichigo/archive")
+         (mu4e-trash-folder  . "/ichigo/trash")
+
+         (mu4e-maildir-shortcuts
+          . (("/ichigo/inbox"   . ?i)
+             ("/ichigo/drafts"  . ?d)
+             ("/ichigo/sent"    . ?s)
+             ("/ichigo/archive" . ?a)
+             ("/ichigo/trash"   . ?t)))))))
+
+  (setq mu4e-bookmarks
+        '((:name "Unread messages"
+           :query "flag:unread AND NOT flag:trashed"
+           :key ?u)
+          (:name "Today's messages"
+           :query "date:today..now"
+           :key ?t)
+          (:name "Last 7 days"
+           :query "date:7d..now"
+           :hide-unread t
+           :key ?w)
+          (:name "Messages with images"
+           :query "mime:image/*"
+           :key ?p)
+          (:name "All inboxes"
+           :query "m:/artem/inbox OR m:/amadeus/inbox OR m:/ichigo/inbox"
+           :key ?i)
+          (:name "Full archive"
+           :query "m:/artem/archive OR m:/amadeus/archive OR m:/ichigo/archive"
+           :key ?a)))
 
   ;; modeline
   (setq
