@@ -1099,8 +1099,10 @@ Function used by =mbsync= for authentication with the email server
   :defer t
   :hook
   (yaml-mode . (lambda ()
-                 (if (s-contains? "ansible" (file-name-directory buffer-file-name) t)
-                     (ansible-mode 1)))))
+                 (if (not buffer-file-name)
+                     (message "buffer-file-name is not set")
+                   (if (s-contains? "ansible" (file-name-directory buffer-file-name) t)
+                       (ansible-mode 1))))))
 #+end_src
 
 ** Projectile
