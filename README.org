@@ -23,7 +23,6 @@
   - [[#org-journal][Org Journal]]
   - [[#roam][Roam]]
   - [[#org-agenda][Org Agenda]]
-  - [[#org-bullets][Org Bullets]]
   - [[#org-auto-tangle][Org Auto Tangle]]
   - [[#ox][Ox]]
 - [[#office-tools][Office Tools]]
@@ -489,14 +488,6 @@ toggle hidden files in dired
         org-agenda-span 'week
         org-agenda-start-on-weekday 1
         org-deadline-warning-days 14))
-#+end_src
-
-** Org Bullets
-#+begin_src emacs-lisp
-(use-package! org-superstar
-  :after org
-  :defer t
-  :hook (org-mode . org-superstar-mode))
 #+end_src
 
 ** Org Auto Tangle
