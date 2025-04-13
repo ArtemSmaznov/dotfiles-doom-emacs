@@ -465,7 +465,8 @@ toggle hidden files in dired
 (use-package! org-roam
   :after org
   :config
-  (setq org-roam-directory org-directory))
+  (setq org-roam-directory org-directory
+        org-roam-db-location (expand-file-name "doom/org-roam.db" (xdg-state-home))))
 #+end_src
 
 ** Org Agenda
