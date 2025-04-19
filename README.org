@@ -588,6 +588,12 @@ CalDAV sync
                            :files (,(expand-file-name "todo.org" org-directory)
                                    ,(expand-file-name "archive.org" org-directory)))
 
+                          (:calendar-id "travel" :select-tags ("caltrvl")
+                           :inbox ,(expand-file-name "todo.org" org-directory)
+                           :files (,(expand-file-name "todo.org" org-directory)
+                                   ,(expand-file-name "notes.org" org-directory)
+                                   ,(expand-file-name "archive.org" org-directory)))
+
                           (:calendar-id "work" :select-tags ("calwrk")
                            :inbox ,(expand-file-name "todo.org" org-directory)
                            :files (,(expand-file-name "todo.org" org-directory)
