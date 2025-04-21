@@ -562,11 +562,11 @@ iCalendar
 CalDAV sync
 #+begin_src emacs-lisp
 (use-package! org-caldav
-  :after calfw
+  :defer t
   :init
   (map! :leader
         :prefix "n"
-        :desc "Sync with server" :e "C-s" #'org-caldav-sync)
+        :desc "Sync with origin" :e "C-s" #'org-caldav-sync)
 
   :config
   (setq
