@@ -686,14 +686,13 @@ A custom variable containing an email address string needs to be defined for eac
    mu4e-refile-folder "/artem/archive"
    mu4e-trash-folder "/artem/trash"
 
-   ;; NOTE not required, but gives an additional visual and functional indicator
-   ;; that no context is selected
+   ;; NOTE on initial launch context is not selected, so setting default paths here
    mu4e-maildir-shortcuts
-   '(("/inbox"   . ?i)
-     ("/drafts"  . ?d)
-     ("/sent"    . ?s)
-     ("/archive" . ?a)
-     ("/trash"   . ?t))
+   '(("/artem/inbox"   . ?i)
+     ("/artem/drafts"  . ?d)
+     ("/artem/sent"    . ?s)
+     ("/artem/archive" . ?a)
+     ("/artem/trash"   . ?t))
 
    ;; DEPRECATED have not see the effect of this yet
    +mu4e-header--maildir-colors
