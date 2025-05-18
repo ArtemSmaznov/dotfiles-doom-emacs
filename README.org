@@ -1053,6 +1053,10 @@ Function used by =mbsync= for authentication with the email server
 (use-package! code-review
   :after magit
   :defer t
+  :hook
+  (code-review-mode . (lambda ()
+                             (persp-add-buffer (current-buffer))))
+
   :config
   (map! :map magit-mode-map
         "R" #'code-review-forge-pr-at-point
