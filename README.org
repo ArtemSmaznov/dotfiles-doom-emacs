@@ -1168,6 +1168,9 @@ To enable a set of items to cycle through globally, add the following to your co
             '("low" "high")
             '("lower" "upper")
             '("below" "above")
+            '("up" "down")
+            '("next" "previous")
+            '("show" "hide")
             '("small" "medium" "large")))
 #+end_src
 
