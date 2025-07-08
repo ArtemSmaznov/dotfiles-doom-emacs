@@ -18,6 +18,7 @@
   - [[#which-key][Which Key]]
   - [[#xdg][XDG]]
   - [[#smart-parens][Smart Parens]]
+  - [[#search-engines][Search engines]]
 - [[#org-mode][Org Mode]]
   - [[#org][Org]]
   - [[#org-journal][Org Journal]]
@@ -318,6 +319,11 @@ toggle hidden files in dired
 
   :config
   (require 'smartparens-config))
+#+end_src
+** Search engines
+#+begin_src emacs-lisp
+(pushnew! +lookup-provider-url-alist
+          '("Brave" "https://search.brave.com/search?q=%s"))
 #+end_src
 
 * Org Mode
