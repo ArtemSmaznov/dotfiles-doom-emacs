@@ -16,6 +16,7 @@
 (package! flycheck-aspell)
 (package! hyperbole)
 (package! ivy-posframe)
+(package! rainbow-delimiters)
 (package! resize-window)
 (package! tldr)
 (package! wc-mode)

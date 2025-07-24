@@ -38,9 +38,10 @@
   - [[#treemacs][Treemacs]]
   - [[#completion][Completion]]
   - [[#ivy][Ivy]]
-  - [[#rotate-text][Rotate Text]]
-  - [[#indent-guides][Indent Guides]]
-  - [[#rainbow-mode][Rainbow Mode]]
+  - [[#rotate-text][Rotate text]]
+  - [[#indent-guides][Indent guides]]
+  - [[#rainbow-delimiters][Rainbow delimiters]]
+  - [[#rainbow-mode][Rainbow mode]]
 - [[#lsp][LSP]]
   - [[#lsp-mode][LSP Mode]]
   - [[#conf][Conf]]
@@ -1161,7 +1162,7 @@ Function used by =mbsync= for authentication with the email server
   :commands lsp-ivy-workspace-symbol)
 #+end_src
 
-** Rotate Text
+** Rotate text
 To enable a set of items to cycle through globally, add the following to your configuration
 #+begin_src emacs-lisp
 (use-package! rotate-text
@@ -1180,7 +1181,7 @@ To enable a set of items to cycle through globally, add the following to your co
             '("small" "medium" "large")))
 #+end_src
 
-** Indent Guides
+** Indent guides
 #+begin_src emacs-lisp
 (use-package! highlight-indent-guides
   :defer t
@@ -1188,7 +1189,15 @@ To enable a set of items to cycle through globally, add the following to your co
   (setq highlight-indent-guides-method 'fill))
 #+end_src
 
-** Rainbow Mode
+** Rainbow delimiters
+#+begin_src emacs-lisp
+(use-package! rainbow-delimiters
+  :defer t
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
+#+end_src
+
+** Rainbow mode
 Highlight colors in file
 #+begin_src emacs-lisp
 (use-package! rainbow-mode
@@ -1327,9 +1336,6 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   "/Jenkinsfile.*\\'"
   "\\.pipe\\'"
   "\\.PIPE\\'"
-
-  :hook
-  (groovy-mode . (lambda () (rainbow-delimiters-mode 1)))
 
   :config
   (setq groovy-indent-offset 2))
