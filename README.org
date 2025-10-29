@@ -1215,11 +1215,12 @@ Highlight colors in file
   :defer t
   :commands (lsp lsp-deferred)
   :hook
-  (rjsx-mode    . lsp-deferred)
-  (python-mode  . lsp-deferred)
   (feature-mode . lsp-deferred)
+  (groovy-mode  . lsp-deferred)
+  (python-mode  . lsp-deferred)
+  (rjsx-mode    . lsp-deferred)
   (vimrc-mode   . lsp-deferred)
-  (groovy-mode  . lsp-deferred))
+  (yaml-mode    . lsp-deferred))
 #+end_src
 
 See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] for LSP UI elements and their respective variables
