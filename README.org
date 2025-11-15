@@ -1364,7 +1364,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   :defer t
   :hook
   (jinja2-mode . (lambda ()
-                   (spell-fu-mode -1))))
+                   (spell-fu-mode t))))
 #+end_src
 
 ** Json
@@ -1398,6 +1398,9 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 #+begin_src emacs-lisp
 (use-package! rustic
   :defer t
+  :hook
+  (rustic-mode . (lambda ()
+                   (spell-fu-mode t)))
   :config
   (map! :map rustic-mode-map
         :localleader
@@ -1424,7 +1427,7 @@ Enable syntax highlighting for .vim files
   :defer t
   :hook
   (yaml-mode . (lambda ()
-                   (spell-fu-mode -1))))
+                   (spell-fu-mode t))))
 #+end_src
 
 * AI
