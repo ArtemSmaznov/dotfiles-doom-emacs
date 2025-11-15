@@ -1171,14 +1171,21 @@ To enable a set of items to cycle through globally, add the following to your co
   (pushnew! rotate-text-words
             '("yes" "no")
             '("on" "off")
+
             '("start" "end")
+            '("next" "previous")
+            '("show" "hide")
+
             '("low" "high")
             '("lower" "upper")
             '("below" "above")
             '("up" "down")
-            '("next" "previous")
-            '("show" "hide")
-            '("small" "medium" "large")))
+
+            '("small" "medium" "large")
+
+            '("early" "late")
+            '("morning" "day" "evening" "night")
+            '("noon" "midnight")))
 #+end_src
 
 ** Indent guides
