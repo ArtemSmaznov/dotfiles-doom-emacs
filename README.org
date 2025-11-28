@@ -1227,6 +1227,7 @@ Highlight colors in file
   (python-mode  . lsp-deferred)
   (rjsx-mode    . lsp-deferred)
   (vimrc-mode   . lsp-deferred)
+  (rust-mode    . lsp-deferred)
   (yaml-mode    . lsp-deferred))
 #+end_src
 
