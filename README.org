@@ -1171,8 +1171,12 @@ To enable a set of items to cycle through globally, add the following to your co
   (pushnew! rotate-text-words
             '("yes" "no")
             '("on" "off")
+            '("enable" "disable")
+            '("enabled" "disabled")
+            '("start" "stop")
+            '("started" "stopped")
 
-            '("start" "end")
+            '("beginning" "end")
             '("next" "previous")
             '("show" "hide")
 
