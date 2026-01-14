@@ -1176,9 +1176,11 @@ To enable a set of items to cycle through globally, add the following to your co
             '("start" "stop")
             '("started" "stopped")
 
-            '("beginning" "end")
-            '("next" "previous")
             '("show" "hide")
+            '("next" "previous")
+            '("beginning" "end")
+            '("source" "destination")
+            '("src" "dst")
 
             '("low" "high")
             '("lower" "upper")
