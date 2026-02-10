@@ -1064,12 +1064,35 @@ Function used by =mbsync= for authentication with the email server
   (code-review-mode . (lambda ()
                              (persp-add-buffer (current-buffer))))
 
-  :config
+  ;; :config
+  ;; (map! :map magit-mode-map
+  ;;       "R" #'code-review-forge-pr-at-point
+
+  ;;       :map forge-topic-mode-map
+  ;;       "R" #'code-review-forge-pr-at-point)
+  )
+#+end_src
+
+*** PR Review
+https://magnus.therning.org/2025-01-19-reviewing-github-prs-in-emacs.html
+#+begin_src emacs-lisp
+(use-package! pr-review
+  :after magit forge
+  :defer t
+  :init
+  (defun my/pr-review-at-point ()
+    (interactive)
+    (if-let* ((target (forge--browse-target))
+              (url (if (stringp target) target (forge-get-url target)))
+              (rev-url (pr-review-url-parse url)))
+        (pr-review url)
+      (user-error "No PR to review at point")))
+
   (map! :map magit-mode-map
-        "R" #'code-review-forge-pr-at-point
+        "R" #'my/pr-review-at-point
 
         :map forge-topic-mode-map
-        "R" #'code-review-forge-pr-at-point))
+        "R" #'my/pr-review-at-point))
 #+end_src
 
 *** Todos
@@ -1145,9 +1168,9 @@ Function used by =mbsync= for authentication with the email server
 (use-package! company
   :defer t
   :config
-  (map! :after lsp-mode
-        :map lsp-mode-map
-        :i "<tab>" #'company-indent-or-complete-common)
+  ;; (map! :after lsp-mode
+  ;;       :map lsp-mode-map
+  ;;       :i "<tab>" #'company-indent-or-complete-common)
 
   (setq
    company-idle-delay 0.5

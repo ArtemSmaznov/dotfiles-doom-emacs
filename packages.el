@@ -5,6 +5,8 @@
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.
 ;; (package! code-review :pin "fba8fe3")
+;; (package! ghub :pin "67acd8e")
+(package! closql :pin "05a2b04")
 
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
@@ -33,6 +35,9 @@
 (package! org-caldav)
 (package! calfw-ical)
 (package! elfeed-protocol)
+
+;; dev
+(package! pr-review)
 
 ;; lsp
 (package! crontab-mode)
