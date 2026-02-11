@@ -4,42 +4,52 @@
 ;; To install a package with Doom you must declare them here and run 'doom sync'
 ;; on the command line, then restart Emacs for the changes to take effect -- or
 ;; use 'M-x doom/reload'.
+
+;; pin packages to specific version (workarounds for bugs)
+;; =============================================================================
 ;; (package! code-review :pin "fba8fe3")
 ;; (package! ghub :pin "67acd8e")
 (package! closql :pin "05a2b04")
 
 
-;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
+;; install packages from MELPA, ELPA or emacsmirror
+;; =============================================================================
 (package! async)
-;; (package! dashboard)
 (package! dmenu)
 (package! elpher)
-(package! evil-tutor)
-(package! flycheck-aspell)
 (package! hyperbole)
 (package! ivy-posframe)
-(package! rainbow-delimiters)
 (package! resize-window)
-(package! tldr)
 (package! wc-mode)
-(package! lorem-ipsum)
 
-;; dired
+;; ui
+;; (package! dashboard)
+
+;; doc
+(package! evil-tutor)
+(package! tldr)
+
+;; org mode
+(package! calfw-ical)
+(package! elfeed-protocol)
+(package! org-auto-tangle)
+(package! org-caldav)
+
+;; file system navigation
 (package! dired-hide-dotfiles)
 (package! dired-open)
 (package! dired-single)
 
-;; org mode
-(package! org-auto-tangle)
-(package! magit-todos)
-(package! org-caldav)
-(package! calfw-ical)
-(package! elfeed-protocol)
+;; editing
+(package! flycheck-aspell)
+(package! rainbow-delimiters)
 
 ;; dev
+(package! lorem-ipsum)
+(package! magit-todos)
 (package! pr-review)
 
-;; lsp
+;; dev - lsp
 (package! crontab-mode)
 (package! feature-mode)
 (package! groovy-mode)
@@ -49,7 +59,7 @@
 (package! vimrc-mode)
 (package! yuck-mode)
 
-;; ;; ai
+;; ai
 (package! ellama)
 ;; (package! copilot
 ;;   :recipe (:host github
@@ -59,6 +69,8 @@
 ;; themes
 (package! catppuccin-theme)
 
+
+;; =============================================================================
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
 ;; https://github.com/raxod502/straight.el#the-recipe-format
