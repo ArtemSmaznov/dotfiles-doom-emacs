@@ -1375,7 +1375,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   "\\.pipe\\'"
 
   :config
-  (setq groovy-indent-offset 2))
+  (setq groovy-indent-offset 4))
 #+end_src
 
 ** JavaScript
