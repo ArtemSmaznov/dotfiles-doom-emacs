@@ -1623,15 +1623,12 @@ accept completion from copilot and fallback to company
       :prefix "b"
       :desc "List bookmarks"                          :e "L" #'list-bookmarks
       :desc "Save current bookmarks to bookmark file" :e "w" #'bookmark-save
+      :desc "Justify text"                            :e "j" #'set-justification
       ;; :desc "Clone indirect buffer other window" "c" #'clone-indirect-buffer-other-window
 
       ;; insert
       :prefix "i"
       :desc "Toilet pagga" :e "t" (cmd! (evil-ex "R!toilet -f pagga "))
-
-      ;; <localleader>
-      :prefix "m"
-      :desc "Justify text"    :e "j" #'set-justification
 
       ;; toggle
       :prefix "t"
