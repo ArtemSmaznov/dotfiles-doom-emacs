@@ -54,6 +54,7 @@
   - [[#logs][Logs]]
   - [[#python][Python]]
   - [[#rust][Rust]]
+  - [[#sqlite][Sqlite]]
   - [[#vim][Vim]]
   - [[#yaml][Yaml]]
 - [[#ai][AI]]
@@ -1450,6 +1451,14 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
         :prefix "t"
         :desc "with doc-tests" :n "d" #'rustic-cargo-test-run))
 #+end_src
+
+** Sqlite
+#+begin_src emacs-lisp
+(use-package! sqlite
+  :defer t
+  :init
+  (setq sql-sqlite-options '("-header" "-box")))
+#+End_src
 
 ** Vim
 Enable syntax highlighting for .vim files
