@@ -335,7 +335,7 @@ toggle hidden files in dired
   :commands org-capture-goto-target
   :init
   (setq
-   org-directory (if (featurep :system 'macos) "~/Documents/notes/"
+   org-directory (if (featurep :system 'macos) "~/docs/notes/"
                    (expand-file-name "notes/" (xdg-user-dir "DOCUMENTS")))
    org-agenda-files          (list org-directory)
    org-default-notes-file    (expand-file-name "notes.org" org-directory)
