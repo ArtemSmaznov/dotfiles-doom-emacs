@@ -1092,7 +1092,17 @@ https://magnus.therning.org/2025-01-19-reviewing-github-prs-in-emacs.html
         "R" #'my/pr-review-at-point
 
         :map forge-topic-mode-map
-        "R" #'my/pr-review-at-point))
+        "R" #'my/pr-review-at-point
+
+        :map pr-review-mode-map
+        :localleader
+        "a" #'pr-review-context-action
+        "c" #'pr-review-context-comment
+        "d" #'pr-review-ediff-file
+        "e" #'pr-review-context-edit
+        "r" #'pr-review-refresh
+        "v" #'pr-review-view-file
+        "l" #'pr-review-set-labels))
 #+end_src
 
 *** Todos
