@@ -975,7 +975,7 @@ Function used by =mbsync= for authentication with the email server
 (use-package! magit
   :defer t
   :init
-  (defun my/magit-yank-current-branch-name ()
+  (defun my/magit-yank-current-branch ()
     "Show the current branch in the echo-area and add it to the `kill-ring'."
     (interactive)
     (let ((branch (magit-get-current-branch)))
@@ -983,6 +983,10 @@ Function used by =mbsync= for authentication with the email server
           (progn (kill-new branch)
                  (message "%s" branch))
         (user-error "There is no current branch"))))
+
+  (map! :map magit-mode-map
+        :prefix "y"
+        :desc "Yank currect branch" "B" #'my/magit-yank-current-branch)
 
   :config
   (setq
