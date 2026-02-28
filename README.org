@@ -1448,6 +1448,8 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
   :config
   (map! :map rustic-mode-map
         :localleader
+        :desc "cargo add" :n "a" #'rustic-cargo-add
+
         :prefix "t"
         :desc "with doc-tests" :n "d" #'rustic-cargo-test-run))
 #+end_src
