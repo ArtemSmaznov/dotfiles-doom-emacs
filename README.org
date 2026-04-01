@@ -541,20 +541,20 @@ CalFW
   :init
   (map! :leader
         :prefix "o"
-        :desc "Calendar" :e "c" #'cfw:open-org-calendar)
+        :desc "Calendar" :e "c" #'calfw-org-open-calendar)
 
   :config
-  (map! :map cfw:calendar-mode-map
-        :m "C-j" #'cfw:navi-next-month-command
-        :m "C-k" #'cfw:navi-previous-month-command
-        :m "C-." #'cfw:navi-goto-today-command
-        :m "0"   #'cfw:navi-goto-week-begin-command
-        :m "gd"  #'cfw:org-goto-date
-        :m "zd"  #'cfw:change-view-day
-        :m "zw"  #'cfw:change-view-week
-        :m "zm"  #'cfw:change-view-month
-        :m "zt"  #'cfw:change-view-two-weeks
-        :m "T"   #'cfw:change-view-two-weeks)) ;; not active due to evil-snipe and evil-find-char
+  (map! :map calfw-calendar-mode-map
+        :m "C-j" #'calfw-navi-next-month-command
+        :m "C-k" #'calfw-navi-previous-month-command
+        :m "C-." #'calfw-navi-goto-today-command
+        :m "0"   #'calfw-navi-goto-week-begin-command
+        :m "gd"  #'calfw-org-goto-date
+        :m "zd"  #'calfw-change-view-day
+        :m "zw"  #'calfw-change-view-week
+        :m "zm"  #'calfw-change-view-month
+        :m "zt"  #'calfw-change-view-two-weeks
+        :m "T"   #'calfw-change-view-two-weeks)) ;; not active due to evil-snipe and evil-find-char
 #+end_src
 
 iCalendar
