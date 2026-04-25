@@ -11,6 +11,7 @@
 - [[#global-options][Global Options]]
 - [[#fonts][Fonts]]
 - [[#core][Core]]
+  - [[#evil][Evil]]
   - [[#dashboard][Dashboard]]
   - [[#modeline][Modeline]]
   - [[#dired][Dired]]
@@ -135,6 +136,15 @@ font string. You generally only need these two:
 #+end_src
 
 * Core
+** Evil
+#+begin_src emacs-lisp
+(use-package! evil-numbers
+  :init
+  (require 'cl-lib)
+  (unless (fboundp 'incf)
+    (defalias 'incf 'cl-incf)))
+#+end_src
+
 ** Dashboard
 *** Doom Dashboard
 #+begin_src emacs-lisp
