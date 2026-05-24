@@ -1049,6 +1049,17 @@ Function used by =mbsync= for authentication with the email server
                                      (:sort <))))))
 #+end_src
 
+*** Magit delta
+#+begin_src emacs-lisp
+(use-package! magit-delta
+  :after magit
+  :defer t
+  :hook (magit-mode . magit-delta-mode)
+  :config
+  (setq magit-delta-default-dark-theme "Catppuccin Mocha"
+        magit-delta-default-light-theme "gruvbox-light"))
+#+end_src
+
 *** Forge
 #+begin_src emacs-lisp
 (use-package! forge

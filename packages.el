@@ -46,6 +46,7 @@
 
 ;; dev
 (package! lorem-ipsum)
+(package! magit-delta)
 (package! magit-todos)
 (package! pr-review)
 
