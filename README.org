@@ -1238,7 +1238,12 @@ To enable a set of items to cycle through globally, add the following to your co
 
             '("early" "late")
             '("morning" "day" "evening" "night")
-            '("noon" "midnight")))
+            '("noon" "midnight")
+
+            '("dark" "light")
+            '("bright" "dim")
+            '("black" "gray" "white")
+            '("red" "green" "blue")))
 #+end_src
 
 ** Indent guides
