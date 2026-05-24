@@ -1436,8 +1436,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 (use-package! syslog-mode
   :defer t
   :mode
-  "\\.log"
-  "\\.[0-9]+\\'"
+  "\\.log\\(\\.[0-9]+\\)?\\'"
 
   :hook
   (syslog-mode . (lambda ()
