@@ -905,8 +905,8 @@ https://magnus.therning.org/2025-01-19-reviewing-github-prs-in-emacs.html
   ;;       :i "<tab>" #'company-indent-or-complete-common)
 
   (setq
-   company-idle-delay 0.5
-   company-tooltip-idle-delay 2
+   ;; company-idle-delay 0.5
+   ;; company-tooltip-idle-delay 2
    company-minimum-prefix-length 1))
 #+end_src
 
@@ -1012,7 +1012,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 
    ;; 2. `lsp-ui-doc` hover dialogs
    lsp-ui-doc-enable nil
-   lsp-ui-doc-delay 0.75
+   ;; lsp-ui-doc-delay 0.75
    lsp-ui-doc-show-with-cursor t
    lsp-ui-doc-show-with-mouse nil
 
