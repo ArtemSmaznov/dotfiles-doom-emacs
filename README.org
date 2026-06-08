@@ -819,7 +819,8 @@ https://magnus.therning.org/2025-01-19-reviewing-github-prs-in-emacs.html
         :map pr-review-mode-map
         :localleader
         "a" #'pr-review-context-action
-        "c" #'pr-review-context-comment
+        "c" #'pr-review-select-commit
+        "C" #'pr-review-context-comment
         "d" #'pr-review-ediff-file
         "e" #'pr-review-context-edit
         "f" #'pr-review-view-file
