@@ -942,6 +942,8 @@ To enable a set of items to cycle through globally, add the following to your co
             '("lower" "upper")
             '("below" "above")
             '("up" "down")
+            '("north" "west" "south" "east")
+            '("horizontal" "diagonal" "vertical")
 
             '("small" "medium" "large")
 
