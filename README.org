@@ -362,7 +362,8 @@ toggle hidden files in dired
   :config
   (map! :mode org-mode
         :localleader
-        :n "B" #'org-babel-tangle)
+        :n "B" #'org-babel-tangle
+        :n "S" #'org-save-all-org-buffers)
 
   (map! :map org-mode-map
         :desc "Move line(s) up"        :nv "<M-up>"    #'drag-stuff-up
