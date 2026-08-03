@@ -335,8 +335,7 @@ toggle hidden files in dired
 #+end_src
 ** Search engines
 #+begin_src emacs-lisp
-(pushnew! +lookup-provider-url-alist
-          '("Brave" "https://search.brave.com/search?q=%s"))
+(cl-pushnew '("Brave" "https://search.brave.com/search?q=%s") +lookup-provider-url-alist)
 #+end_src
 
 * Org Mode
@@ -450,18 +449,18 @@ toggle hidden files in dired
   (require 'org-tempo)
 
   ;; extra languages for src blocks
-  (pushnew! org-structure-template-alist
-            '("el" . "src emacs-lisp")
-            '("js" . "src javascript")
-            '("lu" . "src lua")
-            '("py" . "src python")
-            '("sh" . "src shell")
-            '("ya" . "src yaml"))
+  (dolist (item '(("el" . "src emacs-lisp")
+                  ("js" . "src javascript")
+                  ("lu" . "src lua")
+                  ("py" . "src python")
+                  ("sh" . "src shell")
+                  ("ya" . "src yaml")))
+    (cl-pushnew item org-structure-template-alist))
 
   ;; extra org structure templates
-  (pushnew! org-src-lang-modes
-            '("conf-unix" . conf-unix)
-            '("toml"      . conf-toml)))
+  (dolist (item '(("conf-unix" . conf-unix)
+                  ("toml"      . conf-toml)))
+    (cl-pushnew item org-src-lang-modes)))
 #+end_src
 
 ** Org Journal
@@ -836,25 +835,25 @@ https://magnus.therning.org/2025-01-19-reviewing-github-prs-in-emacs.html
   :hook
   (magit-mode . magit-todos-mode)
   :config
-  (pushnew! magit-todos-exclude-globs
-            "Basemark*/"
-            "Brave*/"
-            "Code*/"
-            "Cypress/"
-            "GIMP/"
-            "KDE/"
-            "Nextcloud/"
-            "chromium/"
-            "coc/"
-            "discord/"
-            "glib*/"
-            "google*/"
-            "google-chrome/"
-            "kde*/"
-            "torbrowser*/"
-            "unity*/"
-            "vivaldi*/"
-            "{emacs,doom}/"))
+  (dolist (item '("Basemark*/"
+                  "Brave*/"
+                  "Code*/"
+                  "Cypress/"
+                  "GIMP/"
+                  "KDE/"
+                  "Nextcloud/"
+                  "chromium/"
+                  "coc/"
+                  "discord/"
+                  "glib*/"
+                  "google*/"
+                  "google-chrome/"
+                  "kde*/"
+                  "torbrowser*/"
+                  "unity*/"
+                  "vivaldi*/"
+                  "{emacs,doom}/"))
+    (cl-pushnew item magit-todos-exclude-globs)))
 #+end_src
 
 ** Ansible
@@ -924,37 +923,37 @@ To enable a set of items to cycle through globally, add the following to your co
 (use-package! rotate-text
   :defer t
   :config
-  (pushnew! rotate-text-words
-            '("yes" "no")
-            '("on" "off")
-            '("enable" "disable")
-            '("enabled" "disabled")
-            '("start" "stop")
-            '("started" "stopped")
+  (dolist (item '(("yes" "no")
+                  ("on" "off")
+                  ("enable" "disable")
+                  ("enabled" "disabled")
+                  ("start" "stop")
+                  ("started" "stopped")
 
-            '("show" "hide")
-            '("next" "previous")
-            '("beginning" "end")
-            '("source" "destination")
-            '("src" "dst")
+                  ("show" "hide")
+                  ("next" "previous")
+                  ("beginning" "end")
+                  ("source" "destination")
+                  ("src" "dst")
 
-            '("low" "high")
-            '("lower" "upper")
-            '("below" "above")
-            '("up" "down")
-            '("north" "west" "south" "east")
-            '("horizontal" "diagonal" "vertical")
+                  ("low" "high")
+                  ("lower" "upper")
+                  ("below" "above")
+                  ("up" "down")
+                  ("north" "west" "south" "east")
+                  ("horizontal" "diagonal" "vertical")
 
-            '("small" "medium" "large")
+                  ("small" "medium" "large")
 
-            '("early" "late")
-            '("morning" "day" "evening" "night")
-            '("noon" "midnight")
+                  ("early" "late")
+                  ("morning" "day" "evening" "night")
+                  ("noon" "midnight")
 
-            '("dark" "light")
-            '("bright" "dim")
-            '("black" "gray" "white")
-            '("red" "green" "blue")))
+                  ("dark" "light")
+                  ("bright" "dim")
+                  ("black" "gray" "white")
+                  ("red" "green" "blue")))
+    (cl-pushnew item rotate-text-words)))
 #+end_src
 
 ** Indent guides
