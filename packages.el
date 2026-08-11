@@ -7,9 +7,7 @@
 
 ;; pin packages to specific version (workarounds for bugs)
 ;; =============================================================================
-;; (package! code-review :pin "fba8fe3")
-;; (package! ghub :pin "67acd8e")
-(package! closql :pin "05a2b04")
+;; (package! closql :pin "05a2b04")
 
 
 ;; install packages from MELPA, ELPA or emacsmirror
