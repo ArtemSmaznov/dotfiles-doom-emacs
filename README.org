@@ -924,7 +924,8 @@ To enable a set of items to cycle through globally, add the following to your co
 (use-package! rotate-text
   :defer t
   :config
-  (dolist (item '(("yes" "no")
+  (dolist (item '(("t" "nil")
+                  ("yes" "no")
                   ("on" "off")
                   ("enable" "disable")
                   ("enabled" "disabled")
