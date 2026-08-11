@@ -1348,6 +1348,11 @@ accept completion from copilot and fallback to company
                                  (expand-file-name
                                   "dict/ru.pws" (xdg-data-home))))
 
+       ;; (spell-fu-dictionary-add (spell-fu-get-personal-dictionary
+       ;;                           "japanese"
+       ;;                           (expand-file-name
+       ;;                            "dict/jp.pws" (xdg-data-home))))
+
        ;; extra personal dictionaries
        (spell-fu-dictionary-add (spell-fu-get-personal-dictionary
                                  "people"
@@ -1377,12 +1382,7 @@ accept completion from copilot and fallback to company
        (spell-fu-dictionary-add (spell-fu-get-personal-dictionary
                                  "work"
                                  (expand-file-name
-                                  "dict/en.work.pws" (xdg-data-home))))
-
-       (spell-fu-dictionary-add (spell-fu-get-personal-dictionary
-                                 "japanese"
-                                 (expand-file-name
-                                  "dict/jp.pws" (xdg-data-home))))))
+                                  "dict/en.work.pws" (xdg-data-home))))))
 
   :config
   (setq
