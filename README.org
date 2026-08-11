@@ -133,7 +133,8 @@ font string. You generally only need these two:
   :defer t
   :hook (after-init . global-emojify-mode))
 
-(doom-big-font-mode)
+(if (display-graphic-p)
+    (doom-big-font-mode))
 #+end_src
 
 * Core
