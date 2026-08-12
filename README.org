@@ -1006,9 +1006,7 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
 
   :init
   (map! :map lsp-ui-doc-mode-map
-        :desc "Focus UI Doc frame" :neg "<C-tab>" #'lsp-ui-doc-focus-frame)
-  (map! :map lsp-ui-doc-frame-mode-map
-        :desc "Unfocus UI Doc frame" :neg "q" #'lsp-ui-doc-unfocus-frame)
+        :desc "Focus UI Doc frame" :n "<C-tab>" #'lsp-ui-doc-focus-frame)
 
   :config
   (setq ;; 1. Symbol highlighting
@@ -1023,7 +1021,6 @@ See [[https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/][this]] fo
    lsp-ui-doc-max-width 150
    lsp-ui-doc-max-height 13
 
-   lsp-ui-doc-frame-mode t       ;; I don't see any difference
    lsp-ui-doc-use-childframe t
    lsp-ui-doc-position 'at-point ;; 'at-point can't limit to buffer which is a good thing
    lsp-ui-doc-side 'right        ;; only with top|bottom
