@@ -946,6 +946,11 @@ To enable a set of items to cycle through globally, add the following to your co
                   ("horizontal" "diagonal" "vertical")
 
                   ("small" "medium" "large")
+                  ("plus" "minus")
+                  ("increase" "decrease")
+                  ("increased" "decreased")
+                  ("increment" "decrement")
+                  ("incremented" "decremented")
 
                   ("early" "late")
                   ("morning" "day" "evening" "night")
